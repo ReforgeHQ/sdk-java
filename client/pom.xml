@@ -148,7 +148,7 @@
         <artifactId>protobuf-maven-plugin</artifactId>
         <version>2.13.1</version>
         <configuration>
-          <protocVersion>3.25.2</protocVersion>
+          <protocVersion>3.25.8</protocVersion>
           <sourceDirectories>
             <sourceDirectory>${project.basedir}/src/main/protobufs/shared-protobufs</sourceDirectory>
           </sourceDirectories>
