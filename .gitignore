@@ -36,10 +36,9 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
-Tester.java
-README_INTERNAL.md
 .envrc
 .env
 
 /.idea/
 *.iml
+/.claude/
