@@ -99,10 +99,7 @@ class LookupContextTest {
 
   @Test
   void equalsAndHashCodeWorkWithDifferentContextTypeArgs() {
-    Context context = Context
-      .newBuilder("user")
-      .put("firstName", "james")
-      .build();
+    Context context = Context.newBuilder("user").put("firstName", "james").build();
 
     LookupContext lookupContext1 = new LookupContext(context);
     LookupContext lookupContext2 = new LookupContext(ContextSet.from(context));

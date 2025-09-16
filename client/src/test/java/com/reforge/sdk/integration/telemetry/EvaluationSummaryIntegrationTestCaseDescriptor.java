@@ -106,7 +106,7 @@ public class EvaluationSummaryIntegrationTestCaseDescriptor
       .atMost(Duration.of(3, ChronoUnit.SECONDS))
       .untilAsserted(() -> {
         List<Prefab.ConfigEvaluationSummary> actualSummaries = getTelemetryAccumulator(
-                sdk
+          sdk
         )
           .getTelemetryEventsList()
           .stream()

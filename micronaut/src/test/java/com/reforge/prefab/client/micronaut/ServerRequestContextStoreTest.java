@@ -14,16 +14,10 @@ import org.junit.jupiter.api.Test;
 class ServerRequestContextStoreTest {
 
   ServerRequestContextStore prefabStateStore = new ServerRequestContextStore();
-  Context userContext = Context
-    .newBuilder("user")
-    .put("country", "us")
-    .build();
+  Context userContext = Context.newBuilder("user").put("country", "us").build();
   Context serverContext = Context.newBuilder("server").put("az", "2").build();
 
-  ContextSet userAndServerContextSet = ContextSet.from(
-    userContext,
-    serverContext
-  );
+  ContextSet userAndServerContextSet = ContextSet.from(userContext, serverContext);
 
   @Nested
   class MissingHttpRequest {
@@ -96,10 +90,7 @@ class ServerRequestContextStoreTest {
     @Nested
     class WithPreExistingContext {
 
-      Context newUserContext = Context
-        .newBuilder("user")
-        .put("country", "UK")
-        .build();
+      Context newUserContext = Context.newBuilder("user").put("country", "UK").build();
       ContextSet newUserAndServerContextSet = ContextSet.from(
         newUserContext,
         serverContext

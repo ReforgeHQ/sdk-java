@@ -73,9 +73,7 @@ public class ExampleContextIntegrationTestCaseDescriptor
     ContextSet expectedContextSet = buildContextFromJsonNode(expectedDataNode);
 
     sdk.configClient().get("my-test-key", contextSetToSend);
-    TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(
-            sdk
-    );
+    TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(sdk);
     await()
       .atMost(Duration.of(3, ChronoUnit.SECONDS))
       .untilAsserted(() -> {

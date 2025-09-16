@@ -32,8 +32,5 @@ public interface FeatureFlagClient {
    * @param prefabContext the context to use for feature evaluation
    * @return
    */
-  Optional<Prefab.ConfigValue> get(
-    String feature,
-    ContextSetReadable prefabContext
-  );
+  Optional<Prefab.ConfigValue> get(String feature, ContextSetReadable prefabContext);
 }

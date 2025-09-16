@@ -72,8 +72,7 @@ public class StandardIntegrationTestCaseDescriptor
       throw new RuntimeException("no `type` set");
     }
 
-    getExpected()
-      .verifyScenario(sdk, getFunction(), getInput(), actualDataType);
+    getExpected().verifyScenario(sdk, getFunction(), getInput(), actualDataType);
   }
 
   public String getClient() {
@@ -94,8 +93,6 @@ public class StandardIntegrationTestCaseDescriptor
 
   @Override
   protected ContextSetReadable getBlockContext() {
-    return blockContextMapMaybe
-      .map(PrefabContextFactory::from)
-      .orElse(ContextSet.EMPTY);
+    return blockContextMapMaybe.map(PrefabContextFactory::from).orElse(ContextSet.EMPTY);
   }
 }

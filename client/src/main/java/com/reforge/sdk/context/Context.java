@@ -107,9 +107,7 @@ public class Context implements ContextSetReadable {
     return shapeBuilder.build();
   }
 
-  public static Context unnamedFromMap(
-    Map<String, Prefab.ConfigValue> configValueMap
-  ) {
+  public static Context unnamedFromMap(Map<String, Prefab.ConfigValue> configValueMap) {
     return new Context("", configValueMap);
   }
 

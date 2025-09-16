@@ -1,9 +1,9 @@
 package com.reforge.client.micronaut;
 
-import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.context.ContextSetReadable;
+import com.reforge.sdk.context.ContextStore;
 import io.micronaut.http.context.ServerRequestContext;
 import java.util.Optional;
 
@@ -27,17 +27,12 @@ public class ServerRequestContextStore implements ContextStore {
   }
 
   @Override
-  public Optional<ContextSetReadable> setContext(
-    ContextSetReadable contextSetReadable
-  ) {
+  public Optional<ContextSetReadable> setContext(ContextSetReadable contextSetReadable) {
     return ServerRequestContext
       .currentRequest()
       .map(req -> {
         Optional<ContextSetReadable> currentContext = getContext();
-        req.setAttribute(
-          ATTRIBUTE_NAME,
-          ContextSet.convert(contextSetReadable)
-        );
+        req.setAttribute(ATTRIBUTE_NAME, ContextSet.convert(contextSetReadable));
         return currentContext;
       })
       .orElse(Optional.empty());

@@ -3,8 +3,8 @@ package com.reforge.sdk;
 import com.google.common.collect.ImmutableSet;
 import com.reforge.sdk.config.ConfigChangeListener;
 import com.reforge.sdk.config.logging.LogLevelChangeListener;
-import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.context.ContextSetReadable;
+import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.internal.Internal;
 import com.reforge.sdk.internal.TelemetryListener;
 import com.reforge.sdk.internal.ThreadLocalContextStore;
@@ -81,8 +81,11 @@ public class Options {
   private ContextSetReadable globalContext;
 
   public Options() {
-    setApikey(Optional.ofNullable(System.getenv("REFORGE_SDK_KEY"))
-        .orElse(System.getenv("PREFAB_API_KEY")));
+    setApikey(
+      Optional
+        .ofNullable(System.getenv("REFORGE_SDK_KEY"))
+        .orElse(System.getenv("PREFAB_API_KEY"))
+    );
     configOverrideDir = System.getProperty("user.home");
     if ("LOCAL_ONLY".equals(System.getenv("REFORGE_DATASOURCES"))) {
       datasources = Datasources.LOCAL_ONLY;

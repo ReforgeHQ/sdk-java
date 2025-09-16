@@ -116,9 +116,7 @@ public class LogAggregatorIntegrationTestCaseDescriptor
       })
       .collect(Collectors.toList());
 
-    TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(
-            sdk
-    );
+    TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(sdk);
 
     await()
       .atMost(Duration.of(30, ChronoUnit.SECONDS))

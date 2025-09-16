@@ -13,9 +13,7 @@ import java.util.stream.StreamSupport;
 
 public class LookupContext {
 
-  public static final LookupContext EMPTY = new LookupContext(
-    ContextSetReadable.EMPTY
-  );
+  public static final LookupContext EMPTY = new LookupContext(ContextSetReadable.EMPTY);
 
   private final ContextSet prefabContextSet;
 

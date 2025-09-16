@@ -46,9 +46,7 @@ public class ContextSet implements ContextSetReadable {
    * @param contextSetReadable instance to convert
    * @return a PrefabContextSet built as discussed above
    */
-  public static ContextSet convert(
-    ContextSetReadable contextSetReadable
-  ) {
+  public static ContextSet convert(ContextSetReadable contextSetReadable) {
     if (contextSetReadable instanceof ContextSet) {
       return (ContextSet) contextSetReadable;
     }

@@ -11,12 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ConfigStoreImpl implements ConfigStore {
 
   private final AtomicReference<MergedConfigData> data = new AtomicReference<>(
-    new MergedConfigData(
-      Map.of(),
-      0,
-      ContextSetReadable.EMPTY,
-      ContextSetReadable.EMPTY
-    )
+    new MergedConfigData(Map.of(), 0, ContextSetReadable.EMPTY, ContextSetReadable.EMPTY)
   );
 
   @Override

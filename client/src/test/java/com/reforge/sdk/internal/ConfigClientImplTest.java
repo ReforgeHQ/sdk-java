@@ -56,10 +56,7 @@ class ConfigClientImplTest {
     );
 
     ConfigClient configClient = new ConfigClientImpl(baseClient);
-    assertThrows(
-      SdkInitializationTimeoutException.class,
-      () -> configClient.get("key")
-    );
+    assertThrows(SdkInitializationTimeoutException.class, () -> configClient.get("key"));
   }
 
   @Test
@@ -152,39 +149,24 @@ class ConfigClientImplTest {
 
   @Test
   void itLooksUpLogLevelsWithProvidedEmptyContext() {
-    try (
-      Sdk sdk = new Sdk(
-        TestData.getDefaultOptionsWithEnvName("logging_multilevel")
-      )
-    ) {
+    try (Sdk sdk = new Sdk(TestData.getDefaultOptionsWithEnvName("logging_multilevel"))) {
       ConfigClient configClient = sdk.configClient();
       assertThat(
-        configClient.getLogLevel(
-          "com.example.p1.ClassOne",
-          ContextSetReadable.EMPTY
-        )
+        configClient.getLogLevel("com.example.p1.ClassOne", ContextSetReadable.EMPTY)
       )
         .contains(Prefab.LogLevel.TRACE);
 
       assertThat(
-        configClient.getLogLevel(
-          "com.example.p1.ClassTwo",
-          ContextSetReadable.EMPTY
-        )
+        configClient.getLogLevel("com.example.p1.ClassTwo", ContextSetReadable.EMPTY)
       )
         .contains(Prefab.LogLevel.DEBUG);
 
       assertThat(
-        configClient.getLogLevel(
-          "com.example.AnotherClass",
-          ContextSetReadable.EMPTY
-        )
+        configClient.getLogLevel("com.example.AnotherClass", ContextSetReadable.EMPTY)
       )
         .contains(Prefab.LogLevel.ERROR);
 
-      assertThat(
-        configClient.getLogLevel("com.foo.ClipBoard", ContextSetReadable.EMPTY)
-      )
+      assertThat(configClient.getLogLevel("com.foo.ClipBoard", ContextSetReadable.EMPTY))
         .contains(Prefab.LogLevel.WARN);
     }
   }
@@ -249,7 +231,7 @@ class ConfigClientImplTest {
 
       try (
         ContextHelper.PrefabContextScope ignored = contextHelper.performWorkWithAutoClosingContext(
-                context
+          context
         )
       ) {
         configClient.get("foobar");
@@ -276,11 +258,7 @@ class ConfigClientImplTest {
       );
 
       ContextSet localUserContext = ContextSet.from(
-        Context
-          .newBuilder("user")
-          .put("name", "roboto")
-          .put("isHuman", false)
-          .build(),
+        Context.newBuilder("user").put("name", "roboto").put("isHuman", false).build(),
         Context.newBuilder("transaction").put("type", "credit").build()
       );
 
@@ -297,11 +275,7 @@ class ConfigClientImplTest {
 
       LookupContext expected = new LookupContext(
         ContextSet.from(
-          Context
-            .newBuilder("user")
-            .put("name", "roboto")
-            .put("isHuman", false)
-            .build(),
+          Context.newBuilder("user").put("name", "roboto").put("isHuman", false).build(),
           Context.newBuilder("computer").put("greeting", "hello computer").build(),
           Context.newBuilder("transaction").put("type", "credit").build()
         )

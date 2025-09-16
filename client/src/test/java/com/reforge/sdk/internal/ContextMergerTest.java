@@ -22,30 +22,14 @@ class ContextMergerTest {
   );
 
   private static final ContextSet CURRENT = ContextSet.from(
-    Context
-      .newBuilder("a")
-      .put("current-a-foo", "bar")
-      .put("current-a-abc", 123)
-      .build(),
-    Context
-      .newBuilder("b")
-      .put("current-a-foo", "bar")
-      .put("current-a-abc", 123)
-      .build(),
+    Context.newBuilder("a").put("current-a-foo", "bar").put("current-a-abc", 123).build(),
+    Context.newBuilder("b").put("current-a-foo", "bar").put("current-a-abc", 123).build(),
     Context.newBuilder("current").put("rainy", "day").put("solar", 456).build()
   );
 
   private static final ContextSet PASSED = ContextSet.from(
-    Context
-      .newBuilder("a")
-      .put("passed-a-foo", "bar")
-      .put("passed-a-abc", 123)
-      .build(),
-    Context
-      .newBuilder("b")
-      .put("passed-a-foo", "bar")
-      .put("passed-a-abc", 123)
-      .build(),
+    Context.newBuilder("a").put("passed-a-foo", "bar").put("passed-a-abc", 123).build(),
+    Context.newBuilder("b").put("passed-a-foo", "bar").put("passed-a-abc", 123).build(),
     Context.newBuilder("passed").put("foggy", "day").put("solar", 345).build()
   );
 

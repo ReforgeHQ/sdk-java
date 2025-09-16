@@ -9,7 +9,6 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.core.spi.FilterReply;
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.ConfigClient;
-
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

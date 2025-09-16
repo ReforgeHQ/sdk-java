@@ -16,9 +16,7 @@ public interface ContextStore {
    * @param contextSetReadable
    * @return existing context, if present
    */
-  Optional<ContextSetReadable> setContext(
-    ContextSetReadable contextSetReadable
-  );
+  Optional<ContextSetReadable> setContext(ContextSetReadable contextSetReadable);
 
   /**
    * Removes all prefab contexts the current context session scope

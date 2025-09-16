@@ -2,9 +2,9 @@ package com.reforge.sdk;
 
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.config.ConfigChangeListener;
-import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextSetReadable;
+import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.internal.ConfigClientCore;
 import java.util.Collection;
 import java.util.Map;
@@ -18,9 +18,7 @@ public interface ConfigClient
    * @param prefabContext additional context to use to evaluate the config. Will be added to existing context as documented in {@link ContextStore#addContext(Context) addcontext} Pass Null or {@link ContextSetReadable#EMPTY} to keep context as is
    * @return a Map with the config's key as the key, the current ConfigValue as map's value
    */
-  Map<String, Prefab.ConfigValue> getAll(
-    @Nullable ContextSetReadable prefabContext
-  );
+  Map<String, Prefab.ConfigValue> getAll(@Nullable ContextSetReadable prefabContext);
 
   /**
    * @return all known config keys
@@ -36,14 +34,6 @@ public interface ConfigClient
   boolean addConfigChangeListener(ConfigChangeListener configChangeListener);
 
   boolean removeConfigChangeListener(ConfigChangeListener configChangeListener);
-
-  /**
-   * This method is for primarily internal use by Prefab's logging filter implementations
-   * @param loggerName the fully qualified name of a logger to report
-   * @param logLevel the log level
-   * @param count the number of log messages
-   */
-  void reportLoggerUsage(String loggerName, Prefab.LogLevel logLevel, long count);
 
   /**
    * Evaluates a configuration based on the arguments

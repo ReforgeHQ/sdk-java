@@ -77,9 +77,7 @@ public class ContextShapeAggregator {
     return shapesBuilder.build();
   }
 
-  private Prefab.ContextShapes extractShapes(
-    ContextSetReadable contextSetReadable
-  ) {
+  private Prefab.ContextShapes extractShapes(ContextSetReadable contextSetReadable) {
     Prefab.ContextShapes.Builder shapesBuilder = Prefab.ContextShapes.newBuilder();
     StreamSupport
       .stream(contextSetReadable.getContexts().spliterator(), false)

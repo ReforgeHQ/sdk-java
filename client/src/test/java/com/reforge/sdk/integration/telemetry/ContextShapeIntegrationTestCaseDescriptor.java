@@ -85,9 +85,7 @@ public class ContextShapeIntegrationTestCaseDescriptor
       .isTrue();
     List<Prefab.ContextShape> expectedShapes = buildExpectedShapesFromExpectedDataNode();
     sdk.configClient().get("my-test-key", contextSet);
-    TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(
-            sdk
-    );
+    TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(sdk);
 
     await()
       .atMost(Duration.of(3, ChronoUnit.SECONDS))

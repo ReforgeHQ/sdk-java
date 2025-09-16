@@ -35,11 +35,7 @@ public interface TypedConfigClient {
    * @param context context for config targeting
    * @return the configured value or defaultValue if the configured value does not exist or any other exception occurs
    */
-  double getDouble(
-    String key,
-    double defaultValue,
-    @Nullable ContextSetReadable context
-  );
+  double getDouble(String key, double defaultValue, @Nullable ContextSetReadable context);
 
   /**
    * Gets the specified String configured value
@@ -48,11 +44,7 @@ public interface TypedConfigClient {
    * @param context context for config targeting
    * @return the configured value or defaultValue if the configured value does not exist or any other exception occurs
    */
-  String getString(
-    String key,
-    String defaultValue,
-    @Nullable ContextSetReadable context
-  );
+  String getString(String key, String defaultValue, @Nullable ContextSetReadable context);
 
   /**
    * Gets the specified `List<String>` configured value

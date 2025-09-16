@@ -41,10 +41,7 @@ public abstract class TelemetryIntegrationTestCaseDescriptor
   }
 
   TelemetryAccumulator getTelemetryAccumulator(Sdk sdk) {
-    return (TelemetryAccumulator) sdk
-      .getOptions()
-      .getTelemetryListener()
-      .orElseThrow();
+    return (TelemetryAccumulator) sdk.getOptions().getTelemetryListener().orElseThrow();
   }
 
   @Override

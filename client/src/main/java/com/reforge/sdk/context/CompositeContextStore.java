@@ -25,9 +25,7 @@ public class CompositeContextStore implements ContextStore {
   }
 
   @Override
-  public Optional<ContextSetReadable> setContext(
-    ContextSetReadable contextSetReadable
-  ) {
+  public Optional<ContextSetReadable> setContext(ContextSetReadable contextSetReadable) {
     return getValidStore().flatMap(cs -> cs.setContext(contextSetReadable));
   }
 

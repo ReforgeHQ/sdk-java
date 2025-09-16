@@ -1,9 +1,9 @@
 package com.reforge.sdk.internal;
 
-import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.context.ContextSetReadable;
+import com.reforge.sdk.context.ContextStore;
 import java.util.Optional;
 
 public class ThreadLocalContextStore implements ContextStore {
@@ -21,13 +21,9 @@ public class ThreadLocalContextStore implements ContextStore {
   }
 
   @Override
-  public Optional<ContextSetReadable> setContext(
-    ContextSetReadable contextSetReadable
-  ) {
+  public Optional<ContextSetReadable> setContext(ContextSetReadable contextSetReadable) {
     Optional<ContextSet> previousContext = getStoredContextSet();
-    PREFAB_CONTEXT_SET_THREAD_LOCAL.set(
-      ContextSet.convert(contextSetReadable)
-    );
+    PREFAB_CONTEXT_SET_THREAD_LOCAL.set(ContextSet.convert(contextSetReadable));
     return previousContext.map(ContextSetReadable::readOnlyContextSetView);
   }
 

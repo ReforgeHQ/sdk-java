@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,8 +40,7 @@ public class ConfigRuleEvaluatorTest {
     when(mockConfigStoreImpl.getConfigIncludedContext())
       .thenReturn(ContextSetReadable.EMPTY);
 
-    when(mockConfigStoreImpl.getGlobalContext())
-      .thenReturn(ContextSetReadable.EMPTY);
+    when(mockConfigStoreImpl.getGlobalContext()).thenReturn(ContextSetReadable.EMPTY);
   }
 
   @Test
@@ -888,9 +886,7 @@ public class ConfigRuleEvaluatorTest {
     @Nullable Prefab.ConfigValue configValue
   ) {
     if (configValue != null) {
-      return new LookupContext(
-        Context.unnamedFromMap(Map.of(propName, configValue))
-      );
+      return new LookupContext(Context.unnamedFromMap(Map.of(propName, configValue)));
     }
     return LookupContext.EMPTY;
   }

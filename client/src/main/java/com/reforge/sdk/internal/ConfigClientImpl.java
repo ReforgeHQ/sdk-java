@@ -16,9 +16,9 @@ import com.reforge.sdk.config.Match;
 import com.reforge.sdk.config.logging.AbstractLoggingListener;
 import com.reforge.sdk.config.logging.LogLevelChangeEvent;
 import com.reforge.sdk.config.logging.LogLevelChangeListener;
-import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextSetReadable;
+import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.value.LiveBoolean;
 import com.reforge.sdk.value.LiveDouble;
 import com.reforge.sdk.value.LiveDuration;
@@ -26,7 +26,6 @@ import com.reforge.sdk.value.LiveLong;
 import com.reforge.sdk.value.LiveString;
 import com.reforge.sdk.value.LiveStringList;
 import com.reforge.sdk.value.Value;
-
 import java.net.http.HttpResponse;
 import java.time.Clock;
 import java.time.Duration;
@@ -80,10 +79,7 @@ public class ConfigClientImpl implements ConfigClient {
   private final TelemetryManager telemetryManager;
   private final TypedConfigClientImpl typedConfigImpl;
 
-  public ConfigClientImpl(
-    Sdk baseClient,
-    ConfigChangeListener... listeners
-  ) {
+  public ConfigClientImpl(Sdk baseClient, ConfigChangeListener... listeners) {
     this(
       baseClient,
       new UpdatingConfigResolver(
@@ -139,7 +135,6 @@ public class ConfigClientImpl implements ConfigClient {
       Executors.newSingleThreadExecutor().submit(this::startConnections);
       telemetryManager =
         new TelemetryManager(
-          new LoggerStatsAggregator(Clock.systemUTC()),
           new MatchStatsAggregator(),
           new ContextShapeAggregator(),
           new ExampleContextBuffer(),
@@ -338,13 +333,6 @@ public class ConfigClientImpl implements ConfigClient {
   @Override
   public boolean removeConfigChangeListener(ConfigChangeListener configChangeListener) {
     return configChangeListeners.remove(configChangeListener);
-  }
-
-  @Override
-  public void reportLoggerUsage(String loggerName, Prefab.LogLevel logLevel, long count) {
-    if (logLevel != null && telemetryManager != null) {
-      telemetryManager.reportLoggerUsage(loggerName, logLevel, count);
-    }
   }
 
   @Override

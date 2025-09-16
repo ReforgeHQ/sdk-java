@@ -24,10 +24,7 @@ public abstract class AbstractFeatureFlagResolverImpl implements FeatureFlagClie
    * @return
    */
   @Override
-  public boolean featureIsOn(
-    String feature,
-    @Nullable ContextSetReadable prefabContext
-  ) {
+  public boolean featureIsOn(String feature, @Nullable ContextSetReadable prefabContext) {
     return isOn(get(feature, prefabContext));
   }
 

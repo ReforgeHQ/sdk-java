@@ -40,7 +40,6 @@ public class TelemetryManager implements AutoCloseable {
   then periodically gets their aggregated results and posts to the prefab api
    */
 
-  private final LoggerStatsAggregator loggerStatsAggregator;
   private final MatchStatsAggregator matchStatsAggregator;
   private final ContextShapeAggregator contextShapeAggregator;
   private final ExampleContextBuffer exampleContextBuffer;
@@ -59,7 +58,6 @@ public class TelemetryManager implements AutoCloseable {
   private final AtomicLong recordingPeriodStartTime = new AtomicLong();
 
   TelemetryManager(
-    LoggerStatsAggregator loggerStatsAggregator,
     MatchStatsAggregator matchStatsAggregator,
     ContextShapeAggregator contextShapeAggregator,
     ExampleContextBuffer exampleContextBuffer,
@@ -67,7 +65,6 @@ public class TelemetryManager implements AutoCloseable {
     Options options,
     Clock clock
   ) {
-    this.loggerStatsAggregator = loggerStatsAggregator;
     this.matchStatsAggregator = matchStatsAggregator;
     this.contextShapeAggregator = contextShapeAggregator;
     this.exampleContextBuffer = exampleContextBuffer;
@@ -136,25 +133,6 @@ public class TelemetryManager implements AutoCloseable {
     }
   }
 
-  void reportLoggerUsage(String loggerName, Prefab.LogLevel logLevel, long count) {
-    if (
-      !inputQueue.offer(new LoggingEvent(clock.millis(), loggerName, logLevel, count))
-    ) {
-      droppedEventCount.accumulate(1);
-    }
-  }
-
-  private void handleLogEvent(IncomingTelemetryEvent incomingTelemetryEvent) {
-    LoggingEvent loggingEvent = (LoggingEvent) incomingTelemetryEvent;
-    if (options.isCollectLoggerCounts()) {
-      loggerStatsAggregator.reportLoggerUsage(
-        loggingEvent.loggerName,
-        loggingEvent.logLevel,
-        loggingEvent.count
-      );
-    }
-  }
-
   private void handleMatchEvent(IncomingTelemetryEvent telemetryEvent) {
     MatchEvent matchEvent = (MatchEvent) telemetryEvent;
     if (!matchEvent.lookupContext.getPrefabContextSet().isEmpty()) {
@@ -185,7 +163,6 @@ public class TelemetryManager implements AutoCloseable {
     // build an output buffer by retrieving data from all the aggregators/buffers
     MatchStatsAggregator.StatsAggregate matchStats = matchStatsAggregator.getAndResetStatsAggregate();
     Set<Prefab.ExampleContext> exampleContexts = exampleContextBuffer.getAndResetContexts();
-    LoggerStatsAggregator.LogCounts loggerCounts = loggerStatsAggregator.getAndResetStats();
     Optional<Prefab.ContextShapes> contextShapesMaybe = contextShapeAggregator.getShapesIfNewInfo();
     long currentDroppedEventCount = droppedEventCount.getThenReset();
     long previousReportingPeriodStart = recordingPeriodStartTime.get();
@@ -199,7 +176,7 @@ public class TelemetryManager implements AutoCloseable {
           now,
           exampleContexts,
           matchStats,
-          loggerCounts.getLoggerMap().values(),
+          java.util.Collections.emptyList(),
           contextShapesMaybe,
           currentDroppedEventCount,
           flushEvent.future
@@ -212,7 +189,6 @@ public class TelemetryManager implements AutoCloseable {
       droppedEventCount.accumulate(currentDroppedEventCount);
       recordingPeriodStartTime.set(previousReportingPeriodStart);
       exampleContextBuffer.setContexts(exampleContexts);
-      loggerStatsAggregator.setStats(loggerCounts);
       flushEvent.future.complete(false);
     }
   }
@@ -237,9 +213,6 @@ public class TelemetryManager implements AutoCloseable {
           inputQueue.drainTo(drain, DRAIN_SIZE - 1);
           for (IncomingTelemetryEvent telemetryEvent : drain) {
             switch (telemetryEvent.eventType) {
-              case LOG:
-                handleLogEvent(telemetryEvent);
-                break;
               case MATCH:
                 handleMatchEvent(telemetryEvent);
                 break;
@@ -366,7 +339,6 @@ public class TelemetryManager implements AutoCloseable {
 
     enum EventType {
       MATCH,
-      LOG,
       FLUSH,
     }
 
@@ -398,27 +370,6 @@ public class TelemetryManager implements AutoCloseable {
       this.configKey = configKey;
       this.match = match;
       this.lookupContext = lookupContext;
-    }
-  }
-
-  static class LoggingEvent extends IncomingTelemetryEvent {
-
-    private final String loggerName;
-    private final Prefab.LogLevel logLevel;
-    private final long count;
-    Match match;
-    LookupContext lookupContext;
-
-    LoggingEvent(
-      long timestamp,
-      String loggerName,
-      Prefab.LogLevel logLevel,
-      long count
-    ) {
-      super(EventType.LOG, timestamp);
-      this.loggerName = loggerName;
-      this.logLevel = logLevel;
-      this.count = count;
     }
   }
 

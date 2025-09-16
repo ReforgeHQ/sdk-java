@@ -44,11 +44,6 @@ public class PrefabContextFilter extends AbstractFilter {
     }
 
     try {
-      configClient.reportLoggerUsage(
-        loggerName,
-        Log4jLevelMapper.REVERSE_LEVEL_MAP.get(level),
-        1
-      );
       Optional<Prefab.LogLevel> loglevelMaybe = getLogLevel(loggerName, level);
       if (loglevelMaybe.isPresent()) {
         Level calculatedMinLogLevelToAccept = Log4jLevelMapper.LEVEL_MAP.get(
