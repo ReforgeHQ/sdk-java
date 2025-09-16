@@ -22,7 +22,7 @@ nested2:
 
 log-level:
   _: warn
-  cloud.prefab.client: warn
+  com.reforge.client: warn
   tests:
     _: debug
     capitalized: INFO
