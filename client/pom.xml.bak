@@ -9,8 +9,8 @@
 
   <artifactId>client</artifactId>
   <packaging>jar</packaging>
-  <name>Reforge SDK</name>
-  <description>SDK Client for https://reforge.com: feature flags and configuration as a service</description>
+  <name>Prefab.cloud API Client</name>
+  <description>API Client for https://prefab.cloud: rate limits, feature flags and semaphores as a service</description>
 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
@@ -150,11 +150,11 @@
         <configuration>
           <protocVersion>3.25.8</protocVersion>
           <sourceDirectories>
-            <sourceDirectory>${project.basedir}/src/main/protobufs/shared-protobufs</sourceDirectory>
+            <sourceDirectory>${project.basedir}/src/main/protos/shared-protos</sourceDirectory>
           </sourceDirectories>
-          <excludes>
-            <include>prefab-services.proto</include>
-          </excludes>
+            <excludes>
+                <include>prefab-services.proto</include>
+            </excludes>
         </configuration>
         <executions>
           <execution>

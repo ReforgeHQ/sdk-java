@@ -8,8 +8,8 @@
     <version>53</version>
   </parent>
 
-  <groupId>cloud.prefab</groupId>
-  <artifactId>prefab-cloud-parent</artifactId>
+  <groupId>com.reforge</groupId>
+  <artifactId>sdk-parent</artifactId>
   <version>0.3.25</version>
   <packaging>pom</packaging>
 
