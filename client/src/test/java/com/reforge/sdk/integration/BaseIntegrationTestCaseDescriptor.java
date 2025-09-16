@@ -41,8 +41,8 @@ public abstract class BaseIntegrationTestCaseDescriptor {
   protected abstract void performVerification(Sdk sdk);
 
   private static final List<String> REQUIRED_ENV_VARS = List.of(
-    "PREFAB_INTEGRATION_TEST_API_KEY",
-    "PREFAB_INTEGRATION_TEST_ENCRYPTION_KEY",
+    "REFORGE_INTEGRATION_TEST_API_KEY",
+    "REFORGE_INTEGRATION_TEST_ENCRYPTION_KEY",
     "NOT_A_NUMBER",
     "IS_A_NUMBER"
   );
@@ -76,10 +76,10 @@ public abstract class BaseIntegrationTestCaseDescriptor {
 
   @MustBeClosed
   private Sdk buildClient(IntegrationTestClientOverrides clientOverrides) {
-    String apiKey = System.getenv("PREFAB_INTEGRATION_TEST_API_KEY");
+    String apiKey = System.getenv("REFORGE_INTEGRATION_TEST_API_KEY");
     if (apiKey == null) {
       throw new IllegalStateException(
-        "Env var PREFAB_INTEGRATION_TEST_API_KEY is not set"
+        "Env var REFORGE_INTEGRATION_TEST_API_KEY is not set"
       );
     }
 

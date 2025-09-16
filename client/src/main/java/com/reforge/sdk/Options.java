@@ -52,7 +52,7 @@ public class Options {
   private String apikey;
   private String configOverrideDir;
   private List<String> prefabEnvs = new ArrayList<>();
-  private Datasources prefabDatasources = Datasources.ALL;
+  private Datasources datasources = Datasources.ALL;
   private int initializationTimeoutSec = 10;
   private OnInitializationFailure onInitializationFailure = OnInitializationFailure.RAISE;
   private boolean collectLoggerCounts = true;
@@ -81,16 +81,17 @@ public class Options {
   private ContextSetReadable globalContext;
 
   public Options() {
-    setApikey(System.getenv("PREFAB_API_KEY"));
+    setApikey(Optional.ofNullable(System.getenv("REFORGE_SDK_KEY"))
+        .orElse(System.getenv("PREFAB_API_KEY")));
     configOverrideDir = System.getProperty("user.home");
-    if ("LOCAL_ONLY".equals(System.getenv("PREFAB_DATASOURCES"))) {
-      prefabDatasources = Datasources.LOCAL_ONLY;
+    if ("LOCAL_ONLY".equals(System.getenv("REFORGE_DATASOURCES"))) {
+      datasources = Datasources.LOCAL_ONLY;
     }
-    localDatafile = System.getProperty("PREFAB_DATAFILE");
+    localDatafile = System.getProperty("REFORGE_DATAFILE");
   }
 
   public boolean isLocalOnly() {
-    return Datasources.LOCAL_ONLY == prefabDatasources;
+    return Datasources.LOCAL_ONLY == datasources;
   }
 
   public String getApikey() {
@@ -184,7 +185,7 @@ public class Options {
   }
 
   public Datasources getPrefabDatasource() {
-    return prefabDatasources;
+    return datasources;
   }
 
   /**
@@ -194,7 +195,7 @@ public class Options {
    */
 
   public Options setPrefabDatasource(Datasources prefabDatasources) {
-    this.prefabDatasources = prefabDatasources;
+    this.datasources = prefabDatasources;
     return this;
   }
 

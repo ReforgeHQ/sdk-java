@@ -28,8 +28,8 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       env:
-        PREFAB_INTEGRATION_TEST_API_KEY: ${{ secrets.PREFAB_INTEGRATION_TEST_API_KEY }}
-        PREFAB_API_KEY: 1-fake-apikey
-        PREFAB_INTEGRATION_TEST_ENCRYPTION_KEY: "c87ba22d8662282abe8a0e4651327b579cb64a454ab0f4c170b45b15f049a221"
+        REFORGE_INTEGRATION_TEST_API_KEY: ${{ secrets.REFORGE_INTEGRATION_TEST_API_KEY }}
+        REFORGE_SDK_KEY: 1-fake-apikey
+        REFORGE_INTEGRATION_TEST_ENCRYPTION_KEY: "c87ba22d8662282abe8a0e4651327b579cb64a454ab0f4c170b45b15f049a221"
         NOT_A_NUMBER: "not a number"
         IS_A_NUMBER: 1234

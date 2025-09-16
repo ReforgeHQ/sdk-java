@@ -4,7 +4,7 @@ This example demonstrates usage of the log4j filter along with global and thread
 
 ### Instructions
 
-Set the `PREFAB_API_KEY` environment variable when running. 
+Set the `REFORGE_SDK_KEY` environment variable when running. 
 
 `cloud.prefab.example.log4j.Main` should quickly appear in the logging configuration screen at prefab 
 
