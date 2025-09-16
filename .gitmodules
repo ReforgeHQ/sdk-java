@@ -1,5 +1,5 @@
 [submodule "prefab-cloud"]
-	path = client/prefab-cloud
+	path = client/src/main/protobufs/shared-protobufs
 	url = https://github.com/prefab-cloud/prefab-cloud.git
 [submodule "integration-test-data"]
 	path = client/src/test/resources/prefab-cloud-integration-test-data

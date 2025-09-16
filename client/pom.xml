@@ -144,6 +144,28 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>io.github.ascopes</groupId>
+        <artifactId>protobuf-maven-plugin</artifactId>
+        <version>2.13.1</version>
+        <configuration>
+          <protocVersion>3.25.2</protocVersion>
+          <sourceDirectories>
+            <sourceDirectory>${project.basedir}/src/main/protobufs/shared-protobufs</sourceDirectory>
+          </sourceDirectories>
+            <excludes>
+                <include>prefab-services.proto</include>
+            </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+              <goal>generate-test</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <executions>
@@ -220,7 +242,7 @@
               <shadeSourcesContent>true</shadeSourcesContent>
               <useDependencyReducedPomInJar>true</useDependencyReducedPomInJar>
               <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"></transformer>
               </transformers>
             </configuration>
           </execution>
@@ -230,22 +252,6 @@
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
         <extensions>true</extensions>
-      </plugin>
-      <plugin>
-        <groupId>org.xolstice.maven.plugins</groupId>
-        <artifactId>protobuf-maven-plugin</artifactId>
-        <configuration>
-          <protocArtifact>com.google.protobuf:protoc:${dep.protoc.version}:exe:${os.detected.classifier}</protocArtifact>
-          <protoSourceRoot>prefab-cloud</protoSourceRoot>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>test-compile</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
 
