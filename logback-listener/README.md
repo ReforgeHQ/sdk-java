@@ -26,4 +26,4 @@ PrefabContextTurboFilter.install(configClient);
 
 ## Copyright
 
-Copyright (c) 2023 PrefabCloud LLC. See LICENSE.txt for further details.
+Copyright (c) 2025 Reforge. See LICENSE for further details.

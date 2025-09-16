@@ -32,4 +32,4 @@ If you get errors about the code not being formatted, run `mvn prettier:write`
 
 ## Copyright
 
-Copyright (c) 2023 PrefabCloud LLC. See LICENSE.txt for further details.
+Copyright (c) 2025 Reforge. See LICENSE for further details.
