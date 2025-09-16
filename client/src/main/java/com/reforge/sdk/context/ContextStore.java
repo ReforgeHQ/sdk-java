@@ -7,17 +7,17 @@ public interface ContextStore {
    * Adds a context to the set of contexts for the current context-session scope
    * If there's already a context with the same type stored in the scope,
    * it is overwritten
-   * @param prefabContext a context -
+   * @param context a context -
    */
-  void addContext(PrefabContext prefabContext);
+  void addContext(Context context);
 
   /**
    * Overwrites any existing context with the provided context
-   * @param prefabContextSetReadable
+   * @param contextSetReadable
    * @return existing context, if present
    */
-  Optional<PrefabContextSetReadable> setContext(
-    PrefabContextSetReadable prefabContextSetReadable
+  Optional<ContextSetReadable> setContext(
+    ContextSetReadable contextSetReadable
   );
 
   /**
@@ -25,13 +25,13 @@ public interface ContextStore {
    * (By default, this is stored in a ThreadLocal)
    * @return existing context, if present
    */
-  Optional<PrefabContextSetReadable> clearContext();
+  Optional<ContextSetReadable> clearContext();
 
   /**
    *
    * @return unmodifiable PrefabContextSetReadable view
    */
-  Optional<PrefabContextSetReadable> getContext();
+  Optional<ContextSetReadable> getContext();
 
   /**
    *

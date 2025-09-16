@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
-class PrefabContextFilterTest {
+class ContextFilterTest {
 
   @Mock
   ConfigClient configClient;

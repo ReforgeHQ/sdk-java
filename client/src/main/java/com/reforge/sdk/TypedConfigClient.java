@@ -1,6 +1,6 @@
 package com.reforge.sdk;
 
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.time.Duration;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -16,7 +16,7 @@ public interface TypedConfigClient {
   boolean getBoolean(
     String key,
     boolean defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   );
 
   /**
@@ -26,7 +26,7 @@ public interface TypedConfigClient {
    * @param context context for config targeting
    * @return the configured value or defaultValue if the configured value does not exist or any other exception occurs
    */
-  long getLong(String key, long defaultValue, @Nullable PrefabContextSetReadable context);
+  long getLong(String key, long defaultValue, @Nullable ContextSetReadable context);
 
   /**
    * Gets the specified double configured value
@@ -38,7 +38,7 @@ public interface TypedConfigClient {
   double getDouble(
     String key,
     double defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   );
 
   /**
@@ -51,7 +51,7 @@ public interface TypedConfigClient {
   String getString(
     String key,
     String defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   );
 
   /**
@@ -64,7 +64,7 @@ public interface TypedConfigClient {
   List<String> getStringList(
     String key,
     List<String> defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   );
 
   /**
@@ -77,6 +77,6 @@ public interface TypedConfigClient {
   Duration getDuration(
     String key,
     Duration defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   );
 }

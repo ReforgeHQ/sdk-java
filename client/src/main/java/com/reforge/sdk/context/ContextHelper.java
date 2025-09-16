@@ -4,7 +4,7 @@ import com.reforge.sdk.ConfigClient;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 
-public class PrefabContextHelper {
+public class ContextHelper {
 
   private final ContextStore contextStore;
 
@@ -12,7 +12,7 @@ public class PrefabContextHelper {
    * Construct a context helper for a given context store
    * @param contextStore
    */
-  public PrefabContextHelper(ContextStore contextStore) {
+  public ContextHelper(ContextStore contextStore) {
     this.contextStore = contextStore;
   }
 
@@ -20,7 +20,7 @@ public class PrefabContextHelper {
    * Convenience constructor to create a helper for the context store attached to a client
    * @param configClient that will be queried for its contextStore at construction time
    */
-  public PrefabContextHelper(ConfigClient configClient) {
+  public ContextHelper(ConfigClient configClient) {
     this(configClient.getContextStore());
   }
 
@@ -32,7 +32,7 @@ public class PrefabContextHelper {
    * @return the return value of the callable
    */
   public <T> T performWorkWithContext(
-    PrefabContextSetReadable prefabContext,
+    ContextSetReadable prefabContext,
     Callable<T> callable
   ) throws Exception {
     try (PrefabContextScope ignored = performWorkWithAutoClosingContext(prefabContext)) {
@@ -47,7 +47,7 @@ public class PrefabContextHelper {
    * @param runnable to run
    */
   public void performWorkWithContext(
-    PrefabContextSetReadable prefabContext,
+    ContextSetReadable prefabContext,
     Runnable runnable
   ) {
     try (PrefabContextScope ignored = performWorkWithAutoClosingContext(prefabContext)) {
@@ -55,7 +55,7 @@ public class PrefabContextHelper {
     }
   }
 
-  private void resetContext(Optional<PrefabContextSetReadable> oldContext) {
+  private void resetContext(Optional<ContextSetReadable> oldContext) {
     if (oldContext.isPresent()) {
       contextStore.setContext(oldContext.get());
     } else {
@@ -70,16 +70,16 @@ public class PrefabContextHelper {
    * @return an AutoClosable PrefabContextClosable that will revert the context on close
    */
   public PrefabContextScope performWorkWithAutoClosingContext(
-    PrefabContextSetReadable context
+    ContextSetReadable context
   ) {
     return new PrefabContextScope(contextStore.setContext(context));
   }
 
   public class PrefabContextScope implements AutoCloseable {
 
-    private final Optional<PrefabContextSetReadable> contextBackup;
+    private final Optional<ContextSetReadable> contextBackup;
 
-    private PrefabContextScope(Optional<PrefabContextSetReadable> contextBackup) {
+    private PrefabContextScope(Optional<ContextSetReadable> contextBackup) {
       this.contextBackup = contextBackup;
     }
 

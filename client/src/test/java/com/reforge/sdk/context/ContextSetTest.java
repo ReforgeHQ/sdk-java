@@ -6,9 +6,9 @@ import cloud.prefab.domain.Prefab;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-class PrefabContextSetTest {
+class ContextSetTest {
 
-  static final PrefabContext PREFAB_USER_CONTEXT_1 = PrefabContext.fromMap(
+  static final Context PREFAB_USER_CONTEXT_1 = Context.fromMap(
     "User",
     Map.of(
       "firstName",
@@ -18,7 +18,7 @@ class PrefabContextSetTest {
     )
   );
 
-  static final PrefabContext PREFAB_USER_CONTEXT_1_LOWERCASE = PrefabContext.fromMap(
+  static final Context PREFAB_USER_CONTEXT_1_LOWERCASE = Context.fromMap(
     "user",
     Map.of(
       "firstName",
@@ -28,7 +28,7 @@ class PrefabContextSetTest {
     )
   );
 
-  static final PrefabContext PREFAB_USER_CONTEXT_2 = PrefabContext.fromMap(
+  static final Context PREFAB_USER_CONTEXT_2 = Context.fromMap(
     "User",
     Map.of(
       "firstName",
@@ -38,21 +38,21 @@ class PrefabContextSetTest {
     )
   );
 
-  static final PrefabContext PREFAB_COMPANY_CONTEXT = PrefabContext.fromMap(
+  static final Context PREFAB_COMPANY_CONTEXT = Context.fromMap(
     "Company",
     Map.of("Name", Prefab.ConfigValue.newBuilder().setString("Enron").build())
   );
 
   @Test
   void itIgnoresNullContextWhenAdding() {
-    PrefabContextSet prefabContextSet = new PrefabContextSet();
+    ContextSet prefabContextSet = new ContextSet();
     prefabContextSet.addContext(null);
     assertThat(prefabContextSet.isEmpty()).isTrue();
   }
 
   @Test
   void lastContextAddedForEachTypeWins() {
-    PrefabContextSet prefabContextSet = new PrefabContextSet();
+    ContextSet prefabContextSet = new ContextSet();
     prefabContextSet.addContext(PREFAB_USER_CONTEXT_1);
     prefabContextSet.addContext(PREFAB_COMPANY_CONTEXT);
     prefabContextSet.addContext(PREFAB_USER_CONTEXT_2);
@@ -64,7 +64,7 @@ class PrefabContextSetTest {
 
   @Test
   void lastContextAddedForEachTypeWinsInFromMethod() {
-    PrefabContextSet prefabContextSet = PrefabContextSet.from(
+    ContextSet prefabContextSet = ContextSet.from(
       PREFAB_USER_CONTEXT_1,
       PREFAB_COMPANY_CONTEXT,
       PREFAB_USER_CONTEXT_2
@@ -77,7 +77,7 @@ class PrefabContextSetTest {
 
   @Test
   void itIsCaseInsensitive() {
-    PrefabContextSet prefabContextSet = PrefabContextSet.from(
+    ContextSet prefabContextSet = ContextSet.from(
       PREFAB_USER_CONTEXT_2,
       PREFAB_COMPANY_CONTEXT,
       PREFAB_USER_CONTEXT_1_LOWERCASE
@@ -93,20 +93,20 @@ class PrefabContextSetTest {
 
   @Test
   void convertWorksForSetReadableCase() {
-    assertThat(PrefabContextSet.convert(PREFAB_COMPANY_CONTEXT))
-      .isEqualTo(PrefabContextSet.from(PREFAB_COMPANY_CONTEXT));
+    assertThat(ContextSet.convert(PREFAB_COMPANY_CONTEXT))
+      .isEqualTo(ContextSet.from(PREFAB_COMPANY_CONTEXT));
   }
 
   @Test
   void convertWorksForContextSetCase() {
-    PrefabContextSet prefabContextSet = PrefabContextSet.from(PREFAB_COMPANY_CONTEXT);
-    assertThat(PrefabContextSet.convert(prefabContextSet)).isEqualTo(prefabContextSet);
+    ContextSet prefabContextSet = ContextSet.from(PREFAB_COMPANY_CONTEXT);
+    assertThat(ContextSet.convert(prefabContextSet)).isEqualTo(prefabContextSet);
   }
 
   @Test
   void fingerPrintIsEmptyForKeyLess() {
     assertThat(
-      PrefabContextSet
+      ContextSet
         .from(
           PREFAB_USER_CONTEXT_2,
           PREFAB_COMPANY_CONTEXT,
@@ -120,8 +120,8 @@ class PrefabContextSetTest {
   @Test
   void fingerPrintForSingleContextWorks() {
     assertThat(
-      PrefabContextSet
-        .from(PrefabContext.newBuilder("user").put("key", "u123").build())
+      ContextSet
+        .from(Context.newBuilder("user").put("key", "u123").build())
         .getFingerPrint()
     )
       .isEqualTo("user--string: \"u123\"");
@@ -130,10 +130,10 @@ class PrefabContextSetTest {
   @Test
   void fingerPrintForContextSetWorks() {
     assertThat(
-      PrefabContextSet
+      ContextSet
         .from(
-          PrefabContext.newBuilder("user").put("key", "u123").build(),
-          PrefabContext.newBuilder("team").put("key", "t123").build()
+          Context.newBuilder("user").put("key", "u123").build(),
+          Context.newBuilder("team").put("key", "t123").build()
         )
         .getFingerPrint()
     )

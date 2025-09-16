@@ -2,7 +2,7 @@ package com.reforge.sdk.internal;
 
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.FeatureFlagClient;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
@@ -26,7 +26,7 @@ public abstract class AbstractFeatureFlagResolverImpl implements FeatureFlagClie
   @Override
   public boolean featureIsOn(
     String feature,
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   ) {
     return isOn(get(feature, prefabContext));
   }
@@ -44,14 +44,14 @@ public abstract class AbstractFeatureFlagResolverImpl implements FeatureFlagClie
   @Override
   public Optional<Prefab.ConfigValue> get(
     String feature,
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   ) {
     return getConfigValue(feature, prefabContext);
   }
 
   protected abstract Optional<Prefab.ConfigValue> getConfigValue(
     String feature,
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   );
 
   private boolean isOn(Optional<Prefab.ConfigValue> featureFlagVariant) {

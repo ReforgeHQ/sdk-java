@@ -2,7 +2,7 @@ package com.reforge.sdk.internal;
 
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.ConfigClient;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
@@ -16,7 +16,7 @@ public class FeatureFlagClientImpl extends AbstractFeatureFlagResolverImpl {
 
   protected Optional<Prefab.ConfigValue> getConfigValue(
     String feature,
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   ) {
     return configClient.get(feature, prefabContext);
   }

@@ -1,7 +1,7 @@
 package com.reforge.sdk;
 
 import com.reforge.sdk.config.ConfigElement;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Collection;
 
 public interface ConfigStore {
@@ -23,11 +23,11 @@ public interface ConfigStore {
    *
    * @return the context sent from prefab - included with the config payload
    */
-  PrefabContextSetReadable getConfigIncludedContext();
+  ContextSetReadable getConfigIncludedContext();
 
   /**
    *
    * @return the context set in options before starting the prefab client
    */
-  PrefabContextSetReadable getGlobalContext();
+  ContextSetReadable getGlobalContext();
 }

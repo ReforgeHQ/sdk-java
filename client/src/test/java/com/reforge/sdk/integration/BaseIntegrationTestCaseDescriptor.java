@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.fail;
 
 import com.google.errorprone.annotations.MustBeClosed;
 import com.reforge.sdk.Options;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.context.PrefabContextHelper;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.context.ContextHelper;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.function.Executable;
@@ -21,13 +21,13 @@ public abstract class BaseIntegrationTestCaseDescriptor {
   );
   private final String name;
   private final IntegrationTestClientOverrides clientOverrides;
-  private final Optional<PrefabContextSet> globalContextMaybe;
+  private final Optional<ContextSet> globalContextMaybe;
   protected Optional<String> dataType;
 
   public BaseIntegrationTestCaseDescriptor(
     String name,
     IntegrationTestClientOverrides clientOverrides,
-    Optional<PrefabContextSet> globalContextMaybe
+    Optional<ContextSet> globalContextMaybe
   ) {
     this.name = name;
     this.clientOverrides = clientOverrides;
@@ -38,7 +38,7 @@ public abstract class BaseIntegrationTestCaseDescriptor {
     return name;
   }
 
-  protected abstract void performVerification(PrefabCloudClient prefabCloudClient);
+  protected abstract void performVerification(Sdk sdk);
 
   private static final List<String> REQUIRED_ENV_VARS = List.of(
     "PREFAB_INTEGRATION_TEST_API_KEY",
@@ -47,8 +47,8 @@ public abstract class BaseIntegrationTestCaseDescriptor {
     "IS_A_NUMBER"
   );
 
-  protected PrefabContextSetReadable getBlockContext() {
-    return PrefabContextSet.EMPTY;
+  protected ContextSetReadable getBlockContext() {
+    return ContextSet.EMPTY;
   }
 
   public Executable asExecutable() {
@@ -61,10 +61,10 @@ public abstract class BaseIntegrationTestCaseDescriptor {
           );
         }
       }
-      try (PrefabCloudClient client = buildClient(clientOverrides)) {
-        PrefabContextHelper helper = new PrefabContextHelper(client.configClient());
+      try (Sdk client = buildClient(clientOverrides)) {
+        ContextHelper helper = new ContextHelper(client.configClient());
         try (
-          PrefabContextHelper.PrefabContextScope ignored = helper.performWorkWithAutoClosingContext(
+          ContextHelper.PrefabContextScope ignored = helper.performWorkWithAutoClosingContext(
             getBlockContext()
           )
         ) {
@@ -75,7 +75,7 @@ public abstract class BaseIntegrationTestCaseDescriptor {
   }
 
   @MustBeClosed
-  private PrefabCloudClient buildClient(IntegrationTestClientOverrides clientOverrides) {
+  private Sdk buildClient(IntegrationTestClientOverrides clientOverrides) {
     String apiKey = System.getenv("PREFAB_INTEGRATION_TEST_API_KEY");
     if (apiKey == null) {
       throw new IllegalStateException(
@@ -107,7 +107,7 @@ public abstract class BaseIntegrationTestCaseDescriptor {
     }
 
     customizeOptions(options);
-    return new PrefabCloudClient(options);
+    return new Sdk(options);
   }
 
   protected void customizeOptions(Options options) {}

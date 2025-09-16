@@ -2,8 +2,8 @@ package com.reforge.client.micronaut;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
 import io.micronaut.http.HttpMethod;
 import io.micronaut.http.context.ServerRequestContext;
 import io.micronaut.http.simple.SimpleHttpRequest;
@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 class ServerRequestContextStoreTest {
 
   ServerRequestContextStore prefabStateStore = new ServerRequestContextStore();
-  PrefabContext userContext = PrefabContext
+  Context userContext = Context
     .newBuilder("user")
     .put("country", "us")
     .build();
-  PrefabContext serverContext = PrefabContext.newBuilder("server").put("az", "2").build();
+  Context serverContext = Context.newBuilder("server").put("az", "2").build();
 
-  PrefabContextSet userAndServerContextSet = PrefabContextSet.from(
+  ContextSet userAndServerContextSet = ContextSet.from(
     userContext,
     serverContext
   );
@@ -84,7 +84,7 @@ class ServerRequestContextStoreTest {
         .isPresent()
         .get()
         .usingRecursiveComparison()
-        .isEqualTo(PrefabContextSet.convert(userContext));
+        .isEqualTo(ContextSet.convert(userContext));
     }
 
     @Test
@@ -94,13 +94,13 @@ class ServerRequestContextStoreTest {
     }
 
     @Nested
-    class WithPreExistingPrefabContext {
+    class WithPreExistingContext {
 
-      PrefabContext newUserContext = PrefabContext
+      Context newUserContext = Context
         .newBuilder("user")
         .put("country", "UK")
         .build();
-      PrefabContextSet newUserAndServerContextSet = PrefabContextSet.from(
+      ContextSet newUserAndServerContextSet = ContextSet.from(
         newUserContext,
         serverContext
       );

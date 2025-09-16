@@ -1,7 +1,7 @@
 package com.reforge.sdk;
 
 import cloud.prefab.domain.Prefab;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Optional;
 
 public interface FeatureFlagClient {
@@ -17,7 +17,7 @@ public interface FeatureFlagClient {
    * @param prefabContext the context to use for feature evaluation
    * @return
    */
-  boolean featureIsOn(String feature, PrefabContextSetReadable prefabContext);
+  boolean featureIsOn(String feature, ContextSetReadable prefabContext);
 
   /**
    * Return the feature flag config value for the given feature using the context loaded from the ContextStore
@@ -34,6 +34,6 @@ public interface FeatureFlagClient {
    */
   Optional<Prefab.ConfigValue> get(
     String feature,
-    PrefabContextSetReadable prefabContext
+    ContextSetReadable prefabContext
   );
 }

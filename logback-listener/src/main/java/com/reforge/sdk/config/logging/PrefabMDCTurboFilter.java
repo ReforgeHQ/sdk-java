@@ -5,7 +5,7 @@ import ch.qos.logback.classic.Logger;
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.config.ConfigValueUtils;
-import com.reforge.sdk.context.PrefabContext;
+import com.reforge.sdk.context.Context;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class PrefabMDCTurboFilter extends BaseTurboFilter {
     Map<String, String> mdcData = MDC.getCopyOfContextMap();
     return configClient.getLogLevel(
       logger.getName(),
-      PrefabContext.unnamedFromMap(
+      Context.unnamedFromMap(
         ConfigValueUtils.fromStringMap(mdcData != null ? mdcData : Collections.emptyMap())
       )
     );

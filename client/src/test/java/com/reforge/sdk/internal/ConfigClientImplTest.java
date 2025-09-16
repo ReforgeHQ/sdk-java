@@ -9,16 +9,16 @@ import static org.mockito.Mockito.when;
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.Options;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.PrefabInitializationTimeoutException;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.SdkInitializationTimeoutException;
 import com.reforge.sdk.config.ConfigChangeEvent;
 import com.reforge.sdk.config.ConfigChangeListener;
 import com.reforge.sdk.config.ConfigValueUtils;
 import com.reforge.sdk.config.TestData;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextHelper;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextHelper;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +37,7 @@ class ConfigClientImplTest {
 
   @Test
   void localModeUnlocks() {
-    final PrefabCloudClient baseClient = new PrefabCloudClient(
+    final Sdk baseClient = new Sdk(
       new Options().setPrefabDatasource(Options.Datasources.LOCAL_ONLY)
     );
     ConfigClient configClient = new ConfigClientImpl(baseClient);
@@ -48,7 +48,7 @@ class ConfigClientImplTest {
 
   @Test
   void initializationTimeout() {
-    final PrefabCloudClient baseClient = new PrefabCloudClient(
+    final Sdk baseClient = new Sdk(
       new Options()
         .setApikey("0-P1-E1-SDK-1234-123-23")
         .setInitializationTimeoutSec(1)
@@ -57,14 +57,14 @@ class ConfigClientImplTest {
 
     ConfigClient configClient = new ConfigClientImpl(baseClient);
     assertThrows(
-      PrefabInitializationTimeoutException.class,
+      SdkInitializationTimeoutException.class,
       () -> configClient.get("key")
     );
   }
 
   @Test
   void initializationUnlock() {
-    final PrefabCloudClient baseClient = new PrefabCloudClient(
+    final Sdk baseClient = new Sdk(
       new Options()
         .setApikey("0-P1-E1-SDK-1234-123-23")
         .setInitializationTimeoutSec(1)
@@ -77,7 +77,7 @@ class ConfigClientImplTest {
 
   @Test
   void broadcast() {
-    final PrefabCloudClient baseClient = new PrefabCloudClient(
+    final Sdk baseClient = new Sdk(
       new Options()
         .setApikey("0-P1-E1-SDK-1234-123-23")
         .setConfigOverrideDir("none")
@@ -141,7 +141,7 @@ class ConfigClientImplTest {
 
   @Test
   void localDataFileMode() {
-    final PrefabCloudClient baseClient = new PrefabCloudClient(
+    final Sdk baseClient = new Sdk(
       new Options()
         .setLocalDatafile("src/test/resources/prefab.Development.5.config.json")
     );
@@ -153,15 +153,15 @@ class ConfigClientImplTest {
   @Test
   void itLooksUpLogLevelsWithProvidedEmptyContext() {
     try (
-      PrefabCloudClient prefabCloudClient = new PrefabCloudClient(
+      Sdk sdk = new Sdk(
         TestData.getDefaultOptionsWithEnvName("logging_multilevel")
       )
     ) {
-      ConfigClient configClient = prefabCloudClient.configClient();
+      ConfigClient configClient = sdk.configClient();
       assertThat(
         configClient.getLogLevel(
           "com.example.p1.ClassOne",
-          PrefabContextSetReadable.EMPTY
+          ContextSetReadable.EMPTY
         )
       )
         .contains(Prefab.LogLevel.TRACE);
@@ -169,7 +169,7 @@ class ConfigClientImplTest {
       assertThat(
         configClient.getLogLevel(
           "com.example.p1.ClassTwo",
-          PrefabContextSetReadable.EMPTY
+          ContextSetReadable.EMPTY
         )
       )
         .contains(Prefab.LogLevel.DEBUG);
@@ -177,13 +177,13 @@ class ConfigClientImplTest {
       assertThat(
         configClient.getLogLevel(
           "com.example.AnotherClass",
-          PrefabContextSetReadable.EMPTY
+          ContextSetReadable.EMPTY
         )
       )
         .contains(Prefab.LogLevel.ERROR);
 
       assertThat(
-        configClient.getLogLevel("com.foo.ClipBoard", PrefabContextSetReadable.EMPTY)
+        configClient.getLogLevel("com.foo.ClipBoard", ContextSetReadable.EMPTY)
       )
         .contains(Prefab.LogLevel.WARN);
     }
@@ -199,15 +199,15 @@ class ConfigClientImplTest {
     UpdatingConfigResolver updatingConfigResolver;
 
     @Mock
-    PrefabCloudClient prefabCloudClient;
+    Sdk sdk;
 
     ConfigClientImpl configClient;
-    private PrefabContextHelper contextHelper;
+    private ContextHelper contextHelper;
 
     @BeforeEach
     void beforeEach() {
       Options options = new Options().setPrefabDatasource(Options.Datasources.LOCAL_ONLY);
-      when(prefabCloudClient.getOptions()).thenReturn(options);
+      when(sdk.getOptions()).thenReturn(options);
       when(updatingConfigResolver.update())
         .thenReturn(
           new UpdatingConfigResolver.ChangeLists(
@@ -216,40 +216,40 @@ class ConfigClientImplTest {
           )
         );
 
-      this.configClient = new ConfigClientImpl(prefabCloudClient, updatingConfigResolver);
-      this.contextHelper = new PrefabContextHelper(configClient);
+      this.configClient = new ConfigClientImpl(sdk, updatingConfigResolver);
+      this.contextHelper = new ContextHelper(configClient);
     }
 
     @Test
     void requestWithNoPassedContextHasAnEmptyLookupContext() {
       configClient.get("foobar");
       verify(updatingConfigResolver)
-        .getMatch("foobar", new LookupContext(PrefabContextSetReadable.EMPTY));
+        .getMatch("foobar", new LookupContext(ContextSetReadable.EMPTY));
     }
 
     @Test
     void requestWithPassedContextHasSameInLookupContext() {
-      PrefabContext prefabContext = PrefabContext
+      Context context = Context
         .newBuilder("user")
         .put("name", "james")
         .put("isHuman", true)
         .build();
 
-      configClient.get("foobar", prefabContext);
-      verify(updatingConfigResolver).getMatch("foobar", new LookupContext(prefabContext));
+      configClient.get("foobar", context);
+      verify(updatingConfigResolver).getMatch("foobar", new LookupContext(context));
     }
 
     @Test
     void requestWithGlobalContextAndNoPassedContextHasExpectedLookup() {
-      PrefabContext prefabContext = PrefabContext
+      Context context = Context
         .newBuilder("user")
         .put("name", "james")
         .put("isHuman", true)
         .build();
 
       try (
-        PrefabContextHelper.PrefabContextScope ignored = contextHelper.performWorkWithAutoClosingContext(
-          prefabContext
+        ContextHelper.PrefabContextScope ignored = contextHelper.performWorkWithAutoClosingContext(
+                context
         )
       ) {
         configClient.get("foobar");
@@ -258,34 +258,34 @@ class ConfigClientImplTest {
       }
 
       LookupContext lookupContext = lookupContextArgumentCaptor.getValue();
-      LookupContext expected = new LookupContext(PrefabContextSet.from(prefabContext));
+      LookupContext expected = new LookupContext(ContextSet.from(context));
 
       assertThat(lookupContext).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
     void requestWithGlobalContextAndConflictingPassedContextHasExpectedLookup() {
-      PrefabContextSet globalUserContext = PrefabContextSet.from(
-        PrefabContext
+      ContextSet globalUserContext = ContextSet.from(
+        Context
           .newBuilder("user")
           .put("name", "james")
           .put("isHuman", true)
           .put("somethingCount", 11)
           .build(),
-        PrefabContext.newBuilder("computer").put("greeting", "hello computer").build()
+        Context.newBuilder("computer").put("greeting", "hello computer").build()
       );
 
-      PrefabContextSet localUserContext = PrefabContextSet.from(
-        PrefabContext
+      ContextSet localUserContext = ContextSet.from(
+        Context
           .newBuilder("user")
           .put("name", "roboto")
           .put("isHuman", false)
           .build(),
-        PrefabContext.newBuilder("transaction").put("type", "credit").build()
+        Context.newBuilder("transaction").put("type", "credit").build()
       );
 
       try (
-        PrefabContextHelper.PrefabContextScope ignored = contextHelper.performWorkWithAutoClosingContext(
+        ContextHelper.PrefabContextScope ignored = contextHelper.performWorkWithAutoClosingContext(
           globalUserContext
         )
       ) {
@@ -296,14 +296,14 @@ class ConfigClientImplTest {
       LookupContext lookupContext = lookupContextArgumentCaptor.getValue();
 
       LookupContext expected = new LookupContext(
-        PrefabContextSet.from(
-          PrefabContext
+        ContextSet.from(
+          Context
             .newBuilder("user")
             .put("name", "roboto")
             .put("isHuman", false)
             .build(),
-          PrefabContext.newBuilder("computer").put("greeting", "hello computer").build(),
-          PrefabContext.newBuilder("transaction").put("type", "credit").build()
+          Context.newBuilder("computer").put("greeting", "hello computer").build(),
+          Context.newBuilder("transaction").put("type", "credit").build()
         )
       );
 

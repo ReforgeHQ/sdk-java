@@ -6,13 +6,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-public class PrefabContextSet implements PrefabContextSetReadable {
+public class ContextSet implements ContextSetReadable {
 
-  private final ConcurrentSkipListMap<String, PrefabContext> contextByNameMap = new ConcurrentSkipListMap<>();
+  private final ConcurrentSkipListMap<String, Context> contextByNameMap = new ConcurrentSkipListMap<>();
 
-  public PrefabContextSet addContext(PrefabContext prefabContext) {
-    if (prefabContext != null) {
-      contextByNameMap.put(prefabContext.getName().toLowerCase(), prefabContext);
+  public ContextSet addContext(Context context) {
+    if (context != null) {
+      contextByNameMap.put(context.getName().toLowerCase(), context);
     }
     return this;
   }
@@ -22,18 +22,18 @@ public class PrefabContextSet implements PrefabContextSetReadable {
   }
 
   @Override
-  public Optional<PrefabContext> getByName(String contextType) {
+  public Optional<Context> getByName(String contextType) {
     return Optional.ofNullable(contextByNameMap.get(contextType.toLowerCase()));
   }
 
   @Override
-  public Iterable<PrefabContext> getContexts() {
+  public Iterable<Context> getContexts() {
     return ImmutableList.copyOf(contextByNameMap.values());
   }
 
-  public static PrefabContextSet from(PrefabContext... contexts) {
-    PrefabContextSet set = new PrefabContextSet();
-    for (PrefabContext context : contexts) {
+  public static ContextSet from(Context... contexts) {
+    ContextSet set = new ContextSet();
+    for (Context context : contexts) {
       set.addContext(context);
     }
     return set;
@@ -43,17 +43,17 @@ public class PrefabContextSet implements PrefabContextSetReadable {
    * Converts the given `PrefabContextSetReadable` instance into a PrefabContextSet
    * If the argument is already a PrefabContextSet return it, othewise create a new PrefabContextSet and add the contents
    * of the PrefabContextSetReadable to it, then return the new set
-   * @param prefabContextSetReadable instance to convert
+   * @param contextSetReadable instance to convert
    * @return a PrefabContextSet built as discussed above
    */
-  public static PrefabContextSet convert(
-    PrefabContextSetReadable prefabContextSetReadable
+  public static ContextSet convert(
+    ContextSetReadable contextSetReadable
   ) {
-    if (prefabContextSetReadable instanceof PrefabContextSet) {
-      return (PrefabContextSet) prefabContextSetReadable;
+    if (contextSetReadable instanceof ContextSet) {
+      return (ContextSet) contextSetReadable;
     }
-    PrefabContextSet prefabContextSet = new PrefabContextSet();
-    for (PrefabContext context : prefabContextSetReadable.getContexts()) {
+    ContextSet prefabContextSet = new ContextSet();
+    for (Context context : contextSetReadable.getContexts()) {
       prefabContextSet.addContext(context);
     }
     return prefabContextSet;
@@ -66,13 +66,13 @@ public class PrefabContextSet implements PrefabContextSetReadable {
     return bldr.build();
   }
 
-  public static PrefabContextSetReadable from(Prefab.ContextSet protoContextSet) {
+  public static ContextSetReadable from(Prefab.ContextSet protoContextSet) {
     if (protoContextSet.getContextsList().isEmpty()) {
-      return PrefabContextSet.EMPTY;
+      return ContextSet.EMPTY;
     }
-    PrefabContextSet prefabContextSet = new PrefabContextSet();
+    ContextSet prefabContextSet = new ContextSet();
     for (Prefab.Context contextProto : protoContextSet.getContextsList()) {
-      prefabContextSet.addContext(PrefabContext.fromProto(contextProto));
+      prefabContextSet.addContext(Context.fromProto(contextProto));
     }
     return prefabContextSet;
   }
@@ -85,7 +85,7 @@ public class PrefabContextSet implements PrefabContextSetReadable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PrefabContextSet that = (PrefabContextSet) o;
+    ContextSet that = (ContextSet) o;
     return Objects.equals(contextByNameMap, that.contextByNameMap);
   }
 

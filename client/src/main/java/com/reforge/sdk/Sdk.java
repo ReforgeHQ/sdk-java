@@ -6,16 +6,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PrefabCloudClient implements AutoCloseable {
+public class Sdk implements AutoCloseable {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PrefabCloudClient.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Sdk.class);
 
   private final Options options;
   private ConfigClientImpl configClient;
   private FeatureFlagClient featureFlagClient;
   private final AtomicBoolean closed;
 
-  public PrefabCloudClient(Options options) {
+  public Sdk(Options options) {
     this.options = options;
 
     if (options.isLocalOnly()) {

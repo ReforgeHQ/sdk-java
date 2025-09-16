@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import com.reforge.sdk.config.ConfigChangeListener;
 import com.reforge.sdk.config.logging.LogLevelChangeListener;
 import com.reforge.sdk.context.ContextStore;
-import com.reforge.sdk.context.PrefabContextSetReadable;
-import com.reforge.sdk.internal.PrefabInternal;
+import com.reforge.sdk.context.ContextSetReadable;
+import com.reforge.sdk.internal.Internal;
 import com.reforge.sdk.internal.TelemetryListener;
 import com.reforge.sdk.internal.ThreadLocalContextStore;
 import java.net.URI;
@@ -78,7 +78,7 @@ public class Options {
   private TelemetryListener telemetryListener;
 
   @Nullable
-  private PrefabContextSetReadable globalContext;
+  private ContextSetReadable globalContext;
 
   public Options() {
     setApikey(System.getenv("PREFAB_API_KEY"));
@@ -317,13 +317,13 @@ public class Options {
     return ImmutableSet.copyOf(logLevelChangeListeners);
   }
 
-  @PrefabInternal
+  @Internal
   public Options setTelemetryListener(@Nullable TelemetryListener telemetryListener) {
     this.telemetryListener = telemetryListener;
     return this;
   }
 
-  @PrefabInternal
+  @Internal
   public Optional<TelemetryListener> getTelemetryListener() {
     return Optional.ofNullable(telemetryListener);
   }
@@ -351,11 +351,11 @@ public class Options {
     return localDatafile != null;
   }
 
-  public Optional<PrefabContextSetReadable> getGlobalContext() {
+  public Optional<ContextSetReadable> getGlobalContext() {
     return Optional.ofNullable(globalContext);
   }
 
-  public Options setGlobalContext(@Nullable PrefabContextSetReadable globalContext) {
+  public Options setGlobalContext(@Nullable ContextSetReadable globalContext) {
     this.globalContext = globalContext;
     return this;
   }

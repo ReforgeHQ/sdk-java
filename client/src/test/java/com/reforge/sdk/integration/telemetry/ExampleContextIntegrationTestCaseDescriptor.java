@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.MoreObjects;
 import com.reforge.sdk.Options;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.integration.IntegrationTestClientOverrides;
 import com.reforge.sdk.integration.IntegrationTestFunction;
 import com.reforge.sdk.integration.PrefabContextFactory;
@@ -55,7 +55,7 @@ public class ExampleContextIntegrationTestCaseDescriptor
       contextMapMaybe
         .map(contextMap -> contextMap.get("global"))
         .map(PrefabContextFactory::from)
-        .map(PrefabContextSet::convert)
+        .map(ContextSet::convert)
     );
     this.dataNode = dataNode;
     this.expectedDataNode = expectedDataNode;
@@ -68,13 +68,13 @@ public class ExampleContextIntegrationTestCaseDescriptor
   }
 
   @Override
-  protected void performVerification(PrefabCloudClient prefabCloudClient) {
-    PrefabContextSet contextSetToSend = buildContextFromJsonNode(dataNode);
-    PrefabContextSet expectedContextSet = buildContextFromJsonNode(expectedDataNode);
+  protected void performVerification(Sdk sdk) {
+    ContextSet contextSetToSend = buildContextFromJsonNode(dataNode);
+    ContextSet expectedContextSet = buildContextFromJsonNode(expectedDataNode);
 
-    prefabCloudClient.configClient().get("my-test-key", contextSetToSend);
+    sdk.configClient().get("my-test-key", contextSetToSend);
     TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(
-      prefabCloudClient
+            sdk
     );
     await()
       .atMost(Duration.of(3, ChronoUnit.SECONDS))
@@ -99,8 +99,8 @@ public class ExampleContextIntegrationTestCaseDescriptor
       });
   }
 
-  PrefabContextSet buildContextFromJsonNode(JsonNode dataNode) {
-    PrefabContextSet contextSet = new PrefabContextSet();
+  ContextSet buildContextFromJsonNode(JsonNode dataNode) {
+    ContextSet contextSet = new ContextSet();
 
     switch (dataNode.getNodeType()) {
       case NULL:

@@ -14,8 +14,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.PrefabInitializationTimeoutException;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.SdkInitializationTimeoutException;
 import com.reforge.sdk.exceptions.ConfigValueDecryptionException;
 import com.reforge.sdk.exceptions.EnvironmentVariableMissingException;
 import com.reforge.sdk.exceptions.EnvironmentVariableTypeConversionException;
@@ -40,7 +40,7 @@ public interface IntegrationTestExpectation {
   Logger LOG = LoggerFactory.getLogger(IntegrationTestExpectation.class);
 
   void verifyScenario(
-    PrefabCloudClient client,
+    Sdk client,
     IntegrationTestFunction function,
     IntegrationTestInput input,
     String dataType
@@ -65,7 +65,7 @@ public interface IntegrationTestExpectation {
 
     @Override
     public void verifyScenario(
-      PrefabCloudClient client,
+      Sdk client,
       IntegrationTestFunction function,
       IntegrationTestInput input,
       String dataType
@@ -109,7 +109,7 @@ public interface IntegrationTestExpectation {
       "missing_default",
       UndefinedKeyException.class,
       "initialization_timeout",
-      PrefabInitializationTimeoutException.class,
+      SdkInitializationTimeoutException.class,
       "missing_env_var",
       EnvironmentVariableMissingException.class,
       "unable_to_coerce_env_var",
@@ -132,7 +132,7 @@ public interface IntegrationTestExpectation {
 
     @Override
     public void verifyScenario(
-      PrefabCloudClient client,
+      Sdk client,
       IntegrationTestFunction function,
       IntegrationTestInput input,
       String dataType

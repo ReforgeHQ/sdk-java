@@ -3,9 +3,9 @@ package com.reforge.sdk.internal;
 import cloud.prefab.domain.Prefab;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -14,15 +14,15 @@ import java.util.stream.StreamSupport;
 public class LookupContext {
 
   public static final LookupContext EMPTY = new LookupContext(
-    PrefabContextSetReadable.EMPTY
+    ContextSetReadable.EMPTY
   );
 
-  private final PrefabContextSet prefabContextSet;
+  private final ContextSet prefabContextSet;
 
   private Map<String, Prefab.ConfigValue> expandedProperties = null;
 
-  public LookupContext(PrefabContextSetReadable prefabContextSetReadable) {
-    this.prefabContextSet = PrefabContextSet.convert(prefabContextSetReadable);
+  public LookupContext(ContextSetReadable contextSetReadable) {
+    this.prefabContextSet = ContextSet.convert(contextSetReadable);
   }
 
   @Override
@@ -46,7 +46,7 @@ public class LookupContext {
     return Optional.ofNullable(getExpandedProperties().get(name));
   }
 
-  public PrefabContextSet getPrefabContextSet() {
+  public ContextSet getPrefabContextSet() {
     return prefabContextSet;
   }
 
@@ -62,7 +62,7 @@ public class LookupContext {
       Map<String, Prefab.ConfigValue> expandedProperties = Maps.newHashMapWithExpectedSize(
         propertyCount
       );
-      for (PrefabContext context : prefabContextSet.getContexts()) {
+      for (Context context : prefabContextSet.getContexts()) {
         String prefix = context.getName().isBlank() ? "" : context.getName() + ".";
         for (Map.Entry<String, Prefab.ConfigValue> stringConfigValueEntry : context
           .getProperties()

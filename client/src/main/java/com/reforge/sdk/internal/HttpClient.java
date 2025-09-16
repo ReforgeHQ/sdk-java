@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -33,12 +32,12 @@ import javax.net.ssl.SSLSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PrefabHttpClient {
+public class HttpClient {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PrefabHttpClient.class);
+  private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
 
   public static final String CLIENT_HEADER_KEY = "client";
-  private static final String VERSION_HEADER = "X-PrefabCloud-Client-Version";
+  private static final String VERSION_HEADER = "X-Reforge-SDK-Version";
 
   public static final String CLIENT_HEADER_VALUE = String.format(
     "%s.%s",
@@ -47,14 +46,14 @@ public class PrefabHttpClient {
   );
 
   public static final String NEW_CLIENT_HEADER_VALUE =
-    "prefab-cloud-java-" + MavenInfo.getInstance().getVersion();
+    "sdk-java-" + MavenInfo.getInstance().getVersion();
 
   private static final String PROTO_MEDIA_TYPE = "application/x-protobuf";
   private static final String EVENT_STREAM_MEDIA_TYPE = "text/event-stream";
   private static final String START_AT_HEADER = "x-prefab-start-at-id";
 
   private final Options options;
-  private final HttpClient httpClient;
+  private final java.net.http.HttpClient httpClient;
   private final URI telemetryUrl;
   private final List<String> apiHosts;
   private final List<String> streamHosts;
@@ -137,12 +136,12 @@ public class PrefabHttpClient {
     }
 
     @Override
-    public HttpClient.Version version() {
-      return HttpClient.Version.HTTP_1_1;
+    public java.net.http.HttpClient.Version version() {
+      return java.net.http.HttpClient.Version.HTTP_1_1;
     }
   }
 
-  public PrefabHttpClient(HttpClient httpClient, Options options) {
+  public HttpClient(java.net.http.HttpClient httpClient, Options options) {
     this.httpClient = httpClient;
     this.options = options;
     this.telemetryUrl =

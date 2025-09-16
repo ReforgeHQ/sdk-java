@@ -1,8 +1,8 @@
 package com.reforge.sdk.internal;
 
 import com.reforge.sdk.context.ContextStore;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Optional;
 
 public abstract class DelegatingContextStore implements ContextStore {
@@ -10,24 +10,24 @@ public abstract class DelegatingContextStore implements ContextStore {
   abstract ContextStore getContextStore();
 
   @Override
-  public void addContext(PrefabContext prefabContext) {
-    getContextStore().addContext(prefabContext);
+  public void addContext(Context context) {
+    getContextStore().addContext(context);
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> clearContext() {
+  public Optional<ContextSetReadable> clearContext() {
     return getContextStore().clearContext();
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> setContext(
-    PrefabContextSetReadable prefabContextSetReadable
+  public Optional<ContextSetReadable> setContext(
+    ContextSetReadable contextSetReadable
   ) {
     return Optional.empty();
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> getContext() {
+  public Optional<ContextSetReadable> getContext() {
     return getContextStore().getContext();
   }
 }

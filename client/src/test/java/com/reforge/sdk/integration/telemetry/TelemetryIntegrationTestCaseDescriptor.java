@@ -6,10 +6,10 @@ import cloud.prefab.domain.Prefab;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.MoreObjects;
 import com.reforge.sdk.Options;
-import com.reforge.sdk.PrefabCloudClient;
+import com.reforge.sdk.Sdk;
 import com.reforge.sdk.config.ConfigValueUtils;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.integration.BaseIntegrationTestCaseDescriptor;
 import com.reforge.sdk.integration.IntegrationTestCaseDescriptorIF;
 import com.reforge.sdk.integration.IntegrationTestClientOverrides;
@@ -31,7 +31,7 @@ public abstract class TelemetryIntegrationTestCaseDescriptor
   public TelemetryIntegrationTestCaseDescriptor(
     String name,
     IntegrationTestClientOverrides clientOverrides,
-    Optional<PrefabContextSet> globalContext
+    Optional<ContextSet> globalContext
   ) {
     super(
       name,
@@ -40,8 +40,8 @@ public abstract class TelemetryIntegrationTestCaseDescriptor
     );
   }
 
-  TelemetryAccumulator getTelemetryAccumulator(PrefabCloudClient prefabCloudClient) {
-    return (TelemetryAccumulator) prefabCloudClient
+  TelemetryAccumulator getTelemetryAccumulator(Sdk sdk) {
+    return (TelemetryAccumulator) sdk
       .getOptions()
       .getTelemetryListener()
       .orElseThrow();
@@ -54,11 +54,11 @@ public abstract class TelemetryIntegrationTestCaseDescriptor
     options.setTelemetryUploadIntervalSeconds(1);
   }
 
-  protected PrefabContext buildContextFromObjectDataNode(
+  protected Context buildContextFromObjectDataNode(
     String contextName,
     JsonNode dataNode
   ) {
-    PrefabContext.Builder prefabContextBuilder = PrefabContext.newBuilder(contextName);
+    Context.Builder prefabContextBuilder = Context.newBuilder(contextName);
     dataNode
       .fields()
       .forEachRemaining(contextKeyAndValue -> {
@@ -72,9 +72,9 @@ public abstract class TelemetryIntegrationTestCaseDescriptor
     return prefabContextBuilder.build();
   }
 
-  protected PrefabContextSet buildContextSetFromObjectDataNode(JsonNode dataNode) {
+  protected ContextSet buildContextSetFromObjectDataNode(JsonNode dataNode) {
     assertThat(dataNode.isObject()).as("data node should be an object").isTrue();
-    PrefabContextSet contextSet = new PrefabContextSet();
+    ContextSet contextSet = new ContextSet();
     dataNode
       .fields()
       .forEachRemaining(keyValuePair ->

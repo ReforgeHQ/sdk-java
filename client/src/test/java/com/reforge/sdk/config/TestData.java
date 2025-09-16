@@ -1,7 +1,7 @@
 package com.reforge.sdk.config;
 
 import com.reforge.sdk.Options;
-import com.reforge.sdk.PrefabCloudClient;
+import com.reforge.sdk.Sdk;
 import java.util.List;
 
 public class TestData {
@@ -47,7 +47,7 @@ public class TestData {
 
 
  */
-  public static PrefabCloudClient clientWithOptions(Options options) {
-    return new PrefabCloudClient(options);
+  public static Sdk clientWithOptions(Options options) {
+    return new Sdk(options);
   }
 }

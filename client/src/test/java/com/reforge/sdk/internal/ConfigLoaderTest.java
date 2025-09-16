@@ -7,8 +7,8 @@ import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.Options;
 import com.reforge.sdk.config.ConfigElement;
 import com.reforge.sdk.config.Provenance;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -272,8 +272,8 @@ public class ConfigLoaderTest {
   @Nested
   class ContextLoadingTests {
 
-    final PrefabContextSet globalContext = PrefabContextSet.from(
-      PrefabContext.newBuilder("deploy").put("name", "prefab-api").build()
+    final ContextSet globalContext = ContextSet.from(
+      Context.newBuilder("deploy").put("name", "prefab-api").build()
     );
 
     @BeforeEach
@@ -293,13 +293,13 @@ public class ConfigLoaderTest {
 
     @Test
     void itReturnsGlobalContextAndApiDefaultContextFromCalcConfig() {
-      PrefabContextSet apiDefaultContext = PrefabContextSet.from(
-        PrefabContext
+      ContextSet apiDefaultContext = ContextSet.from(
+        Context
           .newBuilder("fruitStand")
           .put("applePrice", 1)
           .put("peachPrice", 2)
           .build(),
-        PrefabContext.newBuilder("weather").put("highTemp", 82).build()
+        Context.newBuilder("weather").put("highTemp", 82).build()
       );
 
       configLoader.setConfigs(

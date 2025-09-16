@@ -7,11 +7,11 @@ import static org.mockito.Mockito.when;
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.Options;
-import com.reforge.sdk.PrefabCloudClient;
+import com.reforge.sdk.Sdk;
 import com.reforge.sdk.config.ConfigChangeEvent;
 import com.reforge.sdk.config.ConfigElement;
 import com.reforge.sdk.config.Provenance;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class UpdatingConfigResolverTest {
   private final int TEST_PROJ_ENV = 2;
 
   private UpdatingConfigResolver resolver;
-  private PrefabCloudClient mockBaseClient;
+  private Sdk mockBaseClient;
   private Options mockOptions;
   private ConfigLoader mockLoader;
 
@@ -34,7 +34,7 @@ public class UpdatingConfigResolverTest {
     mockOptions = mock(Options.class);
 
     when(mockLoader.calcConfig()).thenReturn(testData());
-    mockBaseClient = mock(PrefabCloudClient.class);
+    mockBaseClient = mock(Sdk.class);
     when(mockBaseClient.getOptions()).thenReturn(mockOptions);
     resolver =
       new UpdatingConfigResolver(
@@ -97,8 +97,8 @@ public class UpdatingConfigResolverTest {
     return new MergedConfigData(
       config,
       TEST_PROJ_ENV,
-      PrefabContextSetReadable.EMPTY,
-      PrefabContextSetReadable.EMPTY
+      ContextSetReadable.EMPTY,
+      ContextSetReadable.EMPTY
     );
   }
 
@@ -157,8 +157,8 @@ public class UpdatingConfigResolverTest {
     return new MergedConfigData(
       config,
       TEST_PROJ_ENV,
-      PrefabContextSetReadable.EMPTY,
-      PrefabContextSetReadable.EMPTY
+      ContextSetReadable.EMPTY,
+      ContextSetReadable.EMPTY
     );
   }
 

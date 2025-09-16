@@ -1,30 +1,30 @@
 package com.reforge.sdk.internal;
 
 import com.google.common.base.Predicates;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 public class ContextMerger {
 
-  public static PrefabContextSetReadable merge(
-    @Nullable PrefabContextSetReadable globalContext,
-    @Nullable PrefabContextSetReadable apiDefaultContext,
-    @Nullable PrefabContextSetReadable contextStoreContext,
-    @Nullable PrefabContextSetReadable passedContext
+  public static ContextSetReadable merge(
+    @Nullable ContextSetReadable globalContext,
+    @Nullable ContextSetReadable apiDefaultContext,
+    @Nullable ContextSetReadable contextStoreContext,
+    @Nullable ContextSetReadable passedContext
   ) {
     // use naive strategy for now,
-    PrefabContextSet prefabContextSet = new PrefabContextSet();
+    ContextSet prefabContextSet = new ContextSet();
 
     Stream
       .of(globalContext, apiDefaultContext, contextStoreContext, passedContext)
       .filter(Predicates.notNull())
-      .filter(Predicate.not(PrefabContextSetReadable::isEmpty))
+      .filter(Predicate.not(ContextSetReadable::isEmpty))
       .forEach(prefabContextSetReadable -> {
-        for (PrefabContext context : prefabContextSetReadable.getContexts()) {
+        for (Context context : prefabContextSetReadable.getContexts()) {
           prefabContextSet.addContext(context);
         }
       });

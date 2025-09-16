@@ -4,7 +4,7 @@ import static org.mockito.Mockito.verify;
 
 import cloud.prefab.domain.Prefab;
 import com.google.common.collect.ImmutableMap;
-import com.reforge.sdk.PrefabCloudClient;
+import com.reforge.sdk.Sdk;
 import com.reforge.sdk.config.TestData;
 import java.util.Map;
 import java.util.Optional;
@@ -25,7 +25,7 @@ public class LogLevelEventsTest {
   @Test
   void itGetsSpecificLevelMessage() {
     try (
-      PrefabCloudClient prefabCloudClient = new PrefabCloudClient(
+      Sdk sdk = new Sdk(
         TestData
           .getDefaultOptionsWithEnvName(
             TestData.TestDataConfigSet.SPECIFIC_LOGGING.getEnvironmentName()
@@ -33,7 +33,7 @@ public class LogLevelEventsTest {
           .addLogLevelChangeListener(testListener)
       )
     ) {
-      prefabCloudClient.configClient();
+      sdk.configClient();
       verify(testListener).setLevel("test.logger", Optional.of(Level.WARNING));
     }
   }
@@ -41,7 +41,7 @@ public class LogLevelEventsTest {
   @Test
   void itGetsDefaultLevelMessage() {
     try (
-      PrefabCloudClient prefabCloudClient = new PrefabCloudClient(
+      Sdk sdk = new Sdk(
         TestData
           .getDefaultOptionsWithEnvName(
             TestData.TestDataConfigSet.DEFAULT_LOGGING.getEnvironmentName()
@@ -49,7 +49,7 @@ public class LogLevelEventsTest {
           .addLogLevelChangeListener(testListener)
       )
     ) {
-      prefabCloudClient.configClient();
+      sdk.configClient();
       verify(testListener).setDefaultLevel(Optional.of(Level.WARNING));
     }
   }

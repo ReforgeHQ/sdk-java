@@ -3,7 +3,7 @@ package com.reforge.sdk.internal;
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.TypedConfigClient;
 import com.reforge.sdk.config.ConfigValueUtils;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.time.Duration;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -24,7 +24,7 @@ class TypedConfigClientImpl implements TypedConfigClient {
   public boolean getBoolean(
     String key,
     boolean defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     try {
       return configClientCore
@@ -42,7 +42,7 @@ class TypedConfigClientImpl implements TypedConfigClient {
   public long getLong(
     String key,
     long defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     try {
       return configClientCore
@@ -60,7 +60,7 @@ class TypedConfigClientImpl implements TypedConfigClient {
   public double getDouble(
     String key,
     double defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     try {
       return configClientCore
@@ -78,7 +78,7 @@ class TypedConfigClientImpl implements TypedConfigClient {
   public String getString(
     String key,
     String defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     try {
       return configClientCore
@@ -96,7 +96,7 @@ class TypedConfigClientImpl implements TypedConfigClient {
   public List<String> getStringList(
     String key,
     List<String> defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     try {
       return configClientCore
@@ -120,7 +120,7 @@ class TypedConfigClientImpl implements TypedConfigClient {
   public Duration getDuration(
     String key,
     Duration defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     try {
       return configClientCore

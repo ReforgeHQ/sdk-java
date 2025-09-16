@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import cloud.prefab.domain.Prefab;
 import com.google.common.collect.ImmutableMap;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ class LookupContextTest {
   @Test
   void itPrefixesKeysWithContextType() {
     LookupContext lookupContext = new LookupContext(
-      PrefabContext.fromMap(
+      Context.fromMap(
         "User",
         Map.of(
           "firstname",
@@ -43,8 +43,8 @@ class LookupContextTest {
   @Test
   void itPrefixesKeysWithContextTypeForMultipleContexts() {
     LookupContext lookupContext = new LookupContext(
-      PrefabContextSet.from(
-        PrefabContext.fromMap(
+      ContextSet.from(
+        Context.fromMap(
           "User",
           Map.of(
             "firstname",
@@ -55,7 +55,7 @@ class LookupContextTest {
             getIntConfigValue(44)
           )
         ),
-        PrefabContext.fromMap("team", Map.of("name", getStringConfigValue("cool team")))
+        Context.fromMap("team", Map.of("name", getStringConfigValue("cool team")))
       )
     );
 
@@ -74,7 +74,7 @@ class LookupContextTest {
   @Test
   void itRemovesBlankType() {
     LookupContext lookupContext = new LookupContext(
-      PrefabContext.unnamedFromMap(
+      Context.unnamedFromMap(
         Map.of(
           "firstname",
           getStringConfigValue("John"),
@@ -99,13 +99,13 @@ class LookupContextTest {
 
   @Test
   void equalsAndHashCodeWorkWithDifferentContextTypeArgs() {
-    PrefabContext context = PrefabContext
+    Context context = Context
       .newBuilder("user")
       .put("firstName", "james")
       .build();
 
     LookupContext lookupContext1 = new LookupContext(context);
-    LookupContext lookupContext2 = new LookupContext(PrefabContextSet.from(context));
+    LookupContext lookupContext2 = new LookupContext(ContextSet.from(context));
 
     assertThat(lookupContext1).isEqualTo(lookupContext2);
     assertThat(lookupContext1.hashCode()).isEqualTo(lookupContext2.hashCode());

@@ -12,10 +12,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.MoreObjects;
 import com.reforge.sdk.ConfigClient;
-import com.reforge.sdk.PrefabCloudClient;
+import com.reforge.sdk.Sdk;
 import com.reforge.sdk.config.ConfigValueUtils;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.integration.IntegrationTestClientOverrides;
 import com.reforge.sdk.integration.IntegrationTestFunction;
 import com.reforge.sdk.integration.PrefabContextFactory;
@@ -79,7 +79,7 @@ public class EvaluationSummaryIntegrationTestCaseDescriptor
       contextMapMaybe
         .map(contextMap -> contextMap.get("global"))
         .map(PrefabContextFactory::from)
-        .map(PrefabContextSet::convert)
+        .map(ContextSet::convert)
     );
     this.keysToEvaluate = keysAndContext.keys;
     this.expectedData = expectedData;
@@ -88,11 +88,11 @@ public class EvaluationSummaryIntegrationTestCaseDescriptor
   }
 
   @Override
-  protected void performVerification(PrefabCloudClient prefabCloudClient) {
+  protected void performVerification(Sdk sdk) {
     LOG.info("performVerification");
-    ConfigClient configClient = prefabCloudClient.configClient();
+    ConfigClient configClient = sdk.configClient();
 
-    PrefabContextSetReadable context = PrefabContextFactory.from(contextMap.get("local"));
+    ContextSetReadable context = PrefabContextFactory.from(contextMap.get("local"));
 
     for (String key : keysToEvaluate) {
       configClient.get(key, context);
@@ -106,7 +106,7 @@ public class EvaluationSummaryIntegrationTestCaseDescriptor
       .atMost(Duration.of(3, ChronoUnit.SECONDS))
       .untilAsserted(() -> {
         List<Prefab.ConfigEvaluationSummary> actualSummaries = getTelemetryAccumulator(
-          prefabCloudClient
+                sdk
         )
           .getTelemetryEventsList()
           .stream()

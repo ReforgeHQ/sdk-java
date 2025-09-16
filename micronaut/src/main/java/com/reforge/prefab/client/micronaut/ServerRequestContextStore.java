@@ -1,9 +1,9 @@
 package com.reforge.client.micronaut;
 
 import com.reforge.sdk.context.ContextStore;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import io.micronaut.http.context.ServerRequestContext;
 import java.util.Optional;
 
@@ -18,25 +18,25 @@ public class ServerRequestContextStore implements ContextStore {
   public static final String ATTRIBUTE_NAME = "prefab-contexts";
 
   @Override
-  public void addContext(PrefabContext prefabContext) {
+  public void addContext(Context context) {
     getPrefabContextSet()
       .ifPresentOrElse(
-        prefabContextSet -> prefabContextSet.addContext(prefabContext),
-        () -> setContext(prefabContext)
+        prefabContextSet -> prefabContextSet.addContext(context),
+        () -> setContext(context)
       );
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> setContext(
-    PrefabContextSetReadable prefabContextSetReadable
+  public Optional<ContextSetReadable> setContext(
+    ContextSetReadable contextSetReadable
   ) {
     return ServerRequestContext
       .currentRequest()
       .map(req -> {
-        Optional<PrefabContextSetReadable> currentContext = getContext();
+        Optional<ContextSetReadable> currentContext = getContext();
         req.setAttribute(
           ATTRIBUTE_NAME,
-          PrefabContextSet.convert(prefabContextSetReadable)
+          ContextSet.convert(contextSetReadable)
         );
         return currentContext;
       })
@@ -44,8 +44,8 @@ public class ServerRequestContextStore implements ContextStore {
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> clearContext() {
-    Optional<PrefabContextSetReadable> currentContext = getContext();
+  public Optional<ContextSetReadable> clearContext() {
+    Optional<ContextSetReadable> currentContext = getContext();
     ServerRequestContext
       .currentRequest()
       .ifPresent(objectHttpRequest -> objectHttpRequest.setAttribute(ATTRIBUTE_NAME, null)
@@ -54,15 +54,15 @@ public class ServerRequestContextStore implements ContextStore {
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> getContext() {
-    return getPrefabContextSet().map(PrefabContextSetReadable::readOnlyContextSetView);
+  public Optional<ContextSetReadable> getContext() {
+    return getPrefabContextSet().map(ContextSetReadable::readOnlyContextSetView);
   }
 
-  private Optional<PrefabContextSet> getPrefabContextSet() {
+  private Optional<ContextSet> getPrefabContextSet() {
     return ServerRequestContext
       .currentRequest()
       .flatMap(objectHttpRequest ->
-        objectHttpRequest.getAttribute(ATTRIBUTE_NAME, PrefabContextSet.class)
+        objectHttpRequest.getAttribute(ATTRIBUTE_NAME, ContextSet.class)
       );
   }
 

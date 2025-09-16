@@ -27,7 +27,7 @@ Maven
 
 The context store implementation is added to the Prefab `Options` class.
 
-You'll likely have a factory class like this one - see the `options.setContextStore(new PrefabMicronautStateStore());` in the prefabCloudClient method
+You'll likely have a factory class like this one - see the `options.setContextStore(new PrefabMicronautStateStore());` in the sdk method
 
 ```java
 @Factory
@@ -35,7 +35,7 @@ public class PrefabFactory {
     private static final Logger LOG = LoggerFactory.getLogger(PrefabFactory.class);
 
     @Singleton
-    public PrefabCloudClient prefabCloudClient(Environment environment) {
+    public PrefabCloudClient sdk(Environment environment) {
         final Options options = new Options();
         options.setPrefabEnvs(environment.getActiveNames().stream().toList());
         options.setContextStore(new PrefabMicronautStateStore());
@@ -43,15 +43,15 @@ public class PrefabFactory {
     }
 
     @Singleton
-    public FeatureFlagClient featureFlagClient(PrefabCloudClient prefabCloudClient) {
-        return prefabCloudClient.featureFlagClient();
+    public FeatureFlagClient featureFlagClient(PrefabCloudClient sdk) {
+        return sdk.featureFlagClient();
     }
 
     @Context
     public ConfigClient configClient(
-            PrefabCloudClient prefabCloudClient
+            PrefabCloudClient sdk
     ) {
-        ConfigClient configClient = prefabCloudClient.configClient();
+        ConfigClient configClient = sdk.configClient();
         // install the logging filter at the same time
         PrefabMDCTurboFilter.install(configClient);
         return configClient;

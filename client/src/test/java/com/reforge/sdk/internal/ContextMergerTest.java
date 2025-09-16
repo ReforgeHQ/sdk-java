@@ -1,53 +1,52 @@
 package com.reforge.sdk.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import org.junit.jupiter.api.Test;
 
 class ContextMergerTest {
 
-  private static final PrefabContextSet GLOBAL = PrefabContextSet.from(
-    PrefabContext.newBuilder("a").put("ga-foo", "bar").put("ga-abc", 123).build(),
-    PrefabContext.newBuilder("b").put("gb-foo", "bar").put("gb-abc", 123).build(),
-    PrefabContext.newBuilder("global").put("sunny", "day").put("solar", 123).build()
+  private static final ContextSet GLOBAL = ContextSet.from(
+    Context.newBuilder("a").put("ga-foo", "bar").put("ga-abc", 123).build(),
+    Context.newBuilder("b").put("gb-foo", "bar").put("gb-abc", 123).build(),
+    Context.newBuilder("global").put("sunny", "day").put("solar", 123).build()
   );
 
-  private static final PrefabContextSet API = PrefabContextSet.from(
-    PrefabContext.newBuilder("a").put("api-a-foo", "bar").put("api-a-abc", 123).build(),
-    PrefabContext.newBuilder("b").put("api-a-foo", "bar").put("api-a-abc", 123).build(),
-    PrefabContext.newBuilder("api").put("cloudy", "day").put("solar", 234).build()
+  private static final ContextSet API = ContextSet.from(
+    Context.newBuilder("a").put("api-a-foo", "bar").put("api-a-abc", 123).build(),
+    Context.newBuilder("b").put("api-a-foo", "bar").put("api-a-abc", 123).build(),
+    Context.newBuilder("api").put("cloudy", "day").put("solar", 234).build()
   );
 
-  private static final PrefabContextSet CURRENT = PrefabContextSet.from(
-    PrefabContext
+  private static final ContextSet CURRENT = ContextSet.from(
+    Context
       .newBuilder("a")
       .put("current-a-foo", "bar")
       .put("current-a-abc", 123)
       .build(),
-    PrefabContext
+    Context
       .newBuilder("b")
       .put("current-a-foo", "bar")
       .put("current-a-abc", 123)
       .build(),
-    PrefabContext.newBuilder("current").put("rainy", "day").put("solar", 456).build()
+    Context.newBuilder("current").put("rainy", "day").put("solar", 456).build()
   );
 
-  private static final PrefabContextSet PASSED = PrefabContextSet.from(
-    PrefabContext
+  private static final ContextSet PASSED = ContextSet.from(
+    Context
       .newBuilder("a")
       .put("passed-a-foo", "bar")
       .put("passed-a-abc", 123)
       .build(),
-    PrefabContext
+    Context
       .newBuilder("b")
       .put("passed-a-foo", "bar")
       .put("passed-a-abc", 123)
       .build(),
-    PrefabContext.newBuilder("passed").put("foggy", "day").put("solar", 345).build()
+    Context.newBuilder("passed").put("foggy", "day").put("solar", 345).build()
   );
 
   @Test
@@ -60,10 +59,10 @@ class ContextMergerTest {
     assertThat(
       ContextMerger
         .merge(
-          PrefabContextSetReadable.EMPTY,
-          PrefabContextSetReadable.EMPTY,
-          PrefabContextSetReadable.EMPTY,
-          PrefabContextSetReadable.EMPTY
+          ContextSetReadable.EMPTY,
+          ContextSetReadable.EMPTY,
+          ContextSetReadable.EMPTY,
+          ContextSetReadable.EMPTY
         )
         .isEmpty()
     )
@@ -72,7 +71,7 @@ class ContextMergerTest {
 
   @Test
   void itMergesGlobalWithApiInCorrectOrderWithoutPassedOrCurrentContext() {
-    PrefabContextSetReadable merged = ContextMerger.merge(GLOBAL, API, CURRENT, PASSED);
+    ContextSetReadable merged = ContextMerger.merge(GLOBAL, API, CURRENT, PASSED);
     assertThat(merged)
       .isEqualTo(
         PASSED
@@ -84,11 +83,11 @@ class ContextMergerTest {
 
   @Test
   void itMergesAllContextsCorrectly() {
-    PrefabContextSetReadable merged = ContextMerger.merge(
+    ContextSetReadable merged = ContextMerger.merge(
       GLOBAL,
       API,
-      PrefabContextSetReadable.EMPTY,
-      PrefabContextSetReadable.EMPTY
+      ContextSetReadable.EMPTY,
+      ContextSetReadable.EMPTY
     );
 
     assertThat(merged).isEqualTo(API.addContext(GLOBAL.getByName("global").get()));

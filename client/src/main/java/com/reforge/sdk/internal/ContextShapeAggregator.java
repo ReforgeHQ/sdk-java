@@ -2,8 +2,8 @@ package com.reforge.sdk.internal;
 
 import cloud.prefab.domain.Prefab;
 import com.google.common.annotations.VisibleForTesting;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,8 +27,8 @@ public class ContextShapeAggregator {
     this.shapes = new ConcurrentHashMap<>();
   }
 
-  void reportContextUsage(PrefabContextSetReadable prefabContextSetReadable) {
-    Prefab.ContextShapes currentShapes = extractShapes(prefabContextSetReadable);
+  void reportContextUsage(ContextSetReadable contextSetReadable) {
+    Prefab.ContextShapes currentShapes = extractShapes(contextSetReadable);
     for (Prefab.ContextShape contextShape : currentShapes.getShapesList()) {
       ConcurrentHashMap<String, Integer> contextMap = shapes.computeIfAbsent(
         contextShape.getName(),
@@ -78,12 +78,12 @@ public class ContextShapeAggregator {
   }
 
   private Prefab.ContextShapes extractShapes(
-    PrefabContextSetReadable prefabContextSetReadable
+    ContextSetReadable contextSetReadable
   ) {
     Prefab.ContextShapes.Builder shapesBuilder = Prefab.ContextShapes.newBuilder();
     StreamSupport
-      .stream(prefabContextSetReadable.getContexts().spliterator(), false)
-      .map(PrefabContext::getShape)
+      .stream(contextSetReadable.getContexts().spliterator(), false)
+      .map(Context::getShape)
       .forEach(shapesBuilder::addShapes);
     return shapesBuilder.build();
   }

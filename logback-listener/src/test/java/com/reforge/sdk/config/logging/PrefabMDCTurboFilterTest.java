@@ -10,8 +10,7 @@ import ch.qos.logback.core.spi.FilterReply;
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.config.ConfigValueUtils;
-import com.reforge.sdk.config.logging.PrefabMDCTurboFilter;
-import com.reforge.sdk.context.PrefabContext;
+import com.reforge.sdk.context.Context;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -43,7 +42,7 @@ class PrefabMDCTurboFilterTest {
     when(
       configClient.getLogLevel(
         logger.getName(),
-        PrefabContext.unnamedFromMap(Collections.emptyMap())
+        Context.unnamedFromMap(Collections.emptyMap())
       )
     )
       .thenReturn(Optional.empty());
@@ -68,7 +67,7 @@ class PrefabMDCTurboFilterTest {
     when(
       configClient.getLogLevel(
         logger.getName(),
-        PrefabContext.unnamedFromMap(Collections.emptyMap())
+        Context.unnamedFromMap(Collections.emptyMap())
       )
     )
       .thenReturn(Optional.of(Prefab.LogLevel.DEBUG));
@@ -93,7 +92,7 @@ class PrefabMDCTurboFilterTest {
     when(
       configClient.getLogLevel(
         logger.getName(),
-        PrefabContext.unnamedFromMap(Collections.emptyMap())
+        Context.unnamedFromMap(Collections.emptyMap())
       )
     )
       .thenReturn(Optional.of(Prefab.LogLevel.WARN));
@@ -122,7 +121,7 @@ class PrefabMDCTurboFilterTest {
       when(
         configClient.getLogLevel(
           logger.getName(),
-          PrefabContext.unnamedFromMap(ConfigValueUtils.fromStringMap(contextData))
+          Context.unnamedFromMap(ConfigValueUtils.fromStringMap(contextData))
         )
       )
         .thenReturn(Optional.of(Prefab.LogLevel.DEBUG));

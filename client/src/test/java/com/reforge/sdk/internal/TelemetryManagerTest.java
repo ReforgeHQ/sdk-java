@@ -13,8 +13,8 @@ import com.reforge.sdk.config.ConfigValueUtils;
 import com.reforge.sdk.config.Match;
 import com.reforge.sdk.config.Provenance;
 import com.reforge.sdk.config.TestUtils;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
 import java.net.http.HttpResponse;
 import java.time.Clock;
 import java.util.Collections;
@@ -38,7 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class TelemetryManagerTest {
 
   @Mock
-  PrefabHttpClient prefabHttpClient;
+  HttpClient prefabHttpClient;
 
   @Mock
   HttpResponse<Supplier<Prefab.TelemetryEventsResponse>> mockHttpResponse;
@@ -396,7 +396,7 @@ class TelemetryManagerTest {
   }
 
   private static void reportSomeMatches(TelemetryManager telemetryManager) {
-    PrefabContext teamContext = PrefabContext
+    Context teamContext = Context
       .newBuilder("team")
       .put("key", "t123")
       .put("number", 123)
@@ -418,8 +418,8 @@ class TelemetryManagerTest {
         Optional.empty()
       ),
       new LookupContext(
-        PrefabContextSet.from(
-          PrefabContext.newBuilder("user").put("key", "u123").build(),
+        ContextSet.from(
+          Context.newBuilder("user").put("key", "u123").build(),
           teamContext
         )
       )
@@ -439,8 +439,8 @@ class TelemetryManagerTest {
         Optional.empty()
       ),
       new LookupContext(
-        PrefabContextSet.from(
-          PrefabContext.newBuilder("user").put("key", "u123").build(),
+        ContextSet.from(
+          Context.newBuilder("user").put("key", "u123").build(),
           teamContext
         )
       )
@@ -460,8 +460,8 @@ class TelemetryManagerTest {
         Optional.empty()
       ),
       new LookupContext(
-        PrefabContextSet.from(
-          PrefabContext.newBuilder("user").put("key", "u124").build(),
+        ContextSet.from(
+          Context.newBuilder("user").put("key", "u124").build(),
           teamContext
         )
       )
@@ -478,8 +478,8 @@ class TelemetryManagerTest {
         Optional.empty()
       ),
       new LookupContext(
-        PrefabContextSet.from(
-          PrefabContext.newBuilder("user").put("key", "u123").build(),
+        ContextSet.from(
+          Context.newBuilder("user").put("key", "u123").build(),
           teamContext
         )
       )
@@ -496,8 +496,8 @@ class TelemetryManagerTest {
         Optional.empty()
       ),
       new LookupContext(
-        PrefabContextSet.from(
-          PrefabContext.newBuilder("user").put("key", "u123").build(),
+        ContextSet.from(
+          Context.newBuilder("user").put("key", "u123").build(),
           teamContext
         )
       )

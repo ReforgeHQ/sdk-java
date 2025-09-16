@@ -3,7 +3,7 @@ package com.reforge.sdk.internal;
 import cloud.prefab.domain.Prefab;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.context.ContextSet;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +20,7 @@ public class ExampleContextBuffer {
     this.contextDeduplicator = new ContextDeduplicator(Duration.ofMinutes(15), 1000);
   }
 
-  void recordContext(long timestamp, PrefabContextSet context) {
+  void recordContext(long timestamp, ContextSet context) {
     if (context.isEmpty()) {
       return;
     }
@@ -35,7 +35,7 @@ public class ExampleContextBuffer {
           Prefab.ExampleContext
             .newBuilder()
             .setTimestamp(timestamp)
-            .setContextSet(PrefabContextSet.convert(context).toProto())
+            .setContextSet(ContextSet.convert(context).toProto())
             .build()
         );
       }

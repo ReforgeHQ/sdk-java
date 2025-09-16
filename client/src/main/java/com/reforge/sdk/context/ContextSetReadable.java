@@ -10,16 +10,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public interface PrefabContextSetReadable {
-  Optional<PrefabContext> getByName(String contextName);
-  Iterable<PrefabContext> getContexts();
+public interface ContextSetReadable {
+  Optional<Context> getByName(String contextName);
+  Iterable<Context> getContexts();
 
   boolean isEmpty();
 
   default Map<String, Prefab.ConfigValue> flattenToImmutableMap() {
     return Streams
       .stream(getContexts())
-      .sorted(Comparator.comparing(PrefabContext::getName))
+      .sorted(Comparator.comparing(Context::getName))
       .flatMap(context ->
         context
           .getNameQualifiedProperties()
@@ -36,14 +36,14 @@ public interface PrefabContextSetReadable {
       );
   }
 
-  PrefabContextSetReadable EMPTY = new PrefabContextSetReadable() {
+  ContextSetReadable EMPTY = new ContextSetReadable() {
     @Override
-    public Optional<PrefabContext> getByName(String contextName) {
+    public Optional<Context> getByName(String contextName) {
       return Optional.empty();
     }
 
     @Override
-    public Iterable<PrefabContext> getContexts() {
+    public Iterable<Context> getContexts() {
       return Collections.emptyList();
     }
 
@@ -61,15 +61,15 @@ public interface PrefabContextSetReadable {
     }
   };
 
-  static PrefabContextSetReadable readOnlyContextSetView(PrefabContextSet contextSet) {
-    return new PrefabContextSetReadable() {
+  static ContextSetReadable readOnlyContextSetView(ContextSet contextSet) {
+    return new ContextSetReadable() {
       @Override
-      public Optional<PrefabContext> getByName(String contextName) {
+      public Optional<Context> getByName(String contextName) {
         return contextSet.getByName(contextName);
       }
 
       @Override
-      public Iterable<PrefabContext> getContexts() {
+      public Iterable<Context> getContexts() {
         return contextSet.getContexts();
       }
 
@@ -90,7 +90,7 @@ public interface PrefabContextSetReadable {
       .stream(getContexts().spliterator(), false)
       .filter(c -> !c.getName().isBlank())
       .filter(c -> c.getProperties().containsKey("key"))
-      .sorted(Comparator.comparing(PrefabContext::getName))
+      .sorted(Comparator.comparing(Context::getName))
       .map(c ->
         new StringBuilder()
           .append(c.getName())

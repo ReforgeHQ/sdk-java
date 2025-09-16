@@ -5,8 +5,8 @@ import static org.mockito.Mockito.when;
 
 import cloud.prefab.domain.Prefab;
 import com.google.common.hash.HashCode;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.util.RandomProviderIF;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -42,7 +42,7 @@ class WeightedValueEvaluatorTest {
     Prefab.ConfigValue foo = weightedValueEvaluator.toValue(
       weightedValues,
       "featureName",
-      new LookupContext(PrefabContextSetReadable.EMPTY)
+      new LookupContext(ContextSetReadable.EMPTY)
     );
     assertThat(foo).isEqualTo(Prefab.ConfigValue.newBuilder().setBool(false).build());
   }
@@ -63,7 +63,7 @@ class WeightedValueEvaluatorTest {
     Prefab.ConfigValue foo = weightedValueEvaluator.toValue(
       weightedValues,
       "featureName",
-      new LookupContext(PrefabContextSetReadable.EMPTY)
+      new LookupContext(ContextSetReadable.EMPTY)
     );
     assertThat(foo)
       .isEqualTo(Prefab.ConfigValue.newBuilder().setBool(expectedValue).build());
@@ -82,7 +82,7 @@ class WeightedValueEvaluatorTest {
     Prefab.ConfigValue value = weightedValueEvaluator.toValue(
       weightedValues,
       "featureName",
-      new LookupContext(PrefabContext.newBuilder("user").put("name", "james").build())
+      new LookupContext(Context.newBuilder("user").put("name", "james").build())
     );
     assertThat(value)
       .isEqualTo(Prefab.ConfigValue.newBuilder().setBool(expectedValue).build());
@@ -103,7 +103,7 @@ class WeightedValueEvaluatorTest {
     Prefab.ConfigValue value = weightedValueEvaluator.toValue(
       weightedValues,
       "featureName",
-      new LookupContext(PrefabContext.newBuilder("user").put("name", "james").build())
+      new LookupContext(Context.newBuilder("user").put("name", "james").build())
     );
     assertThat(value)
       .isEqualTo(Prefab.ConfigValue.newBuilder().setInt(expectedValue).build());

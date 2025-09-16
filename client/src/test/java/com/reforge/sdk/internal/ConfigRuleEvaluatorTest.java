@@ -10,9 +10,9 @@ import com.reforge.sdk.config.ConfigElement;
 import com.reforge.sdk.config.ConfigValueUtils;
 import com.reforge.sdk.config.EvaluatedCriterion;
 import com.reforge.sdk.config.Provenance;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -20,14 +20,12 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-import org.checkerframework.checker.units.qual.N;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
 
 public class ConfigRuleEvaluatorTest {
 
@@ -41,10 +39,10 @@ public class ConfigRuleEvaluatorTest {
       new ConfigRuleEvaluator(mockConfigStoreImpl, new WeightedValueEvaluator());
 
     when(mockConfigStoreImpl.getConfigIncludedContext())
-      .thenReturn(PrefabContextSetReadable.EMPTY);
+      .thenReturn(ContextSetReadable.EMPTY);
 
     when(mockConfigStoreImpl.getGlobalContext())
-      .thenReturn(PrefabContextSetReadable.EMPTY);
+      .thenReturn(ContextSetReadable.EMPTY);
   }
 
   @Test
@@ -824,9 +822,9 @@ public class ConfigRuleEvaluatorTest {
       .setValueToMatch(criterionValue)
       .build();
     LookupContext lookupContext = new LookupContext(
-      new PrefabContextSet()
+      new ContextSet()
         .addContext(
-          PrefabContext.newBuilder(contextName).put(propertyName, propertyValue).build()
+          Context.newBuilder(contextName).put(propertyName, propertyValue).build()
         )
     );
     assertThat(
@@ -891,7 +889,7 @@ public class ConfigRuleEvaluatorTest {
   ) {
     if (configValue != null) {
       return new LookupContext(
-        PrefabContext.unnamedFromMap(Map.of(propName, configValue))
+        Context.unnamedFromMap(Map.of(propName, configValue))
       );
     }
     return LookupContext.EMPTY;

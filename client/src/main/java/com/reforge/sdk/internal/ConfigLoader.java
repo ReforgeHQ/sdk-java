@@ -12,8 +12,8 @@ import com.reforge.sdk.Options;
 import com.reforge.sdk.config.ConfigElement;
 import com.reforge.sdk.config.Provenance;
 import com.reforge.sdk.config.logging.AbstractLoggingListener;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,10 +54,10 @@ public class ConfigLoader {
 
   private final AtomicLong projectEnvId = new AtomicLong(0);
 
-  private final AtomicReference<PrefabContextSetReadable> configIncludedContext = new AtomicReference<>(
-    PrefabContextSetReadable.EMPTY
+  private final AtomicReference<ContextSetReadable> configIncludedContext = new AtomicReference<>(
+    ContextSetReadable.EMPTY
   );
-  private final PrefabContextSetReadable globalContext;
+  private final ContextSetReadable globalContext;
 
   public ConfigLoader(Options options) {
     this.options = options;
@@ -68,8 +68,8 @@ public class ConfigLoader {
     this.globalContext =
       options
         .getGlobalContext()
-        .filter(Predicate.not(PrefabContextSetReadable::isEmpty))
-        .orElse(PrefabContextSetReadable.EMPTY);
+        .filter(Predicate.not(ContextSetReadable::isEmpty))
+        .orElse(ContextSetReadable.EMPTY);
   }
 
   /**
@@ -90,8 +90,8 @@ public class ConfigLoader {
     );
   }
 
-  private PrefabContextSetReadable getConfigIncludedContext(Prefab.Configs configs) {
-    return PrefabContextSet.from(configs.getDefaultContext());
+  private ContextSetReadable getConfigIncludedContext(Prefab.Configs configs) {
+    return ContextSet.from(configs.getDefaultContext());
   }
 
   public synchronized void setConfigs(Prefab.Configs configs, Provenance provenance) {

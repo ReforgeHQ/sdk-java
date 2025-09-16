@@ -3,7 +3,7 @@ package com.reforge.sdk.integration;
 import cloud.prefab.domain.Prefab;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.reforge.sdk.PrefabCloudClient;
+import com.reforge.sdk.Sdk;
 import com.reforge.sdk.config.ConfigValueUtils;
 import com.reforge.sdk.value.LiveObject;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class IntegrationTestInput {
     this.defaultValue = defaultValue;
   }
 
-  public Object getWithFallback(PrefabCloudClient client) {
+  public Object getWithFallback(Sdk client) {
     Optional<Prefab.ConfigValue> configValueOptional = client
       .configClient()
       .get(getKey(), PrefabContextFactory.from(getContext()));
@@ -42,7 +42,7 @@ public class IntegrationTestInput {
       .orElseGet(() -> defaultValue.orElse(null));
   }
 
-  public Object getWithoutFallback(PrefabCloudClient client) {
+  public Object getWithoutFallback(Sdk client) {
     if (defaultValue.isPresent()) {
       return getWithFallback(client);
     } else {
@@ -51,13 +51,13 @@ public class IntegrationTestInput {
     }
   }
 
-  public boolean featureIsOnFor(PrefabCloudClient client) {
+  public boolean featureIsOnFor(Sdk client) {
     return client
       .featureFlagClient()
       .featureIsOn(getFlag().get(), PrefabContextFactory.from(getContext()));
   }
 
-  public long getFeatureFor(PrefabCloudClient client) {
+  public long getFeatureFor(Sdk client) {
     return client
       .featureFlagClient()
       .get(getFlag().get(), PrefabContextFactory.from(getContext()))

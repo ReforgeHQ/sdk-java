@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.reforge.sdk.config.ConfigValueUtils;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -33,28 +33,28 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsResult() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from(false)));
       assertThat(impl.getBoolean("key", true, null)).isFalse();
     }
 
     @Test
     void getReturnsDefaultValueWhenNoConfigExists() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.empty());
       assertThat(impl.getBoolean("key", true, null)).isTrue();
     }
 
     @Test
     void getReturnsDefaultValueWhenConfigIsWrongType() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from(123)));
       assertThat(impl.getBoolean("key", true, null)).isTrue();
     }
 
     @Test
     void getReturnsDefaultValueWhenExceptionIsThrown() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenThrow(new RuntimeException("something"));
       assertThat(impl.getBoolean("key", true, null)).isTrue();
     }
@@ -65,28 +65,28 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsResult() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from(10)));
       assertThat(impl.getLong("key", 1234, null)).isEqualTo(10);
     }
 
     @Test
     void getReturnsDefaultValueWhenNoConfigExists() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.empty());
       assertThat(impl.getLong("key", 1234, null)).isEqualTo(1234);
     }
 
     @Test
     void getReturnsDefaultValueWhenConfigIsWrongType() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from("hello")));
       assertThat(impl.getLong("key", 1234, null)).isEqualTo(1234);
     }
 
     @Test
     void getReturnsDefaultValueWhenExceptionIsThrown() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenThrow(new RuntimeException("something"));
       assertThat(impl.getLong("key", 1234, null)).isEqualTo(1234);
     }
@@ -97,28 +97,28 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsResult() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from(10.1)));
       assertThat(impl.getDouble("key", 12.34, null)).isEqualTo(10.1);
     }
 
     @Test
     void getReturnsDefaultValueWhenNoConfigExists() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.empty());
       assertThat(impl.getDouble("key", 12.34, null)).isEqualTo(12.34);
     }
 
     @Test
     void getReturnsDefaultValueWhenConfigIsWrongType() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from("hello")));
       assertThat(impl.getDouble("key", 12.34, null)).isEqualTo(12.34);
     }
 
     @Test
     void getReturnsDefaultValueWhenExceptionIsThrown() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenThrow(new RuntimeException("something"));
       assertThat(impl.getDouble("key", 12.34, null)).isEqualTo(12.34);
     }
@@ -129,7 +129,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsResult() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from(Duration.ofSeconds(90))));
       assertThat(impl.getDuration("key", Duration.ofMinutes(10), null))
         .isEqualTo(Duration.ofSeconds(90));
@@ -137,7 +137,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsDefaultValueWhenNoConfigExists() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.empty());
       assertThat(impl.getDuration("key", Duration.ofMinutes(10), null))
         .isEqualTo(Duration.ofMinutes(10));
@@ -145,7 +145,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsDefaultValueWhenConfigIsWrongType() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from("hello")));
       assertThat(impl.getDuration("key", Duration.ofMinutes(10), null))
         .isEqualTo(Duration.ofMinutes(10));
@@ -153,7 +153,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsDefaultValueWhenExceptionIsThrown() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenThrow(new RuntimeException("something"));
       assertThat(impl.getDuration("key", Duration.ofMinutes(10), null))
         .isEqualTo(Duration.ofMinutes(10));
@@ -165,28 +165,28 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsResult() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from("hello")));
       assertThat(impl.getString("key", "world", null)).isEqualTo("hello");
     }
 
     @Test
     void getReturnsDefaultValueWhenNoConfigExists() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.empty());
       assertThat(impl.getString("key", "hello", null)).isEqualTo("hello");
     }
 
     @Test
     void getReturnsDefaultValueWhenConfigIsWrongType() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from(1234)));
       assertThat(impl.getString("key", "hello", null)).isEqualTo("hello");
     }
 
     @Test
     void getReturnsDefaultValueWhenExceptionIsThrown() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenThrow(new RuntimeException("something"));
       assertThat(impl.getString("key", "hello", null)).isEqualTo("hello");
     }
@@ -197,7 +197,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsResult() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from(List.of("a", "b"))));
       assertThat(impl.getStringList("key", List.of("a"), null))
         .isEqualTo(List.of("a", "b"));
@@ -205,7 +205,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsDefaultValueWhenNoConfigExists() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.empty());
       assertThat(impl.getStringList("key", List.of("a", "b"), null))
         .isEqualTo(List.of("a", "b"));
@@ -213,7 +213,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsDefaultValueWhenConfigIsWrongType() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenReturn(Optional.of(ConfigValueUtils.from("hello")));
       assertThat(impl.getStringList("key", List.of("a", "b"), null))
         .isEqualTo(List.of("a", "b"));
@@ -221,7 +221,7 @@ class TypedConfigClientImplTest {
 
     @Test
     void getReturnsDefaultValueWhenExceptionIsThrown() {
-      when(configClientCore.get("key", (PrefabContextSetReadable) null))
+      when(configClientCore.get("key", (ContextSetReadable) null))
         .thenThrow(new RuntimeException("something"));
       assertThat(impl.getStringList("key", List.of("a", "b"), null))
         .isEqualTo(List.of("a", "b"));

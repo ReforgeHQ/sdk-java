@@ -2,7 +2,7 @@ package com.reforge.sdk.integration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.reforge.sdk.PrefabCloudClient;
+import com.reforge.sdk.Sdk;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 public enum IntegrationTestFunction {
   GET_OR_RAISE("get_or_raise") {
     @Override
-    public Object apply(PrefabCloudClient client, IntegrationTestInput input) {
+    public Object apply(Sdk client, IntegrationTestInput input) {
       return input.getWithoutFallback(client);
     }
   },
   GET("get") {
     @Override
-    public Object apply(PrefabCloudClient client, IntegrationTestInput input) {
+    public Object apply(Sdk client, IntegrationTestInput input) {
       if (input.getFlag().isPresent()) {
         return input.getFeatureFor(client);
       } else {
@@ -27,14 +27,14 @@ public enum IntegrationTestFunction {
   },
   ENABLED("enabled") {
     @Override
-    public Object apply(PrefabCloudClient client, IntegrationTestInput input) {
+    public Object apply(Sdk client, IntegrationTestInput input) {
       return input.featureIsOnFor(client);
     }
   },
 
   POST("post") {
     @Override
-    public Object apply(PrefabCloudClient client, IntegrationTestInput input) {
+    public Object apply(Sdk client, IntegrationTestInput input) {
       return null;
     }
   };
@@ -61,5 +61,5 @@ public enum IntegrationTestFunction {
     return jsonValue;
   }
 
-  public abstract Object apply(PrefabCloudClient client, IntegrationTestInput input);
+  public abstract Object apply(Sdk client, IntegrationTestInput input);
 }

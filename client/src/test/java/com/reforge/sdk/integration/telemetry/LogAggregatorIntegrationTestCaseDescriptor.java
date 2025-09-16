@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableBiMap;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.integration.IntegrationTestClientOverrides;
 import com.reforge.sdk.integration.IntegrationTestFunction;
 import com.reforge.sdk.integration.PrefabContextFactory;
@@ -65,17 +65,17 @@ public class LogAggregatorIntegrationTestCaseDescriptor
       contextMapMaybe
         .map(contextMap -> contextMap.get("global"))
         .map(PrefabContextFactory::from)
-        .map(PrefabContextSet::convert)
+        .map(ContextSet::convert)
     );
     this.inputData = inputData;
     this.expectedData = expectedData;
   }
 
   @Override
-  protected void performVerification(PrefabCloudClient prefabCloudClient) {
+  protected void performVerification(Sdk sdk) {
     for (LoggerNamesAndCounts inputDatum : inputData) {
       for (Map.Entry<String, Integer> logLevelCount : inputDatum.levelCounts.entrySet()) {
-        prefabCloudClient
+        sdk
           .configClient()
           .reportLoggerUsage(
             inputDatum.loggerName,
@@ -117,7 +117,7 @@ public class LogAggregatorIntegrationTestCaseDescriptor
       .collect(Collectors.toList());
 
     TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(
-      prefabCloudClient
+            sdk
     );
 
     await()

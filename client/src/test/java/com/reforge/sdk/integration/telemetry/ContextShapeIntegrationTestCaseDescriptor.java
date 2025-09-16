@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.MoreObjects;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.context.PrefabContextSet;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.integration.IntegrationTestClientOverrides;
 import com.reforge.sdk.integration.IntegrationTestFunction;
 import com.reforge.sdk.integration.PrefabContextFactory;
@@ -53,7 +53,7 @@ public class ContextShapeIntegrationTestCaseDescriptor
       contextMapMaybe
         .map(contextMap -> contextMap.get("global"))
         .map(PrefabContextFactory::from)
-        .map(PrefabContextSet::convert)
+        .map(ContextSet::convert)
     );
     this.dataNode = dataNode;
     this.expectedDataNode = expectedDataNode;
@@ -77,16 +77,16 @@ public class ContextShapeIntegrationTestCaseDescriptor
   }
 
   @Override
-  protected void performVerification(PrefabCloudClient prefabCloudClient) {
+  protected void performVerification(Sdk sdk) {
     // build context from data
-    PrefabContextSet contextSet = buildContextSetFromObjectDataNode(dataNode);
+    ContextSet contextSet = buildContextSetFromObjectDataNode(dataNode);
     assertThat(expectedDataNode.isArray())
       .as("expected data node should be an array")
       .isTrue();
     List<Prefab.ContextShape> expectedShapes = buildExpectedShapesFromExpectedDataNode();
-    prefabCloudClient.configClient().get("my-test-key", contextSet);
+    sdk.configClient().get("my-test-key", contextSet);
     TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(
-      prefabCloudClient
+            sdk
     );
 
     await()

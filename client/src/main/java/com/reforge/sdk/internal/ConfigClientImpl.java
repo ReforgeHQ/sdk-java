@@ -8,8 +8,8 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.Options;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.PrefabInitializationTimeoutException;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.SdkInitializationTimeoutException;
 import com.reforge.sdk.config.ConfigChangeEvent;
 import com.reforge.sdk.config.ConfigChangeListener;
 import com.reforge.sdk.config.Match;
@@ -17,8 +17,8 @@ import com.reforge.sdk.config.logging.AbstractLoggingListener;
 import com.reforge.sdk.config.logging.LogLevelChangeEvent;
 import com.reforge.sdk.config.logging.LogLevelChangeListener;
 import com.reforge.sdk.context.ContextStore;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.value.LiveBoolean;
 import com.reforge.sdk.value.LiveDouble;
 import com.reforge.sdk.value.LiveDuration;
@@ -26,7 +26,7 @@ import com.reforge.sdk.value.LiveLong;
 import com.reforge.sdk.value.LiveString;
 import com.reforge.sdk.value.LiveStringList;
 import com.reforge.sdk.value.Value;
-import java.net.http.HttpClient;
+
 import java.net.http.HttpResponse;
 import java.time.Clock;
 import java.time.Duration;
@@ -74,14 +74,14 @@ public class ConfigClientImpl implements ConfigClient {
 
   private final ConcurrentHashMap<String, String> loggerNameLookup = new ConcurrentHashMap<>();
 
-  private final PrefabHttpClient prefabHttpClient;
+  private final HttpClient prefabHttpClient;
 
   private final ContextStore contextStore;
   private final TelemetryManager telemetryManager;
   private final TypedConfigClientImpl typedConfigImpl;
 
   public ConfigClientImpl(
-    PrefabCloudClient baseClient,
+    Sdk baseClient,
     ConfigChangeListener... listeners
   ) {
     this(
@@ -97,7 +97,7 @@ public class ConfigClientImpl implements ConfigClient {
 
   @VisibleForTesting
   ConfigClientImpl(
-    PrefabCloudClient baseClient,
+    Sdk baseClient,
     UpdatingConfigResolver updatingConfigResolver,
     ConfigChangeListener... listeners
   ) {
@@ -122,7 +122,7 @@ public class ConfigClientImpl implements ConfigClient {
       prefabHttpClient = null;
       telemetryManager = null;
     } else {
-      HttpClient httpClient = HttpClient
+      java.net.http.HttpClient httpClient = java.net.http.HttpClient
         .newBuilder()
         .executor(
           MoreExecutors.getExitingExecutorService(
@@ -135,7 +135,7 @@ public class ConfigClientImpl implements ConfigClient {
           )
         )
         .build();
-      prefabHttpClient = new PrefabHttpClient(httpClient, options);
+      prefabHttpClient = new HttpClient(httpClient, options);
       Executors.newSingleThreadExecutor().submit(this::startConnections);
       telemetryManager =
         new TelemetryManager(
@@ -198,7 +198,7 @@ public class ConfigClientImpl implements ConfigClient {
   public boolean getBoolean(
     String key,
     boolean defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     return typedConfigImpl.getBoolean(key, defaultValue, context);
   }
@@ -207,7 +207,7 @@ public class ConfigClientImpl implements ConfigClient {
   public long getLong(
     String key,
     long defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     return typedConfigImpl.getLong(key, defaultValue, context);
   }
@@ -216,7 +216,7 @@ public class ConfigClientImpl implements ConfigClient {
   public double getDouble(
     String key,
     double defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     return typedConfigImpl.getDouble(key, defaultValue, context);
   }
@@ -225,7 +225,7 @@ public class ConfigClientImpl implements ConfigClient {
   public String getString(
     String key,
     String defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     return typedConfigImpl.getString(key, defaultValue, context);
   }
@@ -234,7 +234,7 @@ public class ConfigClientImpl implements ConfigClient {
   public List<String> getStringList(
     String key,
     List<String> defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     return typedConfigImpl.getStringList(key, defaultValue, context);
   }
@@ -243,14 +243,14 @@ public class ConfigClientImpl implements ConfigClient {
   public Duration getDuration(
     String key,
     Duration defaultValue,
-    @Nullable PrefabContextSetReadable context
+    @Nullable ContextSetReadable context
   ) {
     return typedConfigImpl.getDuration(key, defaultValue, context);
   }
 
   @Override
   public Optional<Prefab.ConfigValue> get(String key) {
-    return get(key, (PrefabContextSetReadable) null);
+    return get(key, (ContextSetReadable) null);
   }
 
   @Override
@@ -258,20 +258,20 @@ public class ConfigClientImpl implements ConfigClient {
     String configKey,
     Map<String, Prefab.ConfigValue> properties
   ) {
-    return get(configKey, PrefabContext.unnamedFromMap(properties));
+    return get(configKey, Context.unnamedFromMap(properties));
   }
 
   @Override
   public Optional<Prefab.ConfigValue> get(
     String configKey,
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   ) {
     return getInternal(configKey, prefabContext);
   }
 
   @Override
   public Map<String, Prefab.ConfigValue> getAll(
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   ) {
     waitForInitialization();
     LookupContext lookupContext = new LookupContext(resolveContext(prefabContext));
@@ -292,10 +292,10 @@ public class ConfigClientImpl implements ConfigClient {
 
   private Optional<Prefab.ConfigValue> getInternal(
     String configKey,
-    PrefabContextSetReadable passedContext
+    ContextSetReadable passedContext
   ) {
     waitForInitialization();
-    PrefabContextSetReadable resolvedContext = resolveContext(passedContext);
+    ContextSetReadable resolvedContext = resolveContext(passedContext);
     LookupContext lookupContext = new LookupContext(resolvedContext);
     Optional<Match> matchMaybe = getMatchInternal(configKey, lookupContext);
     reportMatchResult(configKey, matchMaybe.orElse(null), lookupContext);
@@ -355,7 +355,7 @@ public class ConfigClientImpl implements ConfigClient {
   @Override
   public Optional<Prefab.LogLevel> getLogLevel(
     String loggerName,
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   ) {
     waitForInitialization();
     // special case getLogLevel - want to reuse the same lookup context for all key name variants
@@ -374,20 +374,20 @@ public class ConfigClientImpl implements ConfigClient {
     return Optional.empty();
   }
 
-  private PrefabContextSetReadable resolveContext(
-    @Nullable PrefabContextSetReadable prefabContextSetReadable
+  private ContextSetReadable resolveContext(
+    @Nullable ContextSetReadable contextSetReadable
   ) {
     return ContextMerger.merge(
       updatingConfigResolver.getGlobalContext(),
       updatingConfigResolver.getApiDefaultContext(),
       getContextStore()
         .getContext()
-        .filter(Predicate.not(PrefabContextSetReadable::isEmpty))
-        .orElse(PrefabContextSetReadable.EMPTY),
+        .filter(Predicate.not(ContextSetReadable::isEmpty))
+        .orElse(ContextSetReadable.EMPTY),
       Optional
-        .ofNullable(prefabContextSetReadable)
-        .filter(Predicate.not(PrefabContextSetReadable::isEmpty))
-        .orElse(PrefabContextSetReadable.EMPTY)
+        .ofNullable(contextSetReadable)
+        .filter(Predicate.not(ContextSetReadable::isEmpty))
+        .orElse(ContextSetReadable.EMPTY)
     );
   }
 
@@ -449,7 +449,7 @@ public class ConfigClientImpl implements ConfigClient {
         response.request().uri()
       );
 
-      if (PrefabHttpClient.isSuccess(response.statusCode())) {
+      if (HttpClient.isSuccess(response.statusCode())) {
         Prefab.Configs configs = response.body().get();
         loadConfigs(configs, Source.REMOTE_API);
         return Optional.of(configs);
@@ -559,7 +559,7 @@ public class ConfigClientImpl implements ConfigClient {
         ) {
           finishInit(Source.INIT_TIMEOUT);
         } else {
-          throw new PrefabInitializationTimeoutException(
+          throw new SdkInitializationTimeoutException(
             options.getInitializationTimeoutSec()
           );
         }

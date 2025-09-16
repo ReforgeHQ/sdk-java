@@ -5,9 +5,9 @@ import static com.reforge.sdk.integration.IntegrationTestFunction.ENABLED;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
-import com.reforge.sdk.PrefabCloudClient;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.Sdk;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class StandardIntegrationTestCaseDescriptor
       contextMapMaybe
         .map(contextMap -> contextMap.get("global"))
         .map(PrefabContextFactory::from)
-        .map(PrefabContextSet::convert)
+        .map(ContextSet::convert)
     );
     this.clientName = clientName;
     this.function = function;
@@ -62,7 +62,7 @@ public class StandardIntegrationTestCaseDescriptor
   }
 
   @Override
-  protected void performVerification(PrefabCloudClient prefabCloudClient) {
+  protected void performVerification(Sdk sdk) {
     String actualDataType;
     if (dataType.isPresent()) {
       actualDataType = dataType.get();
@@ -73,7 +73,7 @@ public class StandardIntegrationTestCaseDescriptor
     }
 
     getExpected()
-      .verifyScenario(prefabCloudClient, getFunction(), getInput(), actualDataType);
+      .verifyScenario(sdk, getFunction(), getInput(), actualDataType);
   }
 
   public String getClient() {
@@ -93,9 +93,9 @@ public class StandardIntegrationTestCaseDescriptor
   }
 
   @Override
-  protected PrefabContextSetReadable getBlockContext() {
+  protected ContextSetReadable getBlockContext() {
     return blockContextMapMaybe
       .map(PrefabContextFactory::from)
-      .orElse(PrefabContextSet.EMPTY);
+      .orElse(ContextSet.EMPTY);
   }
 }

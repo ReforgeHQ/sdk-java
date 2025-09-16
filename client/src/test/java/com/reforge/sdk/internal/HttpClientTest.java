@@ -9,7 +9,6 @@ import com.google.common.cache.Cache;
 import com.reforge.sdk.Options;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -26,10 +25,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class PrefabHttpClientTest {
+class HttpClientTest {
 
   @Mock
-  HttpClient mockHttpClient;
+  java.net.http.HttpClient mockHttpClient;
 
   Options options = new Options()
     .setApiHosts(List.of("http://a.example.com", "http://b.example.com"))
@@ -37,11 +36,11 @@ class PrefabHttpClientTest {
     .setApikey("not-a-real-key")
     .setPrefabTelemetryHost("http://telemetry.example.com");
 
-  PrefabHttpClient prefabHttpClient;
+  HttpClient prefabHttpClient;
 
   @BeforeEach
   void setup() {
-    prefabHttpClient = new PrefabHttpClient(mockHttpClient, options);
+    prefabHttpClient = new HttpClient(mockHttpClient, options);
     // Clear the internal cache before each test.
     prefabHttpClient.clearCache();
   }
@@ -182,13 +181,13 @@ class PrefabHttpClientTest {
     long past = System.currentTimeMillis() - 10_000;
 
     URI uri = URI.create("http://a.example.com/api/v1/configs/0");
-    Field cacheField = PrefabHttpClient.class.getDeclaredField("configCache");
+    Field cacheField = HttpClient.class.getDeclaredField("configCache");
     cacheField.setAccessible(true);
     @SuppressWarnings("unchecked")
-    Cache<URI, PrefabHttpClient.CacheEntry> cache = (Cache<URI, PrefabHttpClient.CacheEntry>) cacheField.get(
+    Cache<URI, HttpClient.CacheEntry> cache = (Cache<URI, HttpClient.CacheEntry>) cacheField.get(
       prefabHttpClient
     );
-    PrefabHttpClient.CacheEntry expiredEntry = new PrefabHttpClient.CacheEntry(
+    HttpClient.CacheEntry expiredEntry = new HttpClient.CacheEntry(
       dummyBytes,
       "abc",
       past
@@ -318,13 +317,13 @@ class PrefabHttpClientTest {
 
     // Retrieve the cached entry.
     URI uri = URI.create("http://a.example.com/api/v1/configs/0");
-    Field cacheField = PrefabHttpClient.class.getDeclaredField("configCache");
+    Field cacheField = HttpClient.class.getDeclaredField("configCache");
     cacheField.setAccessible(true);
     @SuppressWarnings("unchecked")
-    Cache<URI, PrefabHttpClient.CacheEntry> cache = (Cache<URI, PrefabHttpClient.CacheEntry>) cacheField.get(
+    Cache<URI, HttpClient.CacheEntry> cache = (Cache<URI, HttpClient.CacheEntry>) cacheField.get(
       prefabHttpClient
     );
-    PrefabHttpClient.CacheEntry cachedEntry = cache.getIfPresent(uri);
+    HttpClient.CacheEntry cachedEntry = cache.getIfPresent(uri);
     assertThat(cachedEntry).isNotNull();
     // Due to "no-cache", the cached entry should be immediately expired.
     assertThat(cachedEntry.expiresAt).isLessThanOrEqualTo(System.currentTimeMillis());

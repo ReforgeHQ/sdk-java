@@ -3,8 +3,8 @@ package com.reforge.sdk;
 import cloud.prefab.domain.Prefab;
 import com.reforge.sdk.config.ConfigChangeListener;
 import com.reforge.sdk.context.ContextStore;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.internal.ConfigClientCore;
 import java.util.Collection;
 import java.util.Map;
@@ -15,11 +15,11 @@ public interface ConfigClient
   extends ConfigClientCore, LiveValuesConfigClient, TypedConfigClient {
   /**
    * Evaluates all configurations
-   * @param prefabContext additional context to use to evaluate the config. Will be added to existing context as documented in {@link ContextStore#addContext(PrefabContext) addcontext} Pass Null or {@link PrefabContextSetReadable#EMPTY} to keep context as is
+   * @param prefabContext additional context to use to evaluate the config. Will be added to existing context as documented in {@link ContextStore#addContext(Context) addcontext} Pass Null or {@link ContextSetReadable#EMPTY} to keep context as is
    * @return a Map with the config's key as the key, the current ConfigValue as map's value
    */
   Map<String, Prefab.ConfigValue> getAll(
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   );
 
   /**
@@ -48,13 +48,13 @@ public interface ConfigClient
   /**
    * Evaluates a configuration based on the arguments
    * @param loggerName name of the logger eg
-   * @param prefabContext additional context to use to evaluate the config. Will be added to existing context as documented in {@link ContextStore#addContext(PrefabContext) addcontext}
+   * @param prefabContext additional context to use to evaluate the config. Will be added to existing context as documented in {@link ContextStore#addContext(Context) addcontext}
    * @return the evaluated context
-   * @see ConfigClient#get(String, PrefabContextSetReadable)
+   * @see ConfigClient#get(String, ContextSetReadable)
    */
   Optional<Prefab.LogLevel> getLogLevel(
     String loggerName,
-    @Nullable PrefabContextSetReadable prefabContext
+    @Nullable ContextSetReadable prefabContext
   );
 
   Optional<Prefab.LogLevel> getLogLevel(String loggerName);

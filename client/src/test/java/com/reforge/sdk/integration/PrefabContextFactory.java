@@ -2,9 +2,9 @@ package com.reforge.sdk.integration;
 
 import cloud.prefab.domain.Prefab;
 import com.google.common.collect.ImmutableMap;
-import com.reforge.sdk.context.PrefabContext;
-import com.reforge.sdk.context.PrefabContextSet;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.Context;
+import com.reforge.sdk.context.ContextSet;
+import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.internal.ConfigLoader;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -14,14 +14,14 @@ public class PrefabContextFactory {
 
   static final Logger LOG = LoggerFactory.getLogger(PrefabContextFactory.class);
 
-  public static PrefabContextSetReadable from(Map<String, Map<String, Object>> context) {
+  public static ContextSetReadable from(Map<String, Map<String, Object>> context) {
     if (context == null) {
-      return PrefabContextSetReadable.EMPTY;
+      return ContextSetReadable.EMPTY;
     }
-    PrefabContextSet prefabContextSet = new PrefabContextSet();
+    ContextSet prefabContextSet = new ContextSet();
     for (Map.Entry<String, Map<String, Object>> stringMapEntry : context.entrySet()) {
       prefabContextSet.addContext(
-        PrefabContext.fromMap(
+        Context.fromMap(
           stringMapEntry.getKey(),
           fromLevel2Map(stringMapEntry.getKey(), stringMapEntry.getValue())
         )

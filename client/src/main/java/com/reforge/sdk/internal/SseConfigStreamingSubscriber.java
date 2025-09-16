@@ -23,13 +23,13 @@ public class SseConfigStreamingSubscriber {
     SseConfigStreamingSubscriber.class
   );
 
-  private final PrefabHttpClient prefabHttpClient;
+  private final HttpClient prefabHttpClient;
   private final Supplier<Long> highwaterMarkSupplier;
   private final Consumer<Prefab.Configs> configsConsumer;
   private final ScheduledExecutorService scheduledExecutorService;
 
   public SseConfigStreamingSubscriber(
-    PrefabHttpClient prefabHttpClient,
+    HttpClient prefabHttpClient,
     Supplier<Long> highwaterMarkSupplier,
     Consumer<Prefab.Configs> configsConsumer,
     ScheduledExecutorService scheduledExecutorService

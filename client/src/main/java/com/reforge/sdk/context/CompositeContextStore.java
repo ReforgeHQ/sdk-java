@@ -20,24 +20,24 @@ public class CompositeContextStore implements ContextStore {
   }
 
   @Override
-  public void addContext(PrefabContext prefabContext) {
-    getValidStore().ifPresent(cs -> cs.addContext(prefabContext));
+  public void addContext(Context context) {
+    getValidStore().ifPresent(cs -> cs.addContext(context));
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> setContext(
-    PrefabContextSetReadable prefabContextSetReadable
+  public Optional<ContextSetReadable> setContext(
+    ContextSetReadable contextSetReadable
   ) {
-    return getValidStore().flatMap(cs -> cs.setContext(prefabContextSetReadable));
+    return getValidStore().flatMap(cs -> cs.setContext(contextSetReadable));
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> clearContext() {
+  public Optional<ContextSetReadable> clearContext() {
     return getValidStore().flatMap(ContextStore::clearContext);
   }
 
   @Override
-  public Optional<PrefabContextSetReadable> getContext() {
+  public Optional<ContextSetReadable> getContext() {
     return getValidStore().flatMap(ContextStore::getContext);
   }
 

@@ -9,7 +9,7 @@ import com.reforge.sdk.config.ConfigChangeEvent;
 import com.reforge.sdk.config.Match;
 import com.reforge.sdk.config.Provenance;
 import com.reforge.sdk.config.logging.LogLevelChangeEvent;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.exceptions.ConfigValueException;
 import java.util.Collection;
 import java.util.List;
@@ -216,11 +216,11 @@ public class UpdatingConfigResolver {
     return configResolver.getRawMatch(key, lookupContext);
   }
 
-  public PrefabContextSetReadable getApiDefaultContext() {
+  public ContextSetReadable getApiDefaultContext() {
     return configStore.getConfigIncludedContext();
   }
 
-  public PrefabContextSetReadable getGlobalContext() {
+  public ContextSetReadable getGlobalContext() {
     return configStore.getGlobalContext();
   }
 }

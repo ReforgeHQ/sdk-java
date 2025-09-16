@@ -22,7 +22,7 @@ public class TelemetryUploader implements AutoCloseable {
 
   private final LinkedBlockingQueue<TelemetryManager.OutputBuffer> queue;
   private final Options options;
-  private final PrefabHttpClient prefabHttpClient;
+  private final HttpClient prefabHttpClient;
 
   private final Bulkhead<HttpResponse<Supplier<Prefab.TelemetryEventsResponse>>> bulkhead = Bulkhead
     .<HttpResponse<Supplier<Prefab.TelemetryEventsResponse>>>builder(5)
@@ -40,7 +40,7 @@ public class TelemetryUploader implements AutoCloseable {
 
   TelemetryUploader(
     LinkedBlockingQueue<TelemetryManager.OutputBuffer> queue,
-    PrefabHttpClient prefabHttpClient,
+    HttpClient prefabHttpClient,
     Options options
   ) {
     this.prefabHttpClient = prefabHttpClient;

@@ -10,13 +10,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class PrefabContext implements PrefabContextSetReadable {
+public class Context implements ContextSetReadable {
 
   private final String name;
 
   private final Map<String, Prefab.ConfigValue> properties;
 
-  private PrefabContext(String name, Map<String, Prefab.ConfigValue> properties) {
+  private Context(String name, Map<String, Prefab.ConfigValue> properties) {
     this.name = name;
     this.properties = Map.copyOf(properties);
   }
@@ -49,7 +49,7 @@ public class PrefabContext implements PrefabContextSetReadable {
 
   // implementation of PrefabContextSetReadable so one context is interchangable with many
   @Override
-  public Optional<PrefabContext> getByName(String contextType) {
+  public Optional<Context> getByName(String contextType) {
     if (contextType.equals(this.name)) {
       return Optional.of(this);
     }
@@ -57,7 +57,7 @@ public class PrefabContext implements PrefabContextSetReadable {
   }
 
   @Override
-  public Iterable<PrefabContext> getContexts() {
+  public Iterable<Context> getContexts() {
     return Collections.singleton(this);
   }
 
@@ -77,7 +77,7 @@ public class PrefabContext implements PrefabContextSetReadable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PrefabContext that = (PrefabContext) o;
+    Context that = (Context) o;
     return (
       Objects.equals(name, that.name) && Objects.equals(properties, that.properties)
     );
@@ -107,21 +107,21 @@ public class PrefabContext implements PrefabContextSetReadable {
     return shapeBuilder.build();
   }
 
-  public static PrefabContext unnamedFromMap(
+  public static Context unnamedFromMap(
     Map<String, Prefab.ConfigValue> configValueMap
   ) {
-    return new PrefabContext("", configValueMap);
+    return new Context("", configValueMap);
   }
 
-  public static PrefabContext fromMap(
+  public static Context fromMap(
     String name,
     Map<String, Prefab.ConfigValue> configValueMap
   ) {
-    return new PrefabContext(name, configValueMap);
+    return new Context(name, configValueMap);
   }
 
-  public static PrefabContext fromProto(Prefab.Context protoContext) {
-    return new PrefabContext(protoContext.getType(), protoContext.getValuesMap());
+  public static Context fromProto(Prefab.Context protoContext) {
+    return new Context(protoContext.getType(), protoContext.getValuesMap());
   }
 
   public static class Builder {
@@ -158,8 +158,8 @@ public class PrefabContext implements PrefabContextSetReadable {
       return this;
     }
 
-    public PrefabContext build() {
-      return new PrefabContext(contextType, properties);
+    public Context build() {
+      return new Context(contextType, properties);
     }
   }
 

@@ -2,7 +2,7 @@ package com.reforge.sdk.internal;
 
 import com.reforge.sdk.ConfigStore;
 import com.reforge.sdk.config.ConfigElement;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -14,8 +14,8 @@ public class ConfigStoreImpl implements ConfigStore {
     new MergedConfigData(
       Map.of(),
       0,
-      PrefabContextSetReadable.EMPTY,
-      PrefabContextSetReadable.EMPTY
+      ContextSetReadable.EMPTY,
+      ContextSetReadable.EMPTY
     )
   );
 
@@ -53,12 +53,12 @@ public class ConfigStoreImpl implements ConfigStore {
   }
 
   @Override
-  public PrefabContextSetReadable getConfigIncludedContext() {
+  public ContextSetReadable getConfigIncludedContext() {
     return data.get().getConfigIncludedContext();
   }
 
   @Override
-  public PrefabContextSetReadable getGlobalContext() {
+  public ContextSetReadable getGlobalContext() {
     return data.get().getGlobalContextSet();
   }
 }

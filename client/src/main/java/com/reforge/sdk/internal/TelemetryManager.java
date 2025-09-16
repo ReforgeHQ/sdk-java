@@ -63,7 +63,7 @@ public class TelemetryManager implements AutoCloseable {
     MatchStatsAggregator matchStatsAggregator,
     ContextShapeAggregator contextShapeAggregator,
     ExampleContextBuffer exampleContextBuffer,
-    PrefabHttpClient prefabHttpClient,
+    HttpClient prefabHttpClient,
     Options options,
     Clock clock
   ) {

@@ -6,7 +6,7 @@ import cloud.prefab.domain.Prefab;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-class PrefabContextTest {
+class ContextTest {
 
   @Test
   void itBuildsWithExpectedProperties() {
@@ -18,7 +18,7 @@ class PrefabContextTest {
     double pi = 3.14;
     boolean customer = true;
 
-    PrefabContext prefabContext = PrefabContext
+    Context context = Context
       .newBuilder(type)
       .put("firstname", firstname)
       .put("lastname", lastname)
@@ -27,8 +27,8 @@ class PrefabContextTest {
       .put("isCustomer", customer)
       .build();
 
-    assertThat(prefabContext.getName()).isEqualTo(type);
-    assertThat(prefabContext.getProperties())
+    assertThat(context.getName()).isEqualTo(type);
+    assertThat(context.getProperties())
       .isEqualTo(
         Map.of(
           "firstname",
@@ -44,7 +44,7 @@ class PrefabContextTest {
         )
       );
 
-    assertThat(prefabContext.getNameQualifiedProperties())
+    assertThat(context.getNameQualifiedProperties())
       .isEqualTo(
         Map.of(
           "user.firstname",
@@ -70,7 +70,7 @@ class PrefabContextTest {
     double pi = 3.14;
     boolean customer = true;
 
-    PrefabContext prefabContext = PrefabContext
+    Context context = Context
       .newBuilder("")
       .put("firstname", firstname)
       .put("lastname", lastname)
@@ -79,7 +79,7 @@ class PrefabContextTest {
       .put("isCustomer", customer)
       .build();
 
-    assertThat(prefabContext.getNameQualifiedProperties())
+    assertThat(context.getNameQualifiedProperties())
       .isEqualTo(
         Map.of(
           "firstname",

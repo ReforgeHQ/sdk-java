@@ -1,21 +1,21 @@
 package com.reforge.sdk.internal;
 
 import com.reforge.sdk.config.ConfigElement;
-import com.reforge.sdk.context.PrefabContextSetReadable;
+import com.reforge.sdk.context.ContextSetReadable;
 import java.util.Map;
 
 public class MergedConfigData {
 
   private final Map<String, ConfigElement> configs;
   private final long envId;
-  private final PrefabContextSetReadable globalContextSet;
-  private final PrefabContextSetReadable configIncludedContextSet;
+  private final ContextSetReadable globalContextSet;
+  private final ContextSetReadable configIncludedContextSet;
 
   MergedConfigData(
     Map<String, ConfigElement> configs,
     long envId,
-    PrefabContextSetReadable globalContextSet,
-    PrefabContextSetReadable configIncludedContextSet
+    ContextSetReadable globalContextSet,
+    ContextSetReadable configIncludedContextSet
   ) {
     this.configs = configs;
     this.envId = envId;
@@ -27,7 +27,7 @@ public class MergedConfigData {
     return configs;
   }
 
-  public PrefabContextSetReadable getConfigIncludedContext() {
+  public ContextSetReadable getConfigIncludedContext() {
     return configIncludedContextSet;
   }
 
@@ -35,7 +35,7 @@ public class MergedConfigData {
     return envId;
   }
 
-  public PrefabContextSetReadable getGlobalContextSet() {
+  public ContextSetReadable getGlobalContextSet() {
     return globalContextSet;
   }
 }
