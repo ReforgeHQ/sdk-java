@@ -22,7 +22,7 @@ import org.junit.jupiter.api.TestFactory;
 public class IntegrationTest {
 
   private static final Path INTEGRATION_TEST_DATA_DIRECTORY = Paths.get(
-    "src/test/resources/prefab-cloud-integration-test-data"
+    "src/test/resources/shared-integration-test-data"
   );
 
   private static final ObjectReader YAML_READER = new YAMLMapper()
