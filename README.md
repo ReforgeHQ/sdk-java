@@ -1,17 +1,18 @@
-# prefab-cloud-java
-[![javadoc](https://javadoc.io/badge2/cloud.prefab/client/javadoc.svg)](https://javadoc.io/doc/cloud.prefab/client)
+# Reforge Java Sdk
+
+[![javadoc](https://javadoc.io/badge2/cloud.prefab/client/javadoc.svg)](https://javadoc.io/doc/cloud.prefab/client)  FIXME
 [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/pdi9.svg)](https://betteruptime.com/?utm_source=status_badge)
 
-Java (11+) Client and Logging adapters for Prefab LogLevels, FeatureFlags, Config as a Service: https://www.prefab.cloud
+Java (11+) Reforge SDK for FeatureFlags, Config as a Service: https://launch.reforge.com
 
 See full documentation [https://docs.prefab.cloud/docs/java-sdk/java](https://docs.prefab.cloud/docs/sdks/java)
 
 Maven
 ```xml
 <dependency>
-    <groupId>cloud.prefab</groupId>
-    <artifactId>client</artifactId>
-    <version>0.3.25</version>
+    <groupId>com.reforge</groupId>
+    <artifactId>sdk</artifactId>
+    <version>TODO</version>
 </dependency>
 ```
 

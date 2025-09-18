@@ -1,9 +1,9 @@
-# prefab-cloud-java
+# Reforge Java Sdk
 
-[![javadoc](https://javadoc.io/badge2/cloud.prefab/client/javadoc.svg)](https://javadoc.io/doc/cloud.prefab/client)
+[![javadoc](https://javadoc.io/badge2/cloud.prefab/client/javadoc.svg)](https://javadoc.io/doc/cloud.prefab/client)   FIXME
 [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/pdi9.svg)](https://betteruptime.com/?utm_source=status_badge)
 
-Java (11+) Client for Prefab LogLevels, FeatureFlags, Config as a Service: https://www.prefab.cloud
+Java (11+) Reforge SDK for FeatureFlags, Config as a Service: https://launch.reforge.com
 
 See full documentation https://docs.prefab.cloud/docs/java-sdk/java
 
@@ -11,9 +11,9 @@ See full documentation https://docs.prefab.cloud/docs/java-sdk/java
 ### Maven
 ```xml
 <dependency>
-    <groupId>cloud.prefab</groupId>
-    <artifactId>client</artifactId>
-    <version>0.3.25</version>
+    <groupId>com.reforge</groupId>
+    <artifactId>sdk</artifactId>
+    <version>TODO</version>
 </dependency>
 ```
 
@@ -23,30 +23,21 @@ For an uber-jar including relocated guava and failsafe dependencies add the "ube
 
 ```xml
 <dependency>
-    <groupId>cloud.prefab</groupId>
-    <artifactId>client</artifactId>
-    <version>0.3.25</version>
+    <groupId>com.reforge</groupId>
+    <artifactId>sdk</artifactId>
+    <version>TODO</version>
     <classifier>uberjar</classifier>
 </dependency>
 ```
 
-## Logging Setup
+## Runtime Environment Support
 
-Live log levels with log4j or logback require additional maven dependencies.
-
-* [Log4J (one)](../log4j-one-listener/README.md)
-* [Log4j (two)](../log4j-two-listener/README.md)
-* [LogBack](../logback-listener/README.md)
-
-
-## Container Support
-
-ThreadLocal context state management handles many containers. For event-based containers where ThreadLocals are harder to manage, we have container-specific modules to support tying ContextState to the request scope
+ThreadLocal context state management handles many runtimes. For event-based containers where ThreadLocals are harder to manage, we have runtime-specific modules to support tying ContextState to the request scope
 
 * [Micronaut](../micronaut/README.md)
 
 
-## Contributing to prefab-cloud-java
+## Contributing to Reforge Java SDK
 
 * Check out the latest `main` to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
