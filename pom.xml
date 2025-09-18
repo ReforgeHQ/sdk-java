@@ -10,8 +10,10 @@
 
   <groupId>com.reforge</groupId>
   <artifactId>sdk-parent</artifactId>
+
   <version>0.3.25</version>
   <packaging>pom</packaging>
+  <name>Reforge SDK Parent POM</name>
 
   <modules>
     <module>micronaut</module>
