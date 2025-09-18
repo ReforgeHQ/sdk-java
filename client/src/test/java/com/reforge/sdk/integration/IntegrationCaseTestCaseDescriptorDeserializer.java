@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.node.TextNode;
 import com.reforge.sdk.integration.telemetry.ContextShapeIntegrationTestCaseDescriptor;
 import com.reforge.sdk.integration.telemetry.EvaluationSummaryIntegrationTestCaseDescriptor;
 import com.reforge.sdk.integration.telemetry.ExampleContextIntegrationTestCaseDescriptor;
-import com.reforge.sdk.integration.telemetry.LogAggregatorIntegrationTestCaseDescriptor;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +55,6 @@ public class IntegrationCaseTestCaseDescriptorDeserializer
 
   Class<? extends IntegrationTestCaseDescriptorIF> deriveClass(String aggregatorName) {
     switch (aggregatorName) {
-      case "log_path":
-        return LogAggregatorIntegrationTestCaseDescriptor.class;
       case "context_shape":
         return ContextShapeIntegrationTestCaseDescriptor.class;
       case "evaluation_summary":

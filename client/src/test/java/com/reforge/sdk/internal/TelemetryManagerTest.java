@@ -61,7 +61,6 @@ class TelemetryManagerTest {
     Clock clock = Clock.systemUTC();
     telemetryManager =
       new TelemetryManager(
-        new LoggerStatsAggregator(clock),
         new MatchStatsAggregator(),
         new ContextShapeAggregator(),
         new ExampleContextBuffer(),
@@ -111,58 +110,6 @@ class TelemetryManagerTest {
         )
     )
     .build();
-
-  @Nested
-  class LoggingTests {
-
-    @Test
-    void itRecordsLoggingCountsWhenEnabled() {
-      buildTelemetryManager(
-        new Options()
-          .setContextUploadMode(Options.CollectContextMode.PERIODIC_EXAMPLE)
-          .setCollectEvaluationSummaries(true)
-          .setCollectLoggerCounts(true)
-      );
-      telemetryManager.reportLoggerUsage("a.b", Prefab.LogLevel.DEBUG, 4);
-      telemetryManager.reportLoggerUsage("a.b", Prefab.LogLevel.WARN, 21);
-      telemetryManager.reportLoggerUsage("a.b", Prefab.LogLevel.WARN, 4);
-      telemetryManager.reportLoggerUsage("a.b", Prefab.LogLevel.INFO, 3);
-      telemetryManager.reportLoggerUsage("a.b", Prefab.LogLevel.DEBUG, 7);
-      telemetryManager.reportLoggerUsage("a.b.c", Prefab.LogLevel.DEBUG, 33);
-      assertThat(telemetryManager.requestFlush().join()).isTrue();
-      Prefab.TelemetryEvents telemetryEvents = telemetryEventsArgumentCaptor.getValue();
-
-      List<Prefab.LoggersTelemetryEvent> loggerEvents = telemetryEvents
-        .getEventsList()
-        .stream()
-        .filter(Prefab.TelemetryEvent::hasLoggers)
-        .map(Prefab.TelemetryEvent::getLoggers)
-        .collect(Collectors.toList());
-
-      List<Prefab.Logger> loggers = loggerEvents
-        .stream()
-        .map(Prefab.LoggersTelemetryEvent::getLoggersList)
-        .flatMap(List::stream)
-        .collect(Collectors.toList());
-
-      for (Prefab.LoggersTelemetryEvent loggerEvent : loggerEvents) {
-        assertThat(loggerEvent.getStartAt()).isNotEqualTo(0);
-        assertThat(loggerEvent.getEndAt()).isNotEqualTo(0);
-      }
-
-      assertThat(loggers)
-        .containsExactlyInAnyOrder(
-          Prefab.Logger
-            .newBuilder()
-            .setLoggerName("a.b")
-            .setWarns(25)
-            .setInfos(3)
-            .setDebugs(11)
-            .build(),
-          Prefab.Logger.newBuilder().setLoggerName("a.b.c").setDebugs(33).build()
-        );
-    }
-  }
 
   @Nested
   class MatchTests {

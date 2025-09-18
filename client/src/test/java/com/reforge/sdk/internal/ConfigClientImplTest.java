@@ -14,7 +14,6 @@ import com.reforge.sdk.SdkInitializationTimeoutException;
 import com.reforge.sdk.config.ConfigChangeEvent;
 import com.reforge.sdk.config.ConfigChangeListener;
 import com.reforge.sdk.config.ConfigValueUtils;
-import com.reforge.sdk.config.TestData;
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextHelper;
 import com.reforge.sdk.context.ContextSet;
@@ -145,30 +144,6 @@ class ConfigClientImplTest {
     ConfigClient configClient = new ConfigClientImpl(baseClient);
     final Optional<Prefab.ConfigValue> key = configClient.get("cool.bool.enabled");
     assertThat(key).isPresent();
-  }
-
-  @Test
-  void itLooksUpLogLevelsWithProvidedEmptyContext() {
-    try (Sdk sdk = new Sdk(TestData.getDefaultOptionsWithEnvName("logging_multilevel"))) {
-      ConfigClient configClient = sdk.configClient();
-      assertThat(
-        configClient.getLogLevel("com.example.p1.ClassOne", ContextSetReadable.EMPTY)
-      )
-        .contains(Prefab.LogLevel.TRACE);
-
-      assertThat(
-        configClient.getLogLevel("com.example.p1.ClassTwo", ContextSetReadable.EMPTY)
-      )
-        .contains(Prefab.LogLevel.DEBUG);
-
-      assertThat(
-        configClient.getLogLevel("com.example.AnotherClass", ContextSetReadable.EMPTY)
-      )
-        .contains(Prefab.LogLevel.ERROR);
-
-      assertThat(configClient.getLogLevel("com.foo.ClipBoard", ContextSetReadable.EMPTY))
-        .contains(Prefab.LogLevel.WARN);
-    }
   }
 
   @Nested
