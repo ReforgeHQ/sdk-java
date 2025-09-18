@@ -1,4 +1,4 @@
-package com.reforge.client.micronaut;
+package com.reforge.sdk.extensions.micronaut;
 
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextSet;

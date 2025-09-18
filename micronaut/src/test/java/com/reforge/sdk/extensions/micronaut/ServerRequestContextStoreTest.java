@@ -1,4 +1,4 @@
-package com.reforge.client.micronaut;
+package com.reforge.sdk.extensions.micronaut;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
