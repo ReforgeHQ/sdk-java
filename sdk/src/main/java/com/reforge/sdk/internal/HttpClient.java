@@ -36,7 +36,6 @@ public class HttpClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
 
-  public static final String CLIENT_HEADER_KEY = "client";
   private static final String VERSION_HEADER = "X-Reforge-SDK-Version";
 
   public static final String CLIENT_HEADER_VALUE = String.format(
@@ -50,7 +49,7 @@ public class HttpClient {
 
   private static final String PROTO_MEDIA_TYPE = "application/x-protobuf";
   private static final String EVENT_STREAM_MEDIA_TYPE = "text/event-stream";
-  private static final String START_AT_HEADER = "x-prefab-start-at-id";
+  private static final String START_AT_HEADER = "Last-Event-ID";
 
   private final Options options;
   private final java.net.http.HttpClient httpClient;
@@ -343,7 +342,6 @@ public class HttpClient {
   private HttpRequest.Builder getClientBuilderWithStandardHeaders() {
     return HttpRequest
       .newBuilder()
-      .header(CLIENT_HEADER_KEY, CLIENT_HEADER_VALUE)
       .header(VERSION_HEADER, NEW_CLIENT_HEADER_VALUE)
       .header(
         "Authorization",
