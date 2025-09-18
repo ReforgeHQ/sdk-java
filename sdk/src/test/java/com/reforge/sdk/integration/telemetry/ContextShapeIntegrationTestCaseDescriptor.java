@@ -14,8 +14,6 @@ import com.reforge.sdk.integration.IntegrationTestClientOverrides;
 import com.reforge.sdk.integration.IntegrationTestFunction;
 import com.reforge.sdk.integration.PrefabContextFactory;
 import com.reforge.sdk.integration.TelemetryAccumulator;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,7 +86,7 @@ public class ContextShapeIntegrationTestCaseDescriptor
     TelemetryAccumulator telemetryAccumulator = getTelemetryAccumulator(sdk);
 
     await()
-      .atMost(Duration.of(3, ChronoUnit.SECONDS))
+      .atMost(TELEMETRY_AWAIT_TIMEOUT)
       .untilAsserted(() -> {
         List<Prefab.ContextShape> actualShapes = telemetryAccumulator
           .getTelemetryEventsList()

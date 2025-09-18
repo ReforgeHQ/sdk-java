@@ -19,8 +19,6 @@ import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.integration.IntegrationTestClientOverrides;
 import com.reforge.sdk.integration.IntegrationTestFunction;
 import com.reforge.sdk.integration.PrefabContextFactory;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,7 +101,7 @@ public class EvaluationSummaryIntegrationTestCaseDescriptor
       .collect(toImmutableMap(ExpectedDatum::getKey, Function.identity()));
 
     await()
-      .atMost(Duration.of(3, ChronoUnit.SECONDS))
+      .atMost(TELEMETRY_AWAIT_TIMEOUT)
       .untilAsserted(() -> {
         List<Prefab.ConfigEvaluationSummary> actualSummaries = getTelemetryAccumulator(
           sdk

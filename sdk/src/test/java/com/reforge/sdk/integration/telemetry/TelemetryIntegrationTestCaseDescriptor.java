@@ -14,6 +14,8 @@ import com.reforge.sdk.integration.BaseIntegrationTestCaseDescriptor;
 import com.reforge.sdk.integration.IntegrationTestCaseDescriptorIF;
 import com.reforge.sdk.integration.IntegrationTestClientOverrides;
 import com.reforge.sdk.integration.TelemetryAccumulator;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -26,6 +28,11 @@ public abstract class TelemetryIntegrationTestCaseDescriptor
 
   private static final Logger LOG = LoggerFactory.getLogger(
     TelemetryIntegrationTestCaseDescriptor.class
+  );
+
+  protected static final Duration TELEMETRY_AWAIT_TIMEOUT = Duration.of(
+    20,
+    ChronoUnit.SECONDS
   );
 
   public TelemetryIntegrationTestCaseDescriptor(
