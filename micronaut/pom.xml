@@ -18,7 +18,7 @@
   <dependencies>
     <dependency>
       <groupId>com.reforge</groupId>
-      <artifactId>client</artifactId>
+      <artifactId>sdk</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

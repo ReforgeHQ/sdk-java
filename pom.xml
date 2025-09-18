@@ -14,8 +14,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>client</module>
     <module>micronaut</module>
+    <module>sdk</module>
   </modules>
   <properties>
     <basepom.check.skip-license>true</basepom.check.skip-license>

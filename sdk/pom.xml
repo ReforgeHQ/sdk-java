@@ -7,7 +7,7 @@
     <version>0.3.25</version>
   </parent>
 
-  <artifactId>client</artifactId>
+  <artifactId>sdk</artifactId>
   <packaging>jar</packaging>
   <name>Reforge SDK</name>
   <description>SDK Client for https://reforge.com: feature flags and configuration as a service</description>
