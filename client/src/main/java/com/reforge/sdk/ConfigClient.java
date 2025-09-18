@@ -8,7 +8,6 @@ import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.internal.ConfigClientCore;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import javax.annotation.Nullable;
 
 public interface ConfigClient
@@ -34,20 +33,6 @@ public interface ConfigClient
   boolean addConfigChangeListener(ConfigChangeListener configChangeListener);
 
   boolean removeConfigChangeListener(ConfigChangeListener configChangeListener);
-
-  /**
-   * Evaluates a configuration based on the arguments
-   * @param loggerName name of the logger eg
-   * @param prefabContext additional context to use to evaluate the config. Will be added to existing context as documented in {@link ContextStore#addContext(Context) addcontext}
-   * @return the evaluated context
-   * @see ConfigClient#get(String, ContextSetReadable)
-   */
-  Optional<Prefab.LogLevel> getLogLevel(
-    String loggerName,
-    @Nullable ContextSetReadable prefabContext
-  );
-
-  Optional<Prefab.LogLevel> getLogLevel(String loggerName);
 
   /**
    * Check if the client has completed initialization. Will not block

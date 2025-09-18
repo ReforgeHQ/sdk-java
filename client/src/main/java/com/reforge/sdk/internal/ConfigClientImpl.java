@@ -55,7 +55,6 @@ import org.slf4j.LoggerFactory;
 public class ConfigClientImpl implements ConfigClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(ConfigClientImpl.class);
-  private static final long DEFAULT_CHECKPOINT_SEC = 60;
 
   private static final String LOG_LEVEL_PREFIX_WITH_DOT =
     AbstractLoggingListener.LOG_LEVEL_PREFIX + ".";
@@ -335,33 +334,6 @@ public class ConfigClientImpl implements ConfigClient {
     return configChangeListeners.remove(configChangeListener);
   }
 
-  @Override
-  public Optional<Prefab.LogLevel> getLogLevel(String loggerName) {
-    return getLogLevel(loggerName, null);
-  }
-
-  @Override
-  public Optional<Prefab.LogLevel> getLogLevel(
-    String loggerName,
-    @Nullable ContextSetReadable prefabContext
-  ) {
-    waitForInitialization();
-    // special case getLogLevel - want to reuse the same lookup context for all key name variants
-    // wait for initialization must happen before resolving the context so that any api-sent context
-    // will be included
-    LookupContext lookupContext = new LookupContext(resolveContext(prefabContext));
-    for (Iterator<String> it = loggerNameLookupIterator(loggerName); it.hasNext();) {
-      String configKey = it.next();
-      Optional<Prefab.LogLevel> logLevelMaybe = getInternal(configKey, lookupContext)
-        .filter(Prefab.ConfigValue::hasLogLevel)
-        .map(Prefab.ConfigValue::getLogLevel);
-      if (logLevelMaybe.isPresent()) {
-        return logLevelMaybe;
-      }
-    }
-    return Optional.empty();
-  }
-
   private ContextSetReadable resolveContext(
     @Nullable ContextSetReadable contextSetReadable
   ) {
@@ -387,43 +359,6 @@ public class ConfigClientImpl implements ConfigClient {
   @Override
   public ContextStore getContextStore() {
     return contextStore;
-  }
-
-  private Iterator<String> loggerNameLookupIterator(String loggerName) {
-    return new Iterator<>() {
-      String nextValue = LOG_LEVEL_PREFIX_WITH_DOT + loggerName;
-
-      @Override
-      public boolean hasNext() {
-        return nextValue != null;
-      }
-
-      @Override
-      public String next() {
-        if (nextValue == null) {
-          throw new NoSuchElementException();
-        }
-        String currentValue = nextValue;
-        String temp = loggerNameLookup.get(currentValue);
-        if (temp == null) {
-          nextValue =
-            loggerNameLookup.computeIfAbsent(
-              currentValue,
-              k -> {
-                int lastDotIndex = nextValue.lastIndexOf('.');
-                if (lastDotIndex > 0) {
-                  return nextValue.substring(0, lastDotIndex);
-                } else {
-                  return null;
-                }
-              }
-            );
-        } else {
-          nextValue = temp;
-        }
-        return currentValue;
-      }
-    };
   }
 
   Optional<Prefab.Configs> loadConfigs() {
