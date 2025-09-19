@@ -72,70 +72,6 @@ class ConfigClientImplTest {
   }
 
   @Test
-  void broadcast() {
-    final Sdk baseClient = new Sdk(
-      new Options()
-        .setApikey("0-P1-E1-SDK-1234-123-23")
-        .setConfigOverrideDir("none")
-        .setInitializationTimeoutSec(1)
-        .setOnInitializationFailure(Options.OnInitializationFailure.UNLOCK)
-    );
-
-    ConfigClient configClient = new ConfigClientImpl(baseClient);
-
-    List<ConfigChangeEvent> receivedEvents = new ArrayList<>();
-    ConfigChangeListener listener = receivedEvents::add;
-
-    configClient.addConfigChangeListener(listener);
-
-    assertThat(configClient.get("key")).isNotPresent();
-
-    assertThat(receivedEvents)
-      .containsExactlyInAnyOrder(
-        new ConfigChangeEvent(
-          "sample_bool",
-          Optional.empty(),
-          Optional.of(
-            Prefab.Config
-              .newBuilder()
-              .addRows(
-                Prefab.ConfigRow
-                  .newBuilder()
-                  .addValues(
-                    Prefab.ConditionalValue
-                      .newBuilder()
-                      .setValue(ConfigValueUtils.from(true))
-                      .build()
-                  )
-                  .build()
-              )
-              .build()
-          )
-        ),
-        new ConfigChangeEvent(
-          "sample",
-          Optional.empty(),
-          Optional.of(
-            Prefab.Config
-              .newBuilder()
-              .addRows(
-                Prefab.ConfigRow
-                  .newBuilder()
-                  .addValues(
-                    Prefab.ConditionalValue
-                      .newBuilder()
-                      .setValue(ConfigValueUtils.from("default sample value"))
-                      .build()
-                  )
-                  .build()
-              )
-              .build()
-          )
-        )
-      );
-  }
-
-  @Test
   void localDataFileMode() {
     final Sdk baseClient = new Sdk(
       new Options()
@@ -166,12 +102,7 @@ class ConfigClientImplTest {
       Options options = new Options().setPrefabDatasource(Options.Datasources.LOCAL_ONLY);
       when(sdk.getOptions()).thenReturn(options);
       when(updatingConfigResolver.update())
-        .thenReturn(
-          new UpdatingConfigResolver.ChangeLists(
-            Collections.emptyList(),
-            Collections.emptyList()
-          )
-        );
+        .thenReturn(new UpdatingConfigResolver.ChangeLists(Collections.emptyList()));
 
       this.configClient = new ConfigClientImpl(sdk, updatingConfigResolver);
       this.contextHelper = new ContextHelper(configClient);

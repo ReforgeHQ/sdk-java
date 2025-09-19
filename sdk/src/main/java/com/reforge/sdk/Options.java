@@ -2,7 +2,6 @@ package com.reforge.sdk;
 
 import com.google.common.collect.ImmutableSet;
 import com.reforge.sdk.config.ConfigChangeListener;
-import com.reforge.sdk.config.logging.LogLevelChangeListener;
 import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.context.ContextStore;
 import com.reforge.sdk.internal.Internal;
@@ -47,11 +46,8 @@ public class Options {
     PERIODIC_EXAMPLE,
   }
 
-  private static final String DEFAULT_ENV = "default";
-
   private String apikey;
   private String configOverrideDir;
-  private List<String> prefabEnvs = new ArrayList<>();
   private Datasources datasources = Datasources.ALL;
   private int initializationTimeoutSec = 10;
   private OnInitializationFailure onInitializationFailure = OnInitializationFailure.RAISE;
@@ -60,8 +56,6 @@ public class Options {
   private ContextStore contextStore = ThreadLocalContextStore.INSTANCE;
 
   private final Set<ConfigChangeListener> changeListenerSet = new HashSet<>();
-
-  private final Set<LogLevelChangeListener> logLevelChangeListeners = new HashSet<>();
 
   private boolean evaluatedConfigKeyUploadEnabled = true;
 
@@ -170,23 +164,6 @@ public class Options {
     return this;
   }
 
-  public List<String> getPrefabEnvs() {
-    return prefabEnvs;
-  }
-
-  /**
-   * Set the prefab environment names in order of increasing precedence
-   * Files named with the pattern `.prefab.%s.config.yaml` are loaded first with `default` then the supplied envs, in order
-   * This means a key in an env named later in the list will override the same key earlier in the list
-   * Files are loaded from the classpath first, then from the configured override directory
-   * @param prefabEnvs
-   * @return this
-   */
-  public Options setPrefabEnvs(List<String> prefabEnvs) {
-    this.prefabEnvs = prefabEnvs;
-    return this;
-  }
-
   public Datasources getPrefabDatasource() {
     return datasources;
   }
@@ -283,13 +260,6 @@ public class Options {
     return this;
   }
 
-  public List<String> getAllPrefabEnvs() {
-    final List<String> envs = new ArrayList<>();
-    envs.add(DEFAULT_ENV);
-    envs.addAll(prefabEnvs);
-    return envs;
-  }
-
   public String getApiKeyId() {
     return getApikey().split("\\-")[0];
   }
@@ -310,15 +280,6 @@ public class Options {
 
   public Set<ConfigChangeListener> getChangeListeners() {
     return ImmutableSet.copyOf(changeListenerSet);
-  }
-
-  public Options addLogLevelChangeListener(LogLevelChangeListener configChangeListener) {
-    logLevelChangeListeners.add(configChangeListener);
-    return this;
-  }
-
-  public Set<LogLevelChangeListener> getLogLevelChangeListeners() {
-    return ImmutableSet.copyOf(logLevelChangeListeners);
   }
 
   @Internal

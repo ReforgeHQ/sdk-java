@@ -1,14 +1,11 @@
 package com.reforge.sdk.internal;
 
-import static com.reforge.sdk.config.logging.AbstractLoggingListener.LOG_LEVEL_PREFIX;
-
 import cloud.prefab.domain.Prefab;
 import com.google.common.collect.Maps;
 import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.config.ConfigChangeEvent;
 import com.reforge.sdk.config.Match;
 import com.reforge.sdk.config.Provenance;
-import com.reforge.sdk.config.logging.LogLevelChangeEvent;
 import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.exceptions.ConfigValueException;
 import java.util.Collection;
@@ -28,7 +25,6 @@ public class UpdatingConfigResolver {
 
   private final ConfigStoreImpl configStore;
   private final ConfigResolver configResolver;
-  private final AbstractConfigStoreDeltaCalculator<Prefab.LogLevel, LogLevelChangeEvent> logLevelValueDeltaCalculator;
 
   public UpdatingConfigResolver(
     ConfigLoader configLoader,
@@ -37,17 +33,6 @@ public class UpdatingConfigResolver {
   ) {
     this.configLoader = configLoader;
     this.configStoreConfigValueDeltaCalculator = configStoreConfigValueDeltaCalculator;
-    this.logLevelValueDeltaCalculator =
-      new AbstractConfigStoreDeltaCalculator<>() {
-        @Override
-        LogLevelChangeEvent createEvent(
-          String name,
-          Optional<Prefab.LogLevel> oldValue,
-          Optional<Prefab.LogLevel> newValue
-        ) {
-          return new LogLevelChangeEvent(name, oldValue, newValue);
-        }
-      };
     this.configStore = new ConfigStoreImpl();
     ConfigRuleEvaluator configRuleEvaluator = new ConfigRuleEvaluator(
       configStore,
@@ -65,22 +50,12 @@ public class UpdatingConfigResolver {
 
     final List<ConfigChangeEvent> configChangeEvents;
 
-    final List<LogLevelChangeEvent> logLevelChangeEvents;
-
-    public ChangeLists(
-      List<ConfigChangeEvent> configChangeEvents,
-      List<LogLevelChangeEvent> logLevelChangeEvents
-    ) {
+    public ChangeLists(List<ConfigChangeEvent> configChangeEvents) {
       this.configChangeEvents = configChangeEvents;
-      this.logLevelChangeEvents = logLevelChangeEvents;
     }
 
     public List<ConfigChangeEvent> getConfigChangeEvents() {
       return configChangeEvents;
-    }
-
-    public List<LogLevelChangeEvent> getLogLevelChangeEvents() {
-      return logLevelChangeEvents;
     }
   }
 
@@ -88,39 +63,15 @@ public class UpdatingConfigResolver {
     // catch exceptions resolving, treat as absent
     // store the old map
     Map<String, Prefab.Config> before = buildConfigByNameMap();
-    Map<String, Prefab.LogLevel> logLevelsBefore = buildLogLevelValueMap();
-
     // load the new map
     makeLocal();
 
     // build the new map
     Map<String, Prefab.Config> after = buildConfigByNameMap();
-    Map<String, Prefab.LogLevel> logLevelsAfter = buildLogLevelValueMap();
 
     return new ChangeLists(
-      configStoreConfigValueDeltaCalculator.computeChangeEvents(before, after),
-      logLevelValueDeltaCalculator.computeChangeEvents(logLevelsBefore, logLevelsAfter)
+      configStoreConfigValueDeltaCalculator.computeChangeEvents(before, after)
     );
-  }
-
-  private Map<String, Prefab.LogLevel> buildLogLevelValueMap() {
-    return configStore
-      .entrySet()
-      .stream()
-      .filter(stringConfigElementEntry ->
-        stringConfigElementEntry.getValue().getConfig().getConfigType() ==
-        Prefab.ConfigType.LOG_LEVEL ||
-        stringConfigElementEntry.getKey().startsWith(LOG_LEVEL_PREFIX)
-      )
-      .map(entry ->
-        safeResolve(entry.getKey())
-          .map(cv -> Maps.immutableEntry(entry.getKey(), cv))
-          .filter(resolvedEntry -> resolvedEntry.getValue().hasLogLevel())
-      )
-      .flatMap(Optional::stream)
-      .collect(
-        Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getLogLevel())
-      );
   }
 
   private Map<String, Prefab.Config> buildConfigByNameMap() {

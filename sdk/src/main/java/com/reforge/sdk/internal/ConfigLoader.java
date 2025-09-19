@@ -11,7 +11,6 @@ import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.Options;
 import com.reforge.sdk.config.ConfigElement;
 import com.reforge.sdk.config.Provenance;
-import com.reforge.sdk.config.logging.AbstractLoggingListener;
 import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.context.ContextSetReadable;
 import java.io.BufferedReader;
@@ -166,27 +165,7 @@ public class ConfigLoader {
   }
 
   private ImmutableMap<String, ConfigElement> loadClasspathConfig() {
-    ImmutableMap.Builder<String, ConfigElement> builder = ImmutableMap.builder();
-    if (!options.isLocalDatafileMode()) {
-      for (String env : options.getAllPrefabEnvs()) {
-        final String file = String.format(".prefab.%s.config.yaml", env);
-
-        try (
-          InputStream resourceAsStream = this.getClass()
-            .getClassLoader()
-            .getResourceAsStream(file)
-        ) {
-          if (resourceAsStream == null) {
-            LOG.warn("No default config file found {}", file);
-          } else {
-            loadFileTo(resourceAsStream, builder, ConfigClient.Source.CLASSPATH, file);
-          }
-        } catch (IOException e) {
-          throw new RuntimeException("Error loading config from file: " + file, e);
-        }
-      }
-    }
-    return builder.buildKeepingLast();
+    return ImmutableMap.of();
   }
 
   public static Prefab.ConfigValue configValueFromObj(String key, Object obj) {
@@ -202,7 +181,7 @@ public class ConfigLoader {
     } else if (obj instanceof Double) {
       valueBuilder.setDouble((Double) obj);
     } else if (obj instanceof String) {
-      if (AbstractLoggingListener.keyIsLogLevel(key)) {
+      if (key.startsWith("log-level")) {
         valueBuilder.setLogLevel(LogLevel.valueOf(((String) obj).toUpperCase()));
       } else {
         valueBuilder.setString((String) obj);
@@ -327,28 +306,7 @@ public class ConfigLoader {
   }
 
   private ImmutableMap<String, ConfigElement> loadOverrideConfig() {
-    ImmutableMap.Builder<String, ConfigElement> builder = ImmutableMap.builder();
-    if (!options.isLocalDatafileMode()) {
-      File dir = new File(options.getConfigOverrideDir());
-      for (String env : options.getAllPrefabEnvs()) {
-        final String fileName = String.format(".prefab.%s.config.yaml", env);
-        File file = new File(dir, fileName);
-
-        if (file.exists()) {
-          try (InputStream inputStream = new FileInputStream(file)) {
-            loadFileTo(
-              inputStream,
-              builder,
-              ConfigClient.Source.LOCAL_OVERRIDE,
-              file.getAbsolutePath()
-            );
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
-        }
-      }
-    }
-    return builder.buildKeepingLast();
+    return ImmutableMap.of();
   }
 
   private void loadFileTo(
