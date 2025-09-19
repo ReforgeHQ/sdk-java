@@ -579,6 +579,44 @@ public class ConfigRuleEvaluatorTest {
     assertThat(eval.isMatch()).isFalse();
   }
 
+  @Test
+  public void testReforgeCurrentTimeKey() {
+    // Test that reforge.current-time works the same as prefab.current-time
+    final Prefab.Criterion reforgeTimeCriterion = Prefab.Criterion
+      .newBuilder()
+      .setPropertyName(ConfigRuleEvaluator.REFORGE_CURRENT_TIME_KEY)
+      .setValueToMatch(
+        Prefab.ConfigValue.newBuilder().setIntRange(Prefab.IntRange.newBuilder().build())
+      )
+      .setOperator(Prefab.Criterion.CriterionOperator.IN_INT_RANGE)
+      .build();
+    final EvaluatedCriterion reforgeEval = evaluator
+      .evaluateCriterionMatch(reforgeTimeCriterion, LookupContext.EMPTY)
+      .stream()
+      .findFirst()
+      .get();
+    assertThat(reforgeEval.isMatch()).isTrue();
+
+    // Also test that we can use it with a specific time range that should not match current time
+    long pastTime = System.currentTimeMillis() - 60000; // 1 minute ago
+    final Prefab.Criterion pastRangeCriterion = Prefab.Criterion
+      .newBuilder()
+      .setPropertyName(ConfigRuleEvaluator.REFORGE_CURRENT_TIME_KEY)
+      .setValueToMatch(
+        Prefab.ConfigValue
+          .newBuilder()
+          .setIntRange(Prefab.IntRange.newBuilder().setStart(0).setEnd(pastTime).build())
+      )
+      .setOperator(Prefab.Criterion.CriterionOperator.IN_INT_RANGE)
+      .build();
+    final EvaluatedCriterion pastEval = evaluator
+      .evaluateCriterionMatch(pastRangeCriterion, LookupContext.EMPTY)
+      .stream()
+      .findFirst()
+      .get();
+    assertThat(pastEval.isMatch()).isFalse();
+  }
+
   public static Stream<Arguments> comparisonArguments() {
     return Stream.of(
       Arguments.of(
