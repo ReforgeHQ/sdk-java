@@ -120,7 +120,6 @@ class TelemetryManagerTest {
         new Options()
           .setContextUploadMode(Options.CollectContextMode.PERIODIC_EXAMPLE)
           .setCollectEvaluationSummaries(true)
-          .setCollectLoggerCounts(true)
       );
 
       reportSomeMatches(telemetryManager);
@@ -146,7 +145,6 @@ class TelemetryManagerTest {
         new Options()
           .setContextUploadMode(Options.CollectContextMode.SHAPE_ONLY)
           .setCollectEvaluationSummaries(true)
-          .setCollectLoggerCounts(true)
       );
 
       reportSomeMatches(telemetryManager);
@@ -169,7 +167,6 @@ class TelemetryManagerTest {
         new Options()
           .setContextUploadMode(Options.CollectContextMode.NONE)
           .setCollectEvaluationSummaries(true)
-          .setCollectLoggerCounts(true)
       );
 
       reportSomeMatches(telemetryManager);
@@ -190,7 +187,6 @@ class TelemetryManagerTest {
         new Options()
           .setContextUploadMode(Options.CollectContextMode.NONE)
           .setCollectEvaluationSummaries(false)
-          .setCollectLoggerCounts(true)
       );
 
       reportSomeMatches(telemetryManager);

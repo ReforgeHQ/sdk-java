@@ -85,7 +85,7 @@ public abstract class BaseIntegrationTestCaseDescriptor {
 
     Options options = new Options()
       .setApikey(apiKey)
-      .setPrefabTelemetryHost("https://telemetry.goatsofreforge.com")
+      .setTelemetryHost("https://telemetry.goatsofreforge.com")
       .setApiHosts(List.of("https://api.goatsofreforge.com"))
       .setStreamHosts(List.of("https://stream.goatsofreforge.com"))
       .setInitializationTimeoutSec(2000);

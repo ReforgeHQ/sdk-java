@@ -9,7 +9,6 @@ import com.reforge.sdk.internal.TelemetryListener;
 import com.reforge.sdk.internal.ThreadLocalContextStore;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -47,11 +46,9 @@ public class Options {
   }
 
   private String apikey;
-  private String configOverrideDir;
   private Datasources datasources = Datasources.ALL;
   private int initializationTimeoutSec = 10;
   private OnInitializationFailure onInitializationFailure = OnInitializationFailure.RAISE;
-  private boolean collectLoggerCounts = true;
 
   private ContextStore contextStore = ThreadLocalContextStore.INSTANCE;
 
@@ -80,7 +77,6 @@ public class Options {
         .ofNullable(System.getenv("REFORGE_SDK_KEY"))
         .orElse(System.getenv("PREFAB_API_KEY"))
     );
-    configOverrideDir = System.getProperty("user.home");
     if ("LOCAL_ONLY".equals(System.getenv("REFORGE_DATASOURCES"))) {
       datasources = Datasources.LOCAL_ONLY;
     }
@@ -96,8 +92,8 @@ public class Options {
   }
 
   /**
-   * Sets the API key to be used to communicate with the Prefab APIs
-   * Can also be specified with env var `PREFAB_API_KEY`
+   * Sets the API key to be used to communicate with the Reforge APIs
+   * Can also be specified with env var `REFORGE_API_KEY`
    * @param apikey the key
    * @return Options
    */
@@ -110,33 +106,17 @@ public class Options {
     return this;
   }
 
-  public String getConfigOverrideDir() {
-    return configOverrideDir;
-  }
-
-  /**
-   * Sets a directory to load additional config files from in addition to on the classpath
-   * Defaults to the current user's home directory.
-   * see the docs for {@link Options#setPrefabEnvs(List)} setPrefabEnvs} for more dicussion on file loading
-   * @param configOverrideDir
-   * @return
-   */
-  public Options setConfigOverrideDir(String configOverrideDir) {
-    this.configOverrideDir = configOverrideDir;
-    return this;
-  }
-
-  public String getPrefabTelemetryHost() {
+  public String getTelemetryHost() {
     return telemetryHost;
   }
 
   /**
    *
-   * @param prefabTelemetryHost -including schema
+   * @param telemetryHost -including schema
    * @return
    */
-  public Options setPrefabTelemetryHost(String prefabTelemetryHost) {
-    this.telemetryHost = prefixAndValidate(prefabTelemetryHost);
+  public Options setTelemetryHost(String telemetryHost) {
+    this.telemetryHost = prefixAndValidate(telemetryHost);
     return this;
   }
 
@@ -164,18 +144,18 @@ public class Options {
     return this;
   }
 
-  public Datasources getPrefabDatasource() {
+  public Datasources getDatasource() {
     return datasources;
   }
 
   /**
-   * Configure the Prefab clients to use the API or rely solely on local files
-   * @param prefabDatasources one of DataSource.ALL or DataSource.LOCAL_ONLY
+   * Configure the SDK to use the API or rely solely on local files
+   * @param datasources one of DataSource.ALL or DataSource.LOCAL_ONLY
    * @return
    */
 
-  public Options setPrefabDatasource(Datasources prefabDatasources) {
-    this.datasources = prefabDatasources;
+  public Options setDatasource(Datasources datasources) {
+    this.datasources = datasources;
     return this;
   }
 
@@ -196,24 +176,6 @@ public class Options {
     OnInitializationFailure onInitializationFailure
   ) {
     this.onInitializationFailure = onInitializationFailure;
-    return this;
-  }
-
-  public boolean isCollectLoggerCounts() {
-    return collectLoggerCounts;
-  }
-
-  /**
-   * Configure client to report logging statistics to prefab.
-   * The captured data consists of fully qualified logger name with counts of log messages by level.
-   * The data allows prefab to preconfigure the log levels UI.
-   * Defaults to true
-   * @param collectLoggerCounts
-   * @return
-   */
-
-  public Options setCollectLoggerCounts(boolean collectLoggerCounts) {
-    this.collectLoggerCounts = collectLoggerCounts;
     return this;
   }
 

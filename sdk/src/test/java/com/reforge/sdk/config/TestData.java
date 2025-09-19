@@ -2,7 +2,6 @@ package com.reforge.sdk.config;
 
 import com.reforge.sdk.Options;
 import com.reforge.sdk.Sdk;
-import java.util.List;
 
 public class TestData {
 
@@ -22,9 +21,7 @@ public class TestData {
   }
 
   public static Options getDefaultOptionsWithEnvName(String envName) {
-    return new Options()
-      .setPrefabDatasource(Options.Datasources.LOCAL_ONLY)
-      .setConfigOverrideDir("src/test/resources/override_directory");
+    return new Options().setDatasource(Options.Datasources.LOCAL_ONLY);
   }
 
   /*
