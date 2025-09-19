@@ -85,9 +85,9 @@ public abstract class BaseIntegrationTestCaseDescriptor {
 
     Options options = new Options()
       .setApikey(apiKey)
-      .setPrefabTelemetryHost("https://telemetry.staging-prefab.cloud")
-      .setApiHosts(List.of("https://api.staging-prefab.cloud"))
-      .setStreamHosts(List.of("https://stream.staging-prefab.cloud"))
+      .setPrefabTelemetryHost("https://telemetry.goatsofreforge.com")
+      .setApiHosts(List.of("https://api.goatsofreforge.com"))
+      .setStreamHosts(List.of("https://stream.goatsofreforge.com"))
       .setInitializationTimeoutSec(2000);
     clientOverrides
       .getInitTimeoutSeconds()

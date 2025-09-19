@@ -19,12 +19,12 @@ import javax.annotation.Nullable;
 
 public class Options {
 
-  static final String DEFAULT_TELEMETRY_HOST = "https://telemetry.prefab.cloud";
+  static final String DEFAULT_TELEMETRY_HOST = "https://telemetry.reforge.com";
   static final List<String> DEFAULT_API_HOSTS = List.of(
-    "https://belt.prefab.cloud",
-    "https://suspenders.prefab.cloud"
+    "https://primary.reforge.com",
+    "https://secondary.reforge.com"
   );
-  static final List<String> DEFAULT_STREAM_HOSTS = List.of("https://stream.prefab.cloud");
+  static final List<String> DEFAULT_STREAM_HOSTS = List.of("https://stream.reforge.com");
 
   private List<String> apiHosts = DEFAULT_API_HOSTS;
   private String telemetryHost = DEFAULT_TELEMETRY_HOST;
