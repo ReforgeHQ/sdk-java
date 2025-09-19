@@ -13,9 +13,6 @@ import com.reforge.sdk.SdkInitializationTimeoutException;
 import com.reforge.sdk.config.ConfigChangeEvent;
 import com.reforge.sdk.config.ConfigChangeListener;
 import com.reforge.sdk.config.Match;
-import com.reforge.sdk.config.logging.AbstractLoggingListener;
-import com.reforge.sdk.config.logging.LogLevelChangeEvent;
-import com.reforge.sdk.config.logging.LogLevelChangeListener;
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextSetReadable;
 import com.reforge.sdk.context.ContextStore;
@@ -56,8 +53,7 @@ public class ConfigClientImpl implements ConfigClient {
 
   private static final Logger LOG = LoggerFactory.getLogger(ConfigClientImpl.class);
 
-  private static final String LOG_LEVEL_PREFIX_WITH_DOT =
-    AbstractLoggingListener.LOG_LEVEL_PREFIX + ".";
+  private static final String LOG_LEVEL_PREFIX_WITH_DOT = "log-level.";
 
   private final Options options;
 
@@ -65,8 +61,6 @@ public class ConfigClientImpl implements ConfigClient {
 
   private final CountDownLatch initializedLatch = new CountDownLatch(1);
   private final Set<ConfigChangeListener> configChangeListeners = Sets.newConcurrentHashSet();
-
-  private final Set<LogLevelChangeListener> logLevelChangeListeners = Sets.newConcurrentHashSet();
 
   private final String uniqueClientId;
 
@@ -104,7 +98,6 @@ public class ConfigClientImpl implements ConfigClient {
     );
     configChangeListeners.addAll(baseClient.getOptions().getChangeListeners());
     configChangeListeners.addAll(Arrays.asList(listeners));
-    logLevelChangeListeners.addAll(baseClient.getOptions().getLogLevelChangeListeners());
     contextStore = options.getContextStore();
     typedConfigImpl = new TypedConfigClientImpl(this);
     if (options.isLocalOnly()) {
@@ -416,7 +409,6 @@ public class ConfigClientImpl implements ConfigClient {
   private void finishInit(Source source) {
     final UpdatingConfigResolver.ChangeLists changes = updatingConfigResolver.update();
     broadcastChanges(changes.getConfigChangeEvents());
-    broadcastLogLevelChanges(changes.getLogLevelChangeEvents());
     if (initializedLatch.getCount() > 0) {
       initializedLatch.countDown();
       try {
@@ -454,19 +446,6 @@ public class ConfigClientImpl implements ConfigClient {
           listener.onChange(changeEvent);
         } catch (Exception e) {
           LOG.debug("Exception in config change listener", e);
-        }
-      }
-    }
-  }
-
-  private void broadcastLogLevelChanges(List<LogLevelChangeEvent> changeEvents) {
-    for (LogLevelChangeListener listener : logLevelChangeListeners) {
-      for (LogLevelChangeEvent changeEvent : changeEvents) {
-        LOG.debug("Broadcasting loglevel change {} to {}", changeEvent, listener);
-        try {
-          listener.onChange(changeEvent);
-        } catch (Exception e) {
-          LOG.debug("Exception in loglevel change listener", e);
         }
       }
     }

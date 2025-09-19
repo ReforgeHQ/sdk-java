@@ -24,8 +24,7 @@ public class TestData {
   public static Options getDefaultOptionsWithEnvName(String envName) {
     return new Options()
       .setPrefabDatasource(Options.Datasources.LOCAL_ONLY)
-      .setConfigOverrideDir("src/test/resources/override_directory")
-      .setPrefabEnvs(List.of(envName));
+      .setConfigOverrideDir("src/test/resources/override_directory");
   }
 
   /*

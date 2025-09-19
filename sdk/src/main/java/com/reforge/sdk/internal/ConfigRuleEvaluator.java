@@ -9,7 +9,6 @@ import com.reforge.sdk.config.ConfigElement;
 import com.reforge.sdk.config.ConfigValueUtils;
 import com.reforge.sdk.config.EvaluatedCriterion;
 import com.reforge.sdk.config.Match;
-import com.reforge.sdk.config.logging.AbstractLoggingListener;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,7 +48,7 @@ public class ConfigRuleEvaluator {
     final ConfigElement configElement = configStore.getElement(key);
     if (configElement == null) {
       // logging lookups generate a lot of misses so skip those
-      if (!key.startsWith(AbstractLoggingListener.LOG_LEVEL_PREFIX)) {
+      if (!key.startsWith("log-level")) {
         LOG.trace("No config value found for key {}", key);
       }
       return Optional.empty();
@@ -79,7 +78,7 @@ public class ConfigRuleEvaluator {
   ) {
     if (!configStore.containsKey(key)) {
       // logging lookups generate a lot of misses so skip those
-      if (!key.startsWith(AbstractLoggingListener.LOG_LEVEL_PREFIX)) {
+      if (!key.startsWith("log-level")) {
         LOG.trace("No config value found for key {}", key);
       }
       return Optional.empty();
