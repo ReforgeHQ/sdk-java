@@ -10,7 +10,7 @@ public class IntegrationTestClientOverrides {
   private final Optional<String> namespace;
   private final Optional<Integer> onNoDefault;
   private final Optional<Integer> initTimeoutSeconds;
-  private final Optional<String> prefabApiUrl;
+  private final Optional<String> reforgeApiUrl;
   private final Optional<Options.OnInitializationFailure> onInitFailure;
   private final Optional<String> aggregator;
   private final Optional<Options.CollectContextMode> contextUploadMode;
@@ -20,7 +20,7 @@ public class IntegrationTestClientOverrides {
     @JsonProperty("namespace") Optional<String> namespace,
     @JsonProperty("on_no_default") Optional<Integer> onNoDefault,
     @JsonProperty("initialization_timeout_sec") Optional<Integer> initTimeoutSeconds,
-    @JsonProperty("prefab_api_url") Optional<String> prefabApiUrl,
+    @JsonProperty("reforge_api_url") Optional<String> reforgeApiUrl,
     @JsonProperty("on_init_failure") Optional<String> onInitFailure,
     @JsonProperty("aggregator") Optional<String> aggregator,
     @JsonProperty("context_upload_mode") Optional<String> contextUploadMode
@@ -28,7 +28,7 @@ public class IntegrationTestClientOverrides {
     this.namespace = namespace;
     this.onNoDefault = onNoDefault;
     this.initTimeoutSeconds = initTimeoutSeconds;
-    this.prefabApiUrl = prefabApiUrl;
+    this.reforgeApiUrl = reforgeApiUrl;
     this.onInitFailure =
       onInitFailure.map(text -> {
         if (":return".equals(text)) {
@@ -83,8 +83,8 @@ public class IntegrationTestClientOverrides {
     return initTimeoutSeconds;
   }
 
-  public Optional<String> getPrefabApiUrl() {
-    return prefabApiUrl;
+  public Optional<String> getReforgeApiUrl() {
+    return reforgeApiUrl;
   }
 
   public Optional<Options.OnInitializationFailure> getOnInitFailure() {
