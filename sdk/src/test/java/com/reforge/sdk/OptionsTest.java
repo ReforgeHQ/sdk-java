@@ -10,8 +10,7 @@ public class OptionsTest {
   @Test
   public void testTelemetryDomain() {
     Options options = new Options();
-    assertThat(options.getTelemetryHost())
-      .isEqualTo("https://telemetry.reforge.com");
+    assertThat(options.getTelemetryHost()).isEqualTo("https://telemetry.reforge.com");
 
     options = new Options().setTelemetryHost("http://staging-prefab.cloud");
     assertThat(options.getTelemetryHost()).isEqualTo("http://staging-prefab.cloud");

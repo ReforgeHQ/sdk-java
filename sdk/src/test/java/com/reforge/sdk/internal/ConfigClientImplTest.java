@@ -15,7 +15,6 @@ import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextHelper;
 import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.context.ContextSetReadable;
-
 import java.util.Collections;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
