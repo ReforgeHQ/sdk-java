@@ -47,7 +47,6 @@ public class Options {
   }
 
   private String apikey;
-  private String configOverrideDir;
   private Datasources datasources = Datasources.ALL;
   private int initializationTimeoutSec = 10;
   private OnInitializationFailure onInitializationFailure = OnInitializationFailure.RAISE;
@@ -80,7 +79,6 @@ public class Options {
         .ofNullable(System.getenv("REFORGE_SDK_KEY"))
         .orElse(System.getenv("PREFAB_API_KEY"))
     );
-    configOverrideDir = System.getProperty("user.home");
     if ("LOCAL_ONLY".equals(System.getenv("REFORGE_DATASOURCES"))) {
       datasources = Datasources.LOCAL_ONLY;
     }
@@ -107,22 +105,6 @@ public class Options {
     } else {
       this.apikey = apikey.trim();
     }
-    return this;
-  }
-
-  public String getConfigOverrideDir() {
-    return configOverrideDir;
-  }
-
-  /**
-   * Sets a directory to load additional config files from in addition to on the classpath
-   * Defaults to the current user's home directory.
-   * see the docs for {@link Options#setPrefabEnvs(List)} setPrefabEnvs} for more dicussion on file loading
-   * @param configOverrideDir
-   * @return
-   */
-  public Options setConfigOverrideDir(String configOverrideDir) {
-    this.configOverrideDir = configOverrideDir;
     return this;
   }
 

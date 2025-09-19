@@ -30,7 +30,6 @@ public class ConfigLoaderTest {
     void beforeEach() {
       buildLoaderWithOptions(
         new Options()
-          .setConfigOverrideDir("src/test/resources/override_directory")
           .setLocalDatafile("src/test/resources/prefab.Development.5.config.json")
       );
     }
@@ -43,12 +42,7 @@ public class ConfigLoaderTest {
       );
       Optional<Prefab.Config> configFromJsonFileMaybe = getConfig("cool.bool.enabled");
       assertThat(configFromJsonFileMaybe).isPresent();
-      assertThat(configFromJsonFileMaybe.get().hasChangedBy()).isTrue(); // the override value in .prefab.default.config.yaml wouldn't have a changedby
-      assertThat(getConfig("sample"))
-        .as(
-          "sample from the defaults file resources/.prefab.default.config.yaml shouldn't be present"
-        )
-        .isEmpty();
+      assertThat(configFromJsonFileMaybe.get().hasChangedBy()).isTrue();
     }
   }
 
