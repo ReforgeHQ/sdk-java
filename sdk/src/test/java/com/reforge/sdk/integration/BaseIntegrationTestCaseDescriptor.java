@@ -93,7 +93,7 @@ public abstract class BaseIntegrationTestCaseDescriptor {
       .getInitTimeoutSeconds()
       .ifPresent(options::setInitializationTimeoutSec);
     clientOverrides
-      .getPrefabApiUrl()
+      .getReforgeApiUrl()
       .ifPresent(host -> options.setApiHosts(List.of(host)));
     clientOverrides.getOnInitFailure().ifPresent(options::setOnInitializationFailure);
     clientOverrides.getContextUploadMode().ifPresent(options::setContextUploadMode);
