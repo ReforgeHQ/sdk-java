@@ -143,8 +143,7 @@ public class HttpClient {
   public HttpClient(java.net.http.HttpClient httpClient, Options options) {
     this.httpClient = httpClient;
     this.options = options;
-    this.telemetryUrl =
-      URI.create(options.getTelemetryHost() + "/api/v1/telemetry");
+    this.telemetryUrl = URI.create(options.getTelemetryHost() + "/api/v1/telemetry");
     this.apiHosts = options.getApiHosts();
     this.streamHosts = options.getStreamHosts();
 
