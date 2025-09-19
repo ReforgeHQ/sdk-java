@@ -144,7 +144,7 @@ public class HttpClient {
     this.httpClient = httpClient;
     this.options = options;
     this.telemetryUrl =
-      URI.create(options.getPrefabTelemetryHost() + "/api/v1/telemetry");
+      URI.create(options.getTelemetryHost() + "/api/v1/telemetry");
     this.apiHosts = options.getApiHosts();
     this.streamHosts = options.getStreamHosts();
 

@@ -34,7 +34,7 @@ class HttpClientTest {
     .setApiHosts(List.of("http://a.example.com", "http://b.example.com"))
     .setStreamHosts(List.of("http://stream.example.com"))
     .setApikey("not-a-real-key")
-    .setPrefabTelemetryHost("http://telemetry.example.com");
+    .setTelemetryHost("http://telemetry.example.com");
 
   HttpClient prefabHttpClient;
 

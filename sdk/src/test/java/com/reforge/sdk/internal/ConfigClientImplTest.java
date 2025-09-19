@@ -11,16 +11,12 @@ import com.reforge.sdk.ConfigClient;
 import com.reforge.sdk.Options;
 import com.reforge.sdk.Sdk;
 import com.reforge.sdk.SdkInitializationTimeoutException;
-import com.reforge.sdk.config.ConfigChangeEvent;
-import com.reforge.sdk.config.ConfigChangeListener;
-import com.reforge.sdk.config.ConfigValueUtils;
 import com.reforge.sdk.context.Context;
 import com.reforge.sdk.context.ContextHelper;
 import com.reforge.sdk.context.ContextSet;
 import com.reforge.sdk.context.ContextSetReadable;
-import java.util.ArrayList;
+
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -37,7 +33,7 @@ class ConfigClientImplTest {
   @Test
   void localModeUnlocks() {
     final Sdk baseClient = new Sdk(
-      new Options().setPrefabDatasource(Options.Datasources.LOCAL_ONLY)
+      new Options().setDatasource(Options.Datasources.LOCAL_ONLY)
     );
     ConfigClient configClient = new ConfigClientImpl(baseClient);
 
@@ -99,7 +95,7 @@ class ConfigClientImplTest {
 
     @BeforeEach
     void beforeEach() {
-      Options options = new Options().setPrefabDatasource(Options.Datasources.LOCAL_ONLY);
+      Options options = new Options().setDatasource(Options.Datasources.LOCAL_ONLY);
       when(sdk.getOptions()).thenReturn(options);
       when(updatingConfigResolver.update())
         .thenReturn(new UpdatingConfigResolver.ChangeLists(Collections.emptyList()));
