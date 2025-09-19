@@ -180,7 +180,7 @@ class HttpClientTest {
     // Use a time far enough in the past to ensure expiration.
     long past = System.currentTimeMillis() - 10_000;
 
-    URI uri = URI.create("http://a.example.com/api/v1/configs/0");
+    URI uri = URI.create("http://a.example.com/api/v2/configs/0");
     Field cacheField = HttpClient.class.getDeclaredField("configCache");
     cacheField.setAccessible(true);
     @SuppressWarnings("unchecked")
@@ -194,7 +194,7 @@ class HttpClientTest {
     );
     cache.put(uri, expiredEntry);
 
-    // Mark the stubbing for sendAsync as lenient so that if it’s not invoked, we don’t fail.
+    // Mark the stubbing for sendAsync as lenient so that if it's not invoked, we don't fail.
     HttpResponse<byte[]> httpResponse304 = mock(HttpResponse.class);
     when(httpResponse304.statusCode()).thenReturn(304);
 
@@ -305,7 +305,7 @@ class HttpClientTest {
     )
       .thenReturn(future200);
 
-    // Invoke the request (using offset 0L, yielding a URL like "http://a.example.com/api/v1/configs/0").
+    // Invoke the request (using offset 0L, yielding a URL like "http://a.example.com/api/v2/configs/0").
     CompletableFuture<HttpResponse<Supplier<Prefab.Configs>>> firstCall = prefabHttpClient.requestConfigs(
       0L
     );
@@ -316,7 +316,7 @@ class HttpClientTest {
     assertThat(resp1.headers().firstValue("X-Cache")).contains("MISS");
 
     // Retrieve the cached entry.
-    URI uri = URI.create("http://a.example.com/api/v1/configs/0");
+    URI uri = URI.create("http://a.example.com/api/v2/configs/0");
     Field cacheField = HttpClient.class.getDeclaredField("configCache");
     cacheField.setAccessible(true);
     @SuppressWarnings("unchecked")
@@ -331,7 +331,6 @@ class HttpClientTest {
     // Now simulate a 304 Not Modified response on a subsequent request.
     HttpResponse<byte[]> response304 = mock(HttpResponse.class);
     when(response304.statusCode()).thenReturn(304);
-    HttpHeaders headers304 = HttpHeaders.of(Map.of(), (k, v) -> true);
     CompletableFuture<HttpResponse<byte[]>> future304 = CompletableFuture.completedFuture(
       response304
     );
