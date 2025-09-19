@@ -185,7 +185,7 @@ public class HttpClient {
   ) {
     return executeWithFailover(
       host -> {
-        URI uri = URI.create(host + "/api/v1/sse/config");
+        URI uri = URI.create(host + "/api/v2/sse/config");
         LOG.info("Requesting SSE from {}", uri);
         HttpRequest request = getClientBuilderWithStandardHeaders()
           .header("Accept", EVENT_STREAM_MEDIA_TYPE)
@@ -212,7 +212,7 @@ public class HttpClient {
   ) {
     return executeWithFailover(
       host -> {
-        URI uri = URI.create(host + "/api/v1/configs/" + offset);
+        URI uri = URI.create(host + "/api/v2/configs/" + offset);
         return requestConfigsFromURI(uri);
       },
       apiHosts
