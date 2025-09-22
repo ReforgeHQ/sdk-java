@@ -1,13 +1,16 @@
 name: Publish to Maven Central
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Java CI with Maven"]
+    types:
+      - completed
     branches: [ "main" ]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.repository == 'ReforgeHQ/sdk-java'
+    if: github.repository == 'ReforgeHQ/sdk-java' && github.event.workflow_run.conclusion == 'success'
 
     steps:
     - name: "Checkout"
@@ -85,10 +88,10 @@ jobs:
 
     - name: Create GitHub Release
       if: steps.version_check.outputs.should_publish == 'true'
-      uses: ncipollo/create-release@v1
+      uses: softprops/action-gh-release@v2.3.3
       with:
-        tag: "v${{ steps.extract_version.outputs.version }}"
+        tag_name: "v${{ steps.extract_version.outputs.version }}"
         name: "Release v${{ steps.extract_version.outputs.version }}"
-        generateReleaseNotes: true
+        generate_release_notes: true
         draft: false
         prerelease: ${{ contains(steps.extract_version.outputs.version, 'RC') || contains(steps.extract_version.outputs.version, 'beta') || contains(steps.extract_version.outputs.version, 'alpha') }}
