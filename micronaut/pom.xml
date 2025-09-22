@@ -9,6 +9,7 @@
 
   <artifactId>sdk-micronaut-extension</artifactId>
   <name>Reforge SDK Extension for Micronaut</name>
+  <description>Micronaut integration for Reforge SDK to enable storage of Context in the Server Request Context</description>
 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
