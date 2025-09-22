@@ -14,6 +14,7 @@
   <version>0.3.26</version>
   <packaging>pom</packaging>
   <name>Reforge SDK Parent POM</name>
+  <description>Parent POM for Reforge SDK modules providing feature flags, configuration management, and A/B testing capabilities</description>
 
   <modules>
     <module>micronaut</module>
