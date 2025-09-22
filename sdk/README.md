@@ -1,11 +1,11 @@
-# Reforge Java Sdk
+# Reforge Java SDK
 
-[![javadoc](https://javadoc.io/badge2/cloud.prefab/client/javadoc.svg)](https://javadoc.io/doc/cloud.prefab/client)   FIXME
+[![javadoc](https://javadoc.io/badge2/com.reforge/sdk/javadoc.svg)](https://javadoc.io/doc/com.reforge/sdk)
 [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/pdi9.svg)](https://betteruptime.com/?utm_source=status_badge)
 
-Java (11+) Reforge SDK for FeatureFlags, Config as a Service: https://launch.reforge.com
+Java (11+) Reforge SDK for FeatureFlags, Config as a Service: https://reforge.com
 
-See full documentation https://docs.prefab.cloud/docs/java-sdk/java
+See full documentation https://docs.reforge.com/docs/java-sdk/java
 
 
 ### Maven
@@ -13,7 +13,7 @@ See full documentation https://docs.prefab.cloud/docs/java-sdk/java
 <dependency>
     <groupId>com.reforge</groupId>
     <artifactId>sdk</artifactId>
-    <version>TODO</version>
+    <version>0.3.26</version>
 </dependency>
 ```
 
@@ -25,7 +25,7 @@ For an uber-jar including relocated guava and failsafe dependencies add the "ube
 <dependency>
     <groupId>com.reforge</groupId>
     <artifactId>sdk</artifactId>
-    <version>TODO</version>
+    <version>0.3.26</version>
     <classifier>uberjar</classifier>
 </dependency>
 ```

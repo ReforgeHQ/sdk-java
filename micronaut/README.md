@@ -1,60 +1,53 @@
-# prefab-cloud-java
-Java Client for Prefab LogLevels, FeatureFlags, Config as a Service: https://www.prefab.cloud
+# reforge-sdk-java
+Java Client for Reforge LogLevels, FeatureFlags, Config as a Service: https://reforge.com
 
-See full documentation https://docs.prefab.cloud/docs/java-sdk/java
+See full documentation https://docs.reforge.com/docs/java-sdk/java
 
 # Micronaut Support
 
 ## Context Storage
 
-Out of the box, the Prefab client includes the ThreadLocalContextStore which relies on the same Thread handling a HTTP Request. 
+Out of the box, the Reforge client includes the ThreadLocalContextStore which relies on the same Thread handling a HTTP Request.
 
-Micronaut has an event based model, so state must be managed without ThreadLocals - to that end we provide the `ServerRequestContextStore` that uses the ServerRequestContext. 
+Micronaut has an event based model, so state must be managed without ThreadLocals - to that end we provide the `ServerRequestContextStore` that uses the ServerRequestContext.
 _Note: Behind the scenes ServerRequestContext is based on a threadlocal, but micronaut's instrumentation code knows to copy this threadlocal between threads as the request moves through processing._
 
 ### Usage
 
 Maven
 
-Maven
 ```xml
 <dependency>
-    <groupId>cloud.prefab</groupId>
-    <artifactId>micronaut</artifactId>
-    <version>0.3.25</version>
+    <groupId>com.reforge</groupId>
+    <artifactId>sdk-micronaut-extension</artifactId>
+    <version>0.3.26</version>
 </dependency>
 ```
 
-The context store implementation is added to the Prefab `Options` class.
+The context store implementation is added to the Reforge `Options` class.
 
-You'll likely have a factory class like this one - see the `options.setContextStore(new PrefabMicronautStateStore());` in the sdk method
+You'll likely have a factory class like this one - see the `options.setContextStore(new ServerRequestContextStore());` in the sdk method
 
 ```java
 @Factory
-public class PrefabFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(PrefabFactory.class);
+public class ReforgeFactory {
+    private static final Logger LOG = LoggerFactory.getLogger(ReforgeFactory.class);
 
     @Singleton
-    public PrefabCloudClient sdk(Environment environment) {
+    public Sdk sdk(Environment environment) {
         final Options options = new Options();
-        options.setPrefabEnvs(environment.getActiveNames().stream().toList());
-        options.setContextStore(new PrefabMicronautStateStore());
-        return new PrefabCloudClient(options);
+        options.setContextStore(new ServerRequestContextStore());
+        return new Sdk(options);
     }
 
     @Singleton
-    public FeatureFlagClient featureFlagClient(PrefabCloudClient sdk) {
+    public FeatureFlagClient featureFlagClient(Sdk sdk) {
         return sdk.featureFlagClient();
     }
 
-    @Context
-    public ConfigClient configClient(
-            PrefabCloudClient sdk
-    ) {
-        ConfigClient configClient = sdk.configClient();
-        // install the logging filter at the same time
-        PrefabMDCTurboFilter.install(configClient);
-        return configClient;
+    @Singleton
+    public ConfigClient configClient(Sdk sdk) {
+        return sdk.configClient();
     }
 }
 ```
