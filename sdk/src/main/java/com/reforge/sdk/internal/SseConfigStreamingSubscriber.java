@@ -117,13 +117,16 @@ public class SseConfigStreamingSubscriber {
           hasReceivedData.set(true);
           String dataPayload = dataEvent.getData().trim();
           if (!dataPayload.isEmpty()) {
-            Prefab.Configs configs = Prefab.Configs.parseFrom(
-              Base64.getDecoder().decode(dataPayload)
-            );
-            if (!configs.hasConfigServicePointer()) {
-              LOG.debug("Ignoring empty config keep-alive");
+            byte[] decodedData = Base64.getDecoder().decode(dataPayload);
+            if (decodedData.length == 0) {
+              LOG.warn("Ignoring zero-byte config data from SSE stream");
             } else {
-              configConsumer.accept(configs);
+              Prefab.Configs configs = Prefab.Configs.parseFrom(decodedData);
+              if (!configs.hasConfigServicePointer()) {
+                LOG.debug("Ignoring empty config keep-alive");
+              } else {
+                configConsumer.accept(configs);
+              }
             }
           }
         } catch (InvalidProtocolBufferException e) {

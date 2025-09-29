@@ -275,6 +275,10 @@ public class HttpClient {
           // Build a synthetic response for the 200 case.
           Supplier<Prefab.Configs> supplier = () -> {
             try {
+              if (bodyBytes.length == 0) {
+                LOG.warn("Rejecting zero-byte config data from HTTP response");
+                throw new IllegalArgumentException("Zero-byte config data is not valid");
+              }
               return Prefab.Configs.parseFrom(bodyBytes);
             } catch (IOException e) {
               throw new UncheckedIOException(e);
@@ -287,6 +291,10 @@ public class HttpClient {
           // For other status codes, simply wrap the response.
           Supplier<Prefab.Configs> supplier = () -> {
             try (ByteArrayInputStream bais = new ByteArrayInputStream(response.body())) {
+              if (response.body().length == 0) {
+                LOG.warn("Rejecting zero-byte config data from HTTP response");
+                throw new IllegalArgumentException("Zero-byte config data is not valid");
+              }
               return Prefab.Configs.parseFrom(bais);
             } catch (IOException e) {
               throw new UncheckedIOException(e);
@@ -324,6 +332,10 @@ public class HttpClient {
   ) {
     Supplier<Prefab.Configs> supplier = () -> {
       try {
+        if (entry.data.length == 0) {
+          LOG.warn("Rejecting zero-byte config data from cache");
+          throw new IllegalArgumentException("Zero-byte config data is not valid");
+        }
         return Prefab.Configs.parseFrom(entry.data);
       } catch (IOException e) {
         throw new UncheckedIOException(e);

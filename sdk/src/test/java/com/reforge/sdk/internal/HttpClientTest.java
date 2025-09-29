@@ -48,7 +48,12 @@ class HttpClientTest {
   @Test
   void testFailoverForConfigFetch() throws Exception {
     // Use byte[]–based mocks since requestConfigsFromURI uses BodyHandlers.ofByteArray().
-    Prefab.Configs dummyConfigs = Prefab.Configs.newBuilder().build();
+    Prefab.Configs dummyConfigs = Prefab.Configs
+      .newBuilder()
+      .setConfigServicePointer(
+        Prefab.ConfigServicePointer.newBuilder().setProjectId(123L)
+      )
+      .build();
     byte[] dummyBytes = dummyConfigs.toByteArray();
 
     HttpResponse<byte[]> failureResponse = mock(HttpResponse.class);
@@ -128,7 +133,12 @@ class HttpClientTest {
 
   @Test
   void testBasicCaching() throws Exception {
-    Prefab.Configs dummyConfigs = Prefab.Configs.newBuilder().build();
+    Prefab.Configs dummyConfigs = Prefab.Configs
+      .newBuilder()
+      .setConfigServicePointer(
+        Prefab.ConfigServicePointer.newBuilder().setProjectId(123L)
+      )
+      .build();
     byte[] dummyBytes = dummyConfigs.toByteArray();
 
     HttpResponse<byte[]> httpResponse200 = mock(HttpResponse.class);
@@ -175,7 +185,12 @@ class HttpClientTest {
   @Test
   void testConditionalGet304() throws Exception {
     // In order to trigger a conditional GET, we insert a cached entry that is expired.
-    Prefab.Configs dummyConfigs = Prefab.Configs.newBuilder().build();
+    Prefab.Configs dummyConfigs = Prefab.Configs
+      .newBuilder()
+      .setConfigServicePointer(
+        Prefab.ConfigServicePointer.newBuilder().setProjectId(123L)
+      )
+      .build();
     byte[] dummyBytes = dummyConfigs.toByteArray();
     // Use a time far enough in the past to ensure expiration.
     long past = System.currentTimeMillis() - 10_000;
@@ -225,7 +240,12 @@ class HttpClientTest {
 
   @Test
   void testClearCache() throws Exception {
-    Prefab.Configs dummyConfigs = Prefab.Configs.newBuilder().build();
+    Prefab.Configs dummyConfigs = Prefab.Configs
+      .newBuilder()
+      .setConfigServicePointer(
+        Prefab.ConfigServicePointer.newBuilder().setProjectId(123L)
+      )
+      .build();
     byte[] dummyBytes = dummyConfigs.toByteArray();
 
     HttpResponse<byte[]> httpResponse200 = mock(HttpResponse.class);
@@ -280,7 +300,12 @@ class HttpClientTest {
   @Test
   void testNoCacheResponseAlwaysRevalidates() throws Exception {
     // Create a valid Prefab.Configs instance and its serialized form.
-    Prefab.Configs dummyConfigs = Prefab.Configs.newBuilder().build();
+    Prefab.Configs dummyConfigs = Prefab.Configs
+      .newBuilder()
+      .setConfigServicePointer(
+        Prefab.ConfigServicePointer.newBuilder().setProjectId(123L)
+      )
+      .build();
     byte[] dummyBytes = dummyConfigs.toByteArray();
 
     // Simulate a 200 response with Cache-Control: no-cache and an ETag.
@@ -364,5 +389,171 @@ class HttpClientTest {
     HttpRequest sentRequest = requestCaptor.getValue();
     assertThat(sentRequest.headers().firstValue("If-None-Match"))
       .contains("etag-no-cache");
+  }
+
+  @Test
+  void testZeroByteConfigRejectionFromHttpResponse() throws Exception {
+    // Mock a 200 response that returns zero bytes
+    byte[] zeroBytes = new byte[0];
+    HttpResponse<byte[]> zeroByteResponse = mock(HttpResponse.class);
+    when(zeroByteResponse.statusCode()).thenReturn(200);
+    when(zeroByteResponse.body()).thenReturn(zeroBytes);
+    when(zeroByteResponse.headers()).thenReturn(HttpHeaders.of(Map.of(), (k, v) -> true));
+
+    CompletableFuture<HttpResponse<byte[]>> futureZeroBytes = CompletableFuture.completedFuture(
+      zeroByteResponse
+    );
+    when(
+      mockHttpClient.sendAsync(
+        any(HttpRequest.class),
+        any(HttpResponse.BodyHandler.class)
+      )
+    )
+      .thenReturn(futureZeroBytes);
+
+    // Request configs - this should eventually fail after retries
+    CompletableFuture<HttpResponse<Supplier<Prefab.Configs>>> result = prefabHttpClient.requestConfigs(
+      0L
+    );
+
+    HttpResponse<Supplier<Prefab.Configs>> response = result.get();
+    assertThat(response.statusCode()).isEqualTo(200);
+
+    // Try to get the body - this should throw IllegalArgumentException
+    try {
+      response.body().get();
+      assertThat(false)
+        .as("Expected IllegalArgumentException for zero-byte config")
+        .isTrue();
+    } catch (IllegalArgumentException e) {
+      // Should get IllegalArgumentException from zero-byte rejection
+      assertThat(e.getMessage()).contains("Zero-byte config data is not valid");
+    }
+  }
+
+  @Test
+  void testZeroByteConfigRejectionFromNon200Response() throws Exception {
+    // Mock a 404 response that returns zero bytes
+    byte[] zeroBytes = new byte[0];
+    HttpResponse<byte[]> zeroByteResponse = mock(HttpResponse.class);
+    when(zeroByteResponse.statusCode()).thenReturn(404);
+    when(zeroByteResponse.body()).thenReturn(zeroBytes);
+    when(zeroByteResponse.headers()).thenReturn(HttpHeaders.of(Map.of(), (k, v) -> true));
+
+    CompletableFuture<HttpResponse<byte[]>> futureZeroBytes = CompletableFuture.completedFuture(
+      zeroByteResponse
+    );
+    when(
+      mockHttpClient.sendAsync(
+        any(HttpRequest.class),
+        any(HttpResponse.BodyHandler.class)
+      )
+    )
+      .thenReturn(futureZeroBytes);
+
+    // Request configs - this should eventually fail after retries
+    CompletableFuture<HttpResponse<Supplier<Prefab.Configs>>> result = prefabHttpClient.requestConfigs(
+      0L
+    );
+
+    HttpResponse<Supplier<Prefab.Configs>> response = result.get();
+    assertThat(response.statusCode()).isEqualTo(404);
+
+    // Try to get the body - this should throw IllegalArgumentException
+    try {
+      response.body().get();
+      assertThat(false)
+        .as("Expected IllegalArgumentException for zero-byte config")
+        .isTrue();
+    } catch (IllegalArgumentException e) {
+      // Should get IllegalArgumentException from zero-byte rejection
+      assertThat(e.getMessage()).contains("Zero-byte config data is not valid");
+    }
+  }
+
+  @Test
+  void testZeroByteConfigRejectionFromCache() throws Exception {
+    // Insert zero-byte data directly into cache
+    URI uri = URI.create("http://a.example.com/api/v2/configs/0");
+    Field cacheField = HttpClient.class.getDeclaredField("configCache");
+    cacheField.setAccessible(true);
+    @SuppressWarnings("unchecked")
+    Cache<URI, HttpClient.CacheEntry> cache = (Cache<URI, HttpClient.CacheEntry>) cacheField.get(
+      prefabHttpClient
+    );
+
+    // Create a cache entry with zero-byte data that is still fresh
+    long future = System.currentTimeMillis() + 60_000;
+    HttpClient.CacheEntry zeroByteCacheEntry = new HttpClient.CacheEntry(
+      new byte[0],
+      "zero-byte-etag",
+      future
+    );
+    cache.put(uri, zeroByteCacheEntry);
+
+    // Request configs - should return cached response but fail when accessing body
+    CompletableFuture<HttpResponse<Supplier<Prefab.Configs>>> result = prefabHttpClient.requestConfigs(
+      0L
+    );
+
+    HttpResponse<Supplier<Prefab.Configs>> response = result.get();
+    assertThat(response.statusCode()).isEqualTo(200);
+    assertThat(response.headers().firstValue("X-Cache")).contains("HIT");
+
+    // Try to get the body - this should throw IllegalArgumentException
+    try {
+      response.body().get();
+      assertThat(false)
+        .as("Expected IllegalArgumentException for zero-byte cached config")
+        .isTrue();
+    } catch (IllegalArgumentException e) {
+      // Should get IllegalArgumentException from zero-byte rejection
+      assertThat(e.getMessage()).contains("Zero-byte config data is not valid");
+    }
+  }
+
+  @Test
+  void testValidConfigProcessingAfterZeroByteRejectionImplementation() throws Exception {
+    // This test verifies that valid configs can still be processed normally
+    // even when zero-byte rejection is in place
+
+    Prefab.Configs validConfigs = Prefab.Configs
+      .newBuilder()
+      .setConfigServicePointer(
+        Prefab.ConfigServicePointer.newBuilder().setProjectId(456L)
+      )
+      .build();
+    byte[] validBytes = validConfigs.toByteArray();
+    HttpResponse<byte[]> validResponse = mock(HttpResponse.class);
+    when(validResponse.statusCode()).thenReturn(200);
+    when(validResponse.body()).thenReturn(validBytes);
+    when(validResponse.headers()).thenReturn(HttpHeaders.of(Map.of(), (k, v) -> true));
+
+    CompletableFuture<HttpResponse<byte[]>> futureValidBytes = CompletableFuture.completedFuture(
+      validResponse
+    );
+
+    when(
+      mockHttpClient.sendAsync(
+        any(HttpRequest.class),
+        any(HttpResponse.BodyHandler.class)
+      )
+    )
+      .thenReturn(futureValidBytes);
+
+    // Request configs - should succeed with valid data
+    CompletableFuture<HttpResponse<Supplier<Prefab.Configs>>> result = prefabHttpClient.requestConfigs(
+      0L
+    );
+
+    HttpResponse<Supplier<Prefab.Configs>> response = result.get();
+    assertThat(response.statusCode()).isEqualTo(200);
+
+    // Should be able to get valid configs without exception
+    Prefab.Configs configs = response.body().get();
+    assertThat(configs).isEqualTo(validConfigs);
+
+    // Should have called sendAsync once
+    verify(mockHttpClient, times(1)).sendAsync(any(), any());
   }
 }
