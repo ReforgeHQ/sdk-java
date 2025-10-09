@@ -12,7 +12,7 @@ Maven
 <dependency>
     <groupId>com.reforge</groupId>
     <artifactId>sdk</artifactId>
-    <version>0.3.26</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
