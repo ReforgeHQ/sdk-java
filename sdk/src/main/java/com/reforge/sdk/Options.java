@@ -74,7 +74,7 @@ public class Options {
   public Options() {
     setApikey(
       Optional
-        .ofNullable(System.getenv("REFORGE_SDK_KEY"))
+        .ofNullable(System.getenv("REFORGE_BACKEND_SDK_KEY"))
         .orElse(System.getenv("PREFAB_API_KEY"))
     );
     if ("LOCAL_ONLY".equals(System.getenv("REFORGE_DATASOURCES"))) {
