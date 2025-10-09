@@ -20,13 +20,13 @@ Maven
 <dependency>
     <groupId>com.reforge</groupId>
     <artifactId>sdk-micronaut-extension</artifactId>
-    <version>0.3.26</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 The context store implementation is added to the Reforge `Options` class.
 
-You'll likely have a factory class like this one - see the `options.setContextStore(new ServerRequestContextStore());` in the sdk method
+You'll likely have a factory class like this one—see the `options.setContextStore(new ServerRequestContextStore());` in the sdk method
 
 ```java
 @Factory
