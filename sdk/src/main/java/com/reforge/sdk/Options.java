@@ -45,7 +45,7 @@ public class Options {
     PERIODIC_EXAMPLE,
   }
 
-  private String apikey;
+  private String sdkKey;
   private Datasources datasources = Datasources.ALL;
   private int initializationTimeoutSec = 10;
   private OnInitializationFailure onInitializationFailure = OnInitializationFailure.RAISE;
@@ -72,7 +72,7 @@ public class Options {
   private ContextSetReadable globalContext;
 
   public Options() {
-    setApikey(
+    setSdkKey(
       Optional
         .ofNullable(System.getenv("REFORGE_BACKEND_SDK_KEY"))
         .orElse(System.getenv("PREFAB_API_KEY"))
@@ -87,21 +87,21 @@ public class Options {
     return Datasources.LOCAL_ONLY == datasources;
   }
 
-  public String getApikey() {
-    return apikey;
+  public String getSdkKey() {
+    return sdkKey;
   }
 
   /**
    * Sets the API key to be used to communicate with the Reforge APIs
-   * Can also be specified with env var `REFORGE_API_KEY`
-   * @param apikey the key
+   * Can also be specified with env var `REFORGE_BACKEND_SDK_KEY`
+   * @param sdkKey the key
    * @return Options
    */
-  public Options setApikey(String apikey) {
-    if (apikey == null) {
-      this.apikey = null;
+  public Options setSdkKey(String sdkKey) {
+    if (sdkKey == null) {
+      this.sdkKey = null;
     } else {
-      this.apikey = apikey.trim();
+      this.sdkKey = sdkKey.trim();
     }
     return this;
   }
@@ -223,7 +223,7 @@ public class Options {
   }
 
   public String getApiKeyId() {
-    return getApikey().split("\\-")[0];
+    return getSdkKey().split("\\-")[0];
   }
 
   public Options setContextStore(ContextStore contextStore) {

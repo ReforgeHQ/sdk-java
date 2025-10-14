@@ -36,7 +36,7 @@ public class OptionsTest {
   @Test
   public void apiKeyIsTrimmed() {
     Options options = new Options();
-    options.setApikey("my-key\n");
-    assertThat(options.getApikey()).isEqualTo("my-key");
+    options.setSdkKey("my-key\n");
+    assertThat(options.getSdkKey()).isEqualTo("my-key");
   }
 }

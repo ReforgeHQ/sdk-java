@@ -44,7 +44,7 @@ class ConfigClientImplTest {
   void initializationTimeout() {
     final Sdk baseClient = new Sdk(
       new Options()
-        .setApikey("0-P1-E1-SDK-1234-123-23")
+        .setSdkKey("0-P1-E1-SDK-1234-123-23")
         .setInitializationTimeoutSec(1)
         .setOnInitializationFailure(Options.OnInitializationFailure.RAISE)
     );
@@ -57,7 +57,7 @@ class ConfigClientImplTest {
   void initializationUnlock() {
     final Sdk baseClient = new Sdk(
       new Options()
-        .setApikey("0-P1-E1-SDK-1234-123-23")
+        .setSdkKey("0-P1-E1-SDK-1234-123-23")
         .setInitializationTimeoutSec(1)
         .setOnInitializationFailure(Options.OnInitializationFailure.UNLOCK)
     );
