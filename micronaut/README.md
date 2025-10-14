@@ -20,7 +20,7 @@ Maven
 <dependency>
     <groupId>com.reforge</groupId>
     <artifactId>sdk-micronaut-extension</artifactId>
-    <version>1.0.0</version>
+    <version>LATEST</version>
 </dependency>
 ```
 
