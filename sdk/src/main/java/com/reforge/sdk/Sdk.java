@@ -19,14 +19,14 @@ public class Sdk implements AutoCloseable {
     this.options = options;
 
     if (options.isLocalOnly()) {
-      LOG.info("Initializing Prefab LocalOnly");
+      LOG.info("Initializing Reforge SDK LocalOnly");
     } else if (options.isLocalDatafileMode()) {
-      LOG.info("Initializing Prefab from local file {}", options.getLocalDatafile());
+      LOG.info("Initializing Reforge SDK from local file {}", options.getLocalDatafile());
     } else {
-      if (options.getApikey() == null || options.getApikey().isEmpty()) {
-        throw new RuntimeException("PREFAB_API_KEY not set");
+      if (options.getSdkKey() == null || options.getSdkKey().isEmpty()) {
+        throw new RuntimeException("REFORGE_BACKEND_SDK_KEY not set");
       }
-      LOG.info("Initializing Prefab for apiKeyId {}", options.getApiKeyId());
+      LOG.info("Initializing Reforge SDK for sdkKeyId {}", options.getApiKeyId());
     }
 
     this.closed = new AtomicBoolean(false);

@@ -13,7 +13,7 @@ See full documentation https://docs.reforge.com/docs/java-sdk/java
 <dependency>
     <groupId>com.reforge</groupId>
     <artifactId>sdk</artifactId>
-    <version>0.3.26</version>
+    <version>LATEST</version>
 </dependency>
 ```
 
@@ -25,7 +25,7 @@ For an uber-jar including relocated guava and failsafe dependencies add the "ube
 <dependency>
     <groupId>com.reforge</groupId>
     <artifactId>sdk</artifactId>
-    <version>0.3.26</version>
+    <version>LATEST</version>
     <classifier>uberjar</classifier>
 </dependency>
 ```

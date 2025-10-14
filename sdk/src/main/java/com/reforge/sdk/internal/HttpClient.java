@@ -356,7 +356,7 @@ public class HttpClient {
       .header(VERSION_HEADER, NEW_CLIENT_HEADER_VALUE)
       .header(
         "Authorization",
-        getBasicAuthenticationHeader(options.getApiKeyId(), options.getApikey())
+        getBasicAuthenticationHeader(options.getApiKeyId(), options.getSdkKey())
       );
   }
 
@@ -375,7 +375,7 @@ public class HttpClient {
     if (throwable == null) {
       if (AUTH_PROBLEM_STATUS_CODES.contains(httpResponse.statusCode())) {
         LOG.error(
-          "*** Prefab Auth failure, please check your credentials. Fetching configuration returned HTTP Status code {} (from {}) ",
+          "*** Reforge SDK Auth failure, please check your credentials. Fetching configuration returned HTTP Status code {} (from {}) ",
           httpResponse.statusCode(),
           httpResponse.uri()
         );
