@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 class ServerRequestContextStoreTest {
 
-  ServerRequestContextStore prefabStateStore = new ServerRequestContextStore();
+  ServerRequestContextStore reforgeSdkContextStore = new ServerRequestContextStore();
   Context userContext = Context.newBuilder("user").put("country", "us").build();
   Context serverContext = Context.newBuilder("server").put("az", "2").build();
 
@@ -29,25 +29,25 @@ class ServerRequestContextStoreTest {
 
     @Test
     void getContextReturnsEmpty() {
-      assertThat(prefabStateStore.getContext()).isEmpty();
+      assertThat(reforgeSdkContextStore.getContext()).isEmpty();
     }
 
     @Test
     void setContextQuietlyDoesNothing() {
-      assertThat(prefabStateStore.setContext(userAndServerContextSet)).isEmpty();
-      assertThat(prefabStateStore.getContext()).isEmpty();
+      assertThat(reforgeSdkContextStore.setContext(userAndServerContextSet)).isEmpty();
+      assertThat(reforgeSdkContextStore.getContext()).isEmpty();
     }
 
     @Test
     void addContextQuietlyDoesNothing() {
-      prefabStateStore.addContext(userContext);
-      assertThat(prefabStateStore.getContext()).isEmpty();
+      reforgeSdkContextStore.addContext(userContext);
+      assertThat(reforgeSdkContextStore.getContext()).isEmpty();
     }
 
     @Test
     void clearContextQuietlyDoesNothing() {
-      assertThat(prefabStateStore.clearContext()).isEmpty();
-      assertThat(prefabStateStore.getContext()).isEmpty();
+      assertThat(reforgeSdkContextStore.clearContext()).isEmpty();
+      assertThat(reforgeSdkContextStore.getContext()).isEmpty();
     }
   }
 
@@ -63,18 +63,18 @@ class ServerRequestContextStoreTest {
 
     @Test
     void getContextReturnsEmptyWhenNoContextSet() {
-      assertThat(prefabStateStore.getContext()).isEmpty();
+      assertThat(reforgeSdkContextStore.getContext()).isEmpty();
     }
 
     @Test
     void setContextReturnsEmptyWhenNoContextSet() {
-      assertThat(prefabStateStore.setContext(userAndServerContextSet)).isEmpty();
+      assertThat(reforgeSdkContextStore.setContext(userAndServerContextSet)).isEmpty();
     }
 
     @Test
     void addContextWhenEmptyUpdatesTheContext() {
-      prefabStateStore.addContext(userContext);
-      assertThat(prefabStateStore.getContext())
+      reforgeSdkContextStore.addContext(userContext);
+      assertThat(reforgeSdkContextStore.getContext())
         .isPresent()
         .get()
         .usingRecursiveComparison()
@@ -83,8 +83,8 @@ class ServerRequestContextStoreTest {
 
     @Test
     void clearReturnsEmpty() {
-      assertThat(prefabStateStore.clearContext()).isEmpty();
-      assertThat(prefabStateStore.getContext()).isEmpty();
+      assertThat(reforgeSdkContextStore.clearContext()).isEmpty();
+      assertThat(reforgeSdkContextStore.getContext()).isEmpty();
     }
 
     @Nested
@@ -98,12 +98,12 @@ class ServerRequestContextStoreTest {
 
       @BeforeEach
       void beforeEach() {
-        prefabStateStore.setContext(userAndServerContextSet);
+        reforgeSdkContextStore.setContext(userAndServerContextSet);
       }
 
       @Test
       void getReturnsExpectedSet() {
-        assertThat(prefabStateStore.getContext())
+        assertThat(reforgeSdkContextStore.getContext())
           .isPresent()
           .get()
           .usingRecursiveComparison()
@@ -112,22 +112,22 @@ class ServerRequestContextStoreTest {
 
       @Test
       void clearWorksAsExpected() {
-        assertThat(prefabStateStore.clearContext())
+        assertThat(reforgeSdkContextStore.clearContext())
           .isPresent()
           .get()
           .usingRecursiveComparison()
           .isEqualTo(userAndServerContextSet);
-        assertThat(prefabStateStore.getContext()).isEmpty();
+        assertThat(reforgeSdkContextStore.getContext()).isEmpty();
       }
 
       @Test
       void setWorksAsExpected() {
-        assertThat(prefabStateStore.setContext(userContext))
+        assertThat(reforgeSdkContextStore.setContext(userContext))
           .isPresent()
           .get()
           .usingRecursiveComparison()
           .isEqualTo(userAndServerContextSet);
-        assertThat(prefabStateStore.getContext())
+        assertThat(reforgeSdkContextStore.getContext())
           .isPresent()
           .get()
           .usingRecursiveComparison()
@@ -136,8 +136,8 @@ class ServerRequestContextStoreTest {
 
       @Test
       void addWorksAsExpected() {
-        prefabStateStore.addContext(newUserContext);
-        assertThat(prefabStateStore.getContext())
+        reforgeSdkContextStore.addContext(newUserContext);
+        assertThat(reforgeSdkContextStore.getContext())
           .isPresent()
           .get()
           .usingRecursiveComparison()

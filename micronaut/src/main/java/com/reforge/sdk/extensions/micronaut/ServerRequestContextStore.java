@@ -15,11 +15,11 @@ import java.util.Optional;
  */
 public class ServerRequestContextStore implements ContextStore {
 
-  public static final String ATTRIBUTE_NAME = "prefab-contexts";
+  public static final String ATTRIBUTE_NAME = "reforge-sdk-contexts";
 
   @Override
   public void addContext(Context context) {
-    getPrefabContextSet()
+    getReforgeContextSet()
       .ifPresentOrElse(
         prefabContextSet -> prefabContextSet.addContext(context),
         () -> setContext(context)
@@ -50,10 +50,10 @@ public class ServerRequestContextStore implements ContextStore {
 
   @Override
   public Optional<ContextSetReadable> getContext() {
-    return getPrefabContextSet().map(ContextSetReadable::readOnlyContextSetView);
+    return getReforgeContextSet().map(ContextSetReadable::readOnlyContextSetView);
   }
 
-  private Optional<ContextSet> getPrefabContextSet() {
+  private Optional<ContextSet> getReforgeContextSet() {
     return ServerRequestContext
       .currentRequest()
       .flatMap(objectHttpRequest ->
