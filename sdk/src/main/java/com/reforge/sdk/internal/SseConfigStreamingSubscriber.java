@@ -110,8 +110,7 @@ public class SseConfigStreamingSubscriber {
       if (item instanceof CommentEvent) {
         CommentEvent commentEvent = (CommentEvent) item;
         LOG.debug("Received comment event: {}", commentEvent);
-      }
-      else if (item instanceof DataEvent) {
+      } else if (item instanceof DataEvent) {
         DataEvent dataEvent = (DataEvent) item;
         try {
           hasReceivedData.set(true);
