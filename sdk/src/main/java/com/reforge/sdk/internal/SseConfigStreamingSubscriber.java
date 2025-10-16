@@ -109,9 +109,9 @@ public class SseConfigStreamingSubscriber {
     public void onNext(Event item) {
       if (item instanceof CommentEvent) {
         CommentEvent commentEvent = (CommentEvent) item;
-        LOG.info("Received comment event: {}", commentEvent);
+        LOG.debug("Received comment event: {}", commentEvent);
       }
-      if (item instanceof DataEvent) {
+      else if (item instanceof DataEvent) {
         DataEvent dataEvent = (DataEvent) item;
         try {
           hasReceivedData.set(true);
@@ -142,7 +142,6 @@ public class SseConfigStreamingSubscriber {
 
     @Override
     public void onError(Throwable throwable) {
-      LOG.info("Unexpected error encountered", throwable);
       if (Optional.ofNullable(throwable.getMessage()).orElse("").contains("GOAWAY")) {
         LOG.debug("Got GOAWAY on SSE config stream, will restart connection.");
       } else {
@@ -154,7 +153,7 @@ public class SseConfigStreamingSubscriber {
     @Override
     public void onComplete() {
       // this is called even on auth failure
-      LOG.info("Unexpected stream completion");
+      LOG.debug("Unexpected stream completion");
       restartHandler.accept(getHasReceivedData());
     }
 
