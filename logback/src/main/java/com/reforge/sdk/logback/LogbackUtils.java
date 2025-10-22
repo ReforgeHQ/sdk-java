@@ -7,19 +7,22 @@ import org.slf4j.LoggerFactory;
 
 public class LogbackUtils {
 
-  private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(LogbackUtils.class);
-
   static void installTurboFilter(TurboFilter turboFilter) {
     ILoggerFactory iLoggerFactory = LoggerFactory.getILoggerFactory();
-    if (iLoggerFactory instanceof LoggerContext) {
-      LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-      loggerContext.addTurboFilter(turboFilter);
-    } else {
-      LOG.error(
-        "Unable to install {} - LoggerFactory is not a Logback LoggerContext. Current factory: {}",
-        turboFilter.getClass().getSimpleName(),
-        iLoggerFactory.getClass().getName()
+
+    if (!(iLoggerFactory instanceof LoggerContext)) {
+      throw new IllegalStateException(
+        "Cannot install " +
+        turboFilter.getClass().getSimpleName() +
+        " - LoggerFactory is not a Logback LoggerContext. " +
+        "Found: " +
+        iLoggerFactory.getClass().getName() +
+        ". " +
+        "Make sure Logback is on your classpath and SLF4J is bound to Logback."
       );
     }
+
+    LoggerContext loggerContext = (LoggerContext) iLoggerFactory;
+    loggerContext.addTurboFilter(turboFilter);
   }
 }

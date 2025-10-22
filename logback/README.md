@@ -31,7 +31,9 @@ This module is compatible with:
 - **Logback 1.4.x** (with SLF4J 2.0.x)
 - **Logback 1.5.x** (with SLF4J 2.0.x)
 
-The module uses only stable Logback APIs that haven't changed across these versions. Logback and SLF4J are marked as `provided` dependencies, so your application's versions will be used.
+The module uses only stable Logback APIs that haven't changed across these versions.
+
+**Note:** Logback and SLF4J are marked as `provided` dependencies - your application's versions will be used automatically. Make sure your Logback and SLF4J versions are compatible with each other (Logback 1.3+ requires SLF4J 2.0+, Logback 1.2.x requires SLF4J 1.7.x).
 
 ## Usage
 

@@ -28,6 +28,7 @@ public class ReforgeLogbackTurboFilter extends BaseTurboFilter {
    * Installs the Reforge turbo filter into the Logback logging system.
    *
    * @param loggerClient the LoggerClient to use for retrieving log levels
+   * @throws IllegalStateException if Logback is not being used as the SLF4J implementation
    */
   public static void install(LoggerClient loggerClient) {
     LogbackUtils.installTurboFilter(new ReforgeLogbackTurboFilter(loggerClient));

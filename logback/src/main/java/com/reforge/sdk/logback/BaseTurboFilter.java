@@ -36,14 +36,9 @@ public abstract class BaseTurboFilter extends TurboFilter {
     try {
       recursionCheck.set(true);
       LogLevel reforgeLogLevel = getLogLevel(logger, level);
-
-      Level calculatedMinLogLevelToAccept = LogbackLevelMapper.LEVEL_MAP.get(
+      Level calculatedMinLogLevelToAccept = LogbackLevelMapper.toLogbackLevel(
         reforgeLogLevel
       );
-
-      if (calculatedMinLogLevelToAccept == null) {
-        return FilterReply.NEUTRAL;
-      }
 
       if (level.isGreaterOrEqual(calculatedMinLogLevelToAccept)) {
         return FilterReply.ACCEPT;
