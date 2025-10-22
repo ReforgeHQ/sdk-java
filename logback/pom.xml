@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.reforge</groupId>
+    <artifactId>sdk-parent</artifactId>
+    <version>1.0.3</version>
+  </parent>
+
+  <artifactId>sdk-logback</artifactId>
+  <packaging>jar</packaging>
+  <name>Reforge SDK Logback Integration</name>
+  <description>Logback integration for Reforge SDK dynamic log level management</description>
+
+  <dependencies>
+    <!-- Reforge SDK -->
+    <dependency>
+      <groupId>com.reforge</groupId>
+      <artifactId>sdk</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Logback (provided scope - use customer's version) -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- SLF4J API (provided scope - use customer's version) -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -17,6 +17,7 @@
   <description>Parent POM for Reforge SDK modules providing feature flags, configuration management, and A/B testing capabilities</description>
 
   <modules>
+    <module>logback</module>
     <module>micronaut</module>
     <module>sdk</module>
   </modules>
@@ -39,6 +40,16 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.4.12</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-core</artifactId>
+        <version>1.4.12</version>
+      </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
