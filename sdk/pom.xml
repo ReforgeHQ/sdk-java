@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.reforge</groupId>
     <artifactId>sdk-parent</artifactId>
-    <version>1.0.3</version>
+    <version>1.1.0</version>
   </parent>
 
   <artifactId>sdk</artifactId>
@@ -57,6 +57,12 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
+      <version>[1.4.12,)</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
       <version>[1.4.12,)</version>
       <scope>test</scope>
     </dependency>
