@@ -71,6 +71,9 @@ public class Options {
   @Nullable
   private ContextSetReadable globalContext;
 
+  @Nullable
+  private String loggerKey = "log-levels.default";
+
   public Options() {
     setSdkKey(
       Optional
@@ -284,6 +287,22 @@ public class Options {
 
   public Options setGlobalContext(@Nullable ContextSetReadable globalContext) {
     this.globalContext = globalContext;
+    return this;
+  }
+
+  public Optional<String> getLoggerKey() {
+    return Optional.ofNullable(loggerKey);
+  }
+
+  /**
+   * Sets the config key to use for log level configuration.
+   * This key should point to a LOG_LEVEL_V2 config that will be evaluated
+   * with context containing logger path information.
+   * @param loggerKey the config key for log level configuration
+   * @return Options
+   */
+  public Options setLoggerKey(@Nullable String loggerKey) {
+    this.loggerKey = loggerKey;
     return this;
   }
 

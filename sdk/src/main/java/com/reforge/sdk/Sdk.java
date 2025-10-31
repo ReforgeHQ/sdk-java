@@ -2,6 +2,7 @@ package com.reforge.sdk;
 
 import com.reforge.sdk.internal.ConfigClientImpl;
 import com.reforge.sdk.internal.FeatureFlagClientImpl;
+import com.reforge.sdk.internal.LoggerClientImpl;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ public class Sdk implements AutoCloseable {
   private final Options options;
   private ConfigClientImpl configClient;
   private FeatureFlagClient featureFlagClient;
+  private LoggerClient loggerClient;
   private final AtomicBoolean closed;
 
   public Sdk(Options options) {
@@ -56,6 +58,18 @@ public class Sdk implements AutoCloseable {
       }
     }
     return featureFlagClient;
+  }
+
+  public LoggerClient loggerClient() {
+    if (loggerClient == null) {
+      synchronized (this) {
+        if (loggerClient == null) {
+          loggerClient =
+            new LoggerClientImpl(configClientImpl(), options.getLoggerKey().orElse(null));
+        }
+      }
+    }
+    return loggerClient;
   }
 
   public Options getOptions() {
